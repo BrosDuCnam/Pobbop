@@ -11,7 +11,7 @@ public class TargetSystem : MonoBehaviour
     [SerializeField] private float _targetRange = 100f;
     [SerializeField] private bool _debug;
 
-        [Header("Target Components")]
+    [Header("Needed Components")]
     [SerializeField] private Player _player;
     [SerializeField] private List<GameObject> _targets;
     

@@ -4,7 +4,12 @@ public static class Utils
 {
     public static bool IsVisibleByCamera(GameObject obj, Camera cam)
     {
-        Vector3 screenPoint = cam.WorldToViewportPoint(obj.transform.position);
+        return IsVisibleByCamera(obj.transform.position, cam);
+    }
+    
+    public static bool IsVisibleByCamera(Vector3 position, Camera cam)
+    {
+        Vector3 screenPoint = cam.WorldToViewportPoint(position);
         bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
         return onScreen;
     }
