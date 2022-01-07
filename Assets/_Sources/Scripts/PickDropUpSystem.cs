@@ -28,7 +28,7 @@ public class PickDropUpSystem : MonoBehaviour
     {
         if (_pickableObject != null)
         {
-            _pickableObject.transform.position = _pickUpPoint.position;
+            _pickableObject.GetComponent<Rigidbody>().MovePosition(_pickUpPoint.position);
         }
     }
 
