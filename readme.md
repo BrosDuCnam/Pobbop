@@ -16,5 +16,9 @@ All the files we create and use are under Assets/_Sources/
 All the plugins/assets we use are under Assets/ExternalResources/ so to use this project you need to have all downloaded resources in Addons folder
 Assets/Resources is the folder to put all resources that need to be loaded in runtimes
 
-### External Resources:
+### External Resources :
 - Mirror
+- Polygon Prototype _(from Synty studio)_
+
+### Added Components :
+- Input System
