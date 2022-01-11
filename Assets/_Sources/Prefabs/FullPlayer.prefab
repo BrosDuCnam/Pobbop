@@ -128,7 +128,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8797491869613382536}
-  m_Material: {fileID: 13400000, guid: f447741ea2a2dfd44b6ae00f6460e8ef, type: 2}
+  m_Material: {fileID: 13400000, guid: 7955de1dcc708dd418826ca2431fcfe0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
@@ -293,16 +293,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b394f3b160fca48bddcf9a08e86808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 4
-  runSpeed: 6
+  walkSpeed: 5
+  runSpeed: 8
   crouchSpeed: 2.5
   groundAcceleration: 20
   airSpeed: 3
   airAcceleration: 5
-  jumpUpSpeed: 6
+  jumpUpSpeed: 5
   maxGroundAngle: 40
   slideAccelAngle: 10
-  slideBoost: 10
+  slideBoost: 11
   minSlidePause: 1
   slideDeceleration: 0.1
   crouchScale: 0.3

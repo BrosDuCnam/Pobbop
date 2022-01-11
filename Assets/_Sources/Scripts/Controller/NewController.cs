@@ -15,21 +15,18 @@ public class NewController : MonoBehaviour
     private Vector3 groundNormal = Vector3.up;
     
     //Movement
-    [SerializeField] private float walkSpeed = 4f;
-    [SerializeField] private float runSpeed = 6f;
+    [SerializeField] private float walkSpeed = 5f;
+    [SerializeField] private float runSpeed = 8f;
     [SerializeField] private float crouchSpeed = 2.5f;
     [SerializeField] private float groundAcceleration = 20f;
     [SerializeField] private float airSpeed = 3f;
     [SerializeField] private float airAcceleration = 5f;
-    [SerializeField] private float jumpUpSpeed = 6f;
+    [SerializeField] private float jumpUpSpeed = 5f;
     [SerializeField] private float maxGroundAngle = 40f;
-    [SerializeField] private float slideAccelAngle = 10f;
-    [SerializeField] private float slideBoost = 10f;
+    [SerializeField] private float slideAccelAngle = 10f; //Defines above what ground angle the player can slide
+    [SerializeField] private float slideBoost = 11f;
     [SerializeField] [Tooltip("Used to avoid crouch spam")] private float minSlidePause = 1f;
     [SerializeField] [Range(0, 1)] private float slideDeceleration = 0.1f;
-
-
-
     //Crouch
     [SerializeField] private float crouchScale = 0.3f;
     
@@ -55,8 +52,11 @@ public class NewController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    
 
+    private void Update()
+    {
+        
+    }
 
     private void FixedUpdate()
     {
@@ -64,9 +64,6 @@ public class NewController : MonoBehaviour
 
         if (isGrounded)
         {
-            float velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
-            //Untoggle run if velocity is low
-            if (velocity < 0.5f && Time.time > runInputTime + 1) run = false;
             if (crouch)
                 Crouch(dir, crouchSpeed, groundAcceleration);
             else
@@ -306,13 +303,14 @@ public class NewController : MonoBehaviour
     public void Axis(InputAction.CallbackContext ctx)
     {
         axis = ctx.ReadValue<Vector2>();
+        if (axis.magnitude == 0) run = false;
     }
 
     public void RunInput(InputAction.CallbackContext ctx)
     {
         if (ctx.started)
         {
-            run = !run;
+            run = true;
             if (run) runInputTime = Time.time;
         }
     }
@@ -341,6 +339,7 @@ public class NewController : MonoBehaviour
         GUILayout.Label("speed: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
         GUILayout.Label("speedUp: " + rb.velocity.y);
         GUILayout.Label("yVle: " + Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * 0.35f), 1, Mathf.Infinity));
+        GUILayout.Label("axis : " + axis );
 
     }
 }
