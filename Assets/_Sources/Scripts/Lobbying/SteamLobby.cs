@@ -8,13 +8,20 @@ using UnityEngine;
 public class SteamLobby : MonoBehaviour
 {
     [SerializeField] private GameObject buttons;
+    [SerializeField] private GameObject lobbyList;
+    [SerializeField] private bool filterLobbies = false;
+    
 
     private NetworkManager networkManager;
     private const string HostAdressKey = "HostAdress";
+    
+    private List<CSteamID> lobbyIDS = new List<CSteamID>();
 
     protected Callback<LobbyCreated_t> lobbyCreated;
     protected Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
     protected Callback<LobbyEnter_t> lobbyEntered;
+    protected Callback<LobbyMatchList_t> lobbyListRetrieved;
+    protected Callback<LobbyDataUpdate_t> lobbyDataUpdated;
 
     private void Start()
     {
@@ -25,13 +32,44 @@ public class SteamLobby : MonoBehaviour
         lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
         lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+        lobbyListRetrieved = Callback<LobbyMatchList_t>.Create(OnLobbyListRetrieved);
+        lobbyDataUpdated = Callback<LobbyDataUpdate_t>.Create(OnGetLobbyInfo);
+        
+        
+        lobbyList.SetActive(false);
     }
 
     public void HostLobby()
     {
         buttons.SetActive(false);
+        
+        SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
+    }
 
-        SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
+    public void JoinLobby()
+    {
+        buttons.SetActive(false);
+        lobbyList.SetActive(true);
+        if (filterLobbies)
+        {
+            SteamMatchmaking.AddRequestLobbyListStringFilter("game", "pobbop", ELobbyComparison.k_ELobbyComparisonEqual);
+        }
+        SteamAPICall_t tryGetList = SteamMatchmaking.RequestLobbyList();
+    }
+
+    private void OnLobbyListRetrieved(LobbyMatchList_t callback)
+    {
+        for (int i = 0; i < callback.m_nLobbiesMatching; i++)
+        {
+            CSteamID lobbyID = SteamMatchmaking.GetLobbyByIndex(i);
+            lobbyIDS.Add(lobbyID);
+            SteamMatchmaking.RequestLobbyData(lobbyID);
+        }
+    }
+
+    private void OnGetLobbyInfo(LobbyDataUpdate_t callback)
+    {
+        lobbyList.GetComponent<LobbyListManager>().DisplayLobbies(lobbyIDS, callback);
     }
 
     private void OnLobbyCreated(LobbyCreated_t callback)
@@ -46,7 +84,9 @@ public class SteamLobby : MonoBehaviour
 
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey,
             SteamUser.GetSteamID().ToString());
-        
+        SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "game", "pobbop");
+        SteamMatchmaking.SetLobbyJoinable(new CSteamID(callback.m_ulSteamIDLobby), true);
+
     }
 
     private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)

@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class NewController : MonoBehaviour
+public class NewController : NetworkBehaviour
 {
 
     private Rigidbody rb;
@@ -42,22 +43,18 @@ public class NewController : MonoBehaviour
     private List<float> yVelBuffer = new List<float>();
 
     private float lastBoost = 0;
-    
 
-
-    private void Start()
+    public override void OnStartAuthority()
     {
+        enabled = true;
         rb = GetComponent<Rigidbody>();
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+    
 
-    private void Update()
-    {
-        
-    }
-
+    [ClientCallback]
     private void FixedUpdate()
     {
         dir = Direction();
@@ -214,7 +211,6 @@ public class NewController : MonoBehaviour
         else
         {
             gameObject.transform.localScale = new Vector3(1, 1, 1);
-
         }
     }
 
