@@ -791,9 +791,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d560edd71d1dce746a5e5fc037a06218, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons: {fileID: 1620741344}
+  buttons: {fileID: 1162208875}
   lobbyList: {fileID: 1706117920}
-  filterLobbies: 1
+  filterLobbies: 0
 --- !u!114 &1150460342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,6 +1071,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 26.188, y: 0, z: 0}
+--- !u!1 &1546533854 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2723719311703120439, guid: 36734080c8de554458bc60022f388f8a, type: 3}
+  m_PrefabInstance: {fileID: 2723719310162089178}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1620741344
 GameObject:
   m_ObjectHideFlags: 0
@@ -1321,7 +1326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93df4a34f9b767b4ea6f66afadfce7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbyElement: {fileID: 2723719311703120439, guid: 36734080c8de554458bc60022f388f8a, type: 3}
+  lobbyElementGO: {fileID: 1546533854}
 --- !u!224 &1744490222 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2723719311703120436, guid: 36734080c8de554458bc60022f388f8a, type: 3}

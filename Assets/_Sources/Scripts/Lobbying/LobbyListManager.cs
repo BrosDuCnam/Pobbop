@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LobbyListManager : MonoBehaviour
 {
-    [SerializeField] private GameObject lobbyElement;
+    [SerializeField] private GameObject lobbyElementGO;
 
 
     public void DisplayLobbies(List<CSteamID> lobbyIDS, LobbyDataUpdate_t callback)
@@ -16,10 +16,13 @@ public class LobbyListManager : MonoBehaviour
             if (lobbyIDS[i].m_SteamID == callback.m_ulSteamIDLobby)
             {
                 string lobbyName = SteamMatchmaking.GetLobbyData((CSteamID) lobbyIDS[i].m_SteamID, "name");
-                Debug.Log("Lobby " + i + " :: " + lobbyName);
-                GameObject go = Instantiate(lobbyElement, gameObject.transform);
+                GameObject go = Instantiate(lobbyElementGO, gameObject.transform);
 
-                go.GetComponentInChildren<Text>().text = lobbyName;
+                LobbyElement lobbyElement = go.GetComponent<LobbyElement>();
+                lobbyElement.lobbySteamID = (CSteamID) lobbyIDS[i].m_SteamID;
+                lobbyElement.SetLobbyName(lobbyName);
+                lobbyElement.SetPlayerCount(SteamMatchmaking.GetNumLobbyMembers((CSteamID) lobbyIDS[i].m_SteamID).ToString(),
+                    (SteamMatchmaking.GetLobbyMemberLimit((CSteamID) lobbyIDS[i].m_SteamID).ToString()));
             }
         }
     }

@@ -11,6 +11,7 @@ public class SteamLobby : MonoBehaviour
     [SerializeField] private GameObject lobbyList;
     [SerializeField] private bool filterLobbies = false;
     
+    public static SteamLobby instance;
 
     private NetworkManager networkManager;
     private const string HostAdressKey = "HostAdress";
@@ -26,6 +27,7 @@ public class SteamLobby : MonoBehaviour
     private void Start()
     {
         if (!SteamManager.Initialized) {return;}
+        MakeInstance();
         
         networkManager = GetComponent<NetworkManager>();
 
@@ -103,5 +105,16 @@ public class SteamLobby : MonoBehaviour
         networkManager.StartClient();
         
         buttons.SetActive(false);
+    }
+
+    public void JoinLobby(CSteamID lobbyId)
+    {
+        SteamMatchmaking.JoinLobby(lobbyId);
+    }
+    
+    void MakeInstance()
+    {
+        if (instance == null)
+            instance = this;
     }
 }
