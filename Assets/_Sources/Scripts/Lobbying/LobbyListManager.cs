@@ -17,7 +17,8 @@ public class LobbyListManager : MonoBehaviour
             {
                 string lobbyName = SteamMatchmaking.GetLobbyData((CSteamID) lobbyIDS[i].m_SteamID, "name");
                 GameObject go = Instantiate(lobbyElementGO, gameObject.transform);
-
+                
+                Debug.Log("Lobby " + i + " :: " + "name : " + lobbyName + " | game : " + SteamMatchmaking.GetLobbyData((CSteamID) lobbyIDS[i].m_SteamID, "game"));
                 LobbyElement lobbyElement = go.GetComponent<LobbyElement>();
                 lobbyElement.lobbySteamID = (CSteamID) lobbyIDS[i].m_SteamID;
                 lobbyElement.SetLobbyName(lobbyName);
