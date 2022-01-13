@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using Mirror;
 using Steamworks;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class SteamLobby : MonoBehaviour
 {
     [SerializeField] private GameObject buttons;
     [SerializeField] private GameObject lobbyList;
     [SerializeField] private bool filterLobbies = false;
+    [SerializeField] private bool SearchLobby = false;
+
     
     public static SteamLobby instance;
 
@@ -23,6 +26,15 @@ public class SteamLobby : MonoBehaviour
     protected Callback<LobbyEnter_t> lobbyEntered;
     protected Callback<LobbyMatchList_t> lobbyListRetrieved;
     protected Callback<LobbyDataUpdate_t> lobbyDataUpdated;
+
+    private void Update()
+    {
+        if (SearchLobby)
+        {
+            JoinLobby();
+            SearchLobby = false;
+        }
+    }
 
     private void Start()
     {
@@ -84,11 +96,12 @@ public class SteamLobby : MonoBehaviour
         
         networkManager.StartHost();
 
+        SteamMatchmaking.SetLobbyJoinable(new CSteamID(callback.m_ulSteamIDLobby), true);
+        SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", "Default Name");
+        SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "game", "pobbop");
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey,
             SteamUser.GetSteamID().ToString());
-        SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "game", "pobbop");
         SteamMatchmaking.SetLobbyJoinable(new CSteamID(callback.m_ulSteamIDLobby), true);
-
     }
 
     private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)

@@ -827,7 +827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttons: {fileID: 1162208875}
   lobbyList: {fileID: 1706117920}
-  filterLobbies: 0
+  filterLobbies: 1
 --- !u!114 &1150460342
 MonoBehaviour:
   m_ObjectHideFlags: 0
