@@ -14,7 +14,7 @@ public class DebugThrow : MonoBehaviour
     {
         _throwableObject = GetComponent<ThrowableObject>();
         
-        Utils.DebugBezierCurve(transform.position, _throwStep.position, _throwTarget.position, 100, Color.red, 100f);
+        //Utils.DebugBezierCurve(transform.position, _throwStep.position, _throwTarget.position, 100, Color.red, 100f);
         _throwableObject.Throw(_throwStep.position, _throwTarget, _throwForce, _throwCurve);
     }
 

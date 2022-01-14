@@ -7,12 +7,25 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class ThrowableObject : MonoBehaviour
 {
-    [SerializeField] private bool _isThrown = false;
+    public UnityEvent OnStateChanged;
+    public bool IsThrown
+    {
+        get => _isThrown;
+        set
+        {
+            if (_isThrown == value) return;
+            _isThrown = value;
+            OnStateChanged.Invoke();
+        }
+    }
     
+    [SerializeField] private bool _isThrown = false;
     [SerializeField] private Rigidbody _rigidbody;
 
+    [SerializeField] private bool DEBUG;
+
     private bool _stopThrowPath = false;
-    
+
     private void OnEnable()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -33,6 +46,11 @@ public class ThrowableObject : MonoBehaviour
         Vector3 origin = transform.position;
         _rigidbody.isKinematic = true;
         _isThrown = true;
+        
+        if (DEBUG)
+        {
+            Utils.DebugBezierCurve(origin, step, target.position, 10, Color.red, 5);
+        }
         
         float time = 0;
         float distance = Utils.BezierCurveDistance(origin, step, target.position, 10);
@@ -56,6 +74,7 @@ public class ThrowableObject : MonoBehaviour
     {
         if (_isThrown)
         {
+            print("Collide");
             _stopThrowPath = true;
         }
     }

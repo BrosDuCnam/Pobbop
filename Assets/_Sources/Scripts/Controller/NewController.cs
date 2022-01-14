@@ -331,11 +331,11 @@ public class NewController : NetworkBehaviour
     //Debug : Speed infos
     void OnGUI()
     {
-        GUI.color = Color.red;
-        GUILayout.Label("speed: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
-        GUILayout.Label("speedUp: " + rb.velocity.y);
-        GUILayout.Label("yVle: " + Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * 0.35f), 1, Mathf.Infinity));
-        GUILayout.Label("axis : " + axis );
+        //GUI.color = Color.red;
+        //GUILayout.Label("speed: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
+        //GUILayout.Label("speedUp: " + rb.velocity.y);
+        //GUILayout.Label("yVle: " + Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * 0.35f), 1, Mathf.Infinity));
+        //GUILayout.Label("axis : " + axis );
 
     }
 }

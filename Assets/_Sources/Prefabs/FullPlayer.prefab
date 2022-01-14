@@ -245,8 +245,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8456191531379536459}
-        m_TargetAssemblyTypeName: PickUpSystem, Assembly-CSharp
-        m_MethodName: TryToPickUp
+        m_TargetAssemblyTypeName: PickUpDropSystem, Assembly-CSharp
+        m_MethodName: TogglePickupDrop
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -260,7 +260,7 @@ MonoBehaviour:
     m_ActionName: Player/PickupDrop[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 5000011437541627098}
         m_TargetAssemblyTypeName: Player, Assembly-CSharp
         m_MethodName: ThrowInput
         m_Mode: 0
@@ -351,34 +351,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa9d648386cf2084fadb13aa54081d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minForce: 10
-  maxForce: 35
-  maxChargeTime: 5
-  chargeFactor:
+  _targetSystem: {fileID: 0}
+  _pickUpDropSystem: {fileID: 0}
+  _minForce: 10
+  _maxForce: 35
+  _maxChargeTime: 5
+  _chargeFactor:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  debug: 1
+  DEBUG: 1
   Camera: {fileID: 0}
 --- !u!114 &506940942206868999
 MonoBehaviour:
@@ -393,7 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetRange: 10
-  _debug: 0
+  DEBUG: 0
   _player: {fileID: 0}
   _targets:
   - {fileID: 0}
@@ -415,6 +399,9 @@ MonoBehaviour:
   _pickableObject: {fileID: 0}
   _camera: {fileID: 0}
   _player: {fileID: 0}
+  OnPickUp:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &852052934866384312
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,16 +1,33 @@
 ﻿using System;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PickableObject : MonoBehaviour
 {
     [SerializeField] [CanBeNull] private Collider _collider;
     [SerializeField] [CanBeNull] private Rigidbody _rigidbody;
-    [SerializeField] private bool _isPickable = true;
     [SerializeField] private bool _isPicked = false;
     
-    public bool IsPicked { get { return _isPicked; } }
-    public bool IsPickable { get { return _isPickable; } }
+    public UnityEvent OnStateChanged;
+    public bool IsPicked
+    {
+        get => _isPicked;
+        set
+        {
+            if (_isPicked == value) return;
+            if (value) PickUp();
+            else Drop();
+            _isPicked = value;
+            OnStateChanged.Invoke();
+        }
+    }
+
+    public bool IsPickable
+    {
+        get => !_isPicked;
+    }
 
     private void Start()
     {
@@ -20,10 +37,9 @@ public class PickableObject : MonoBehaviour
 
     public void PickUp()
     {
-        if (!_isPickable)
+        if (!IsPickable)
             return;
-
-        _isPickable = false;
+        
         _isPicked = true;
         if (_collider != null) _collider.enabled = false;
         if (_rigidbody != null) _rigidbody.isKinematic = true;
@@ -31,7 +47,6 @@ public class PickableObject : MonoBehaviour
     
     public void Drop()
     {
-        _isPickable = true;
         _isPicked = false;
         if (_collider != null) _collider.enabled = true;
         if (_rigidbody != null) _rigidbody.isKinematic = false;

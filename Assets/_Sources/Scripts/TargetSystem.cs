@@ -9,14 +9,14 @@ public class TargetSystem : MonoBehaviour
 {
     [Header("Target Settings")]
     [SerializeField] private float _targetRange = 100f;
-    [SerializeField] private bool _debug;
+    [SerializeField] private bool DEBUG;
 
     [Header("Needed Components")]
     [SerializeField] private Player _player;
     [SerializeField] private List<GameObject> _targets;
     
     public List<GameObject> Targets { get { return _targets; } }
-    [NotNull] public GameObject VisibleTarget { get; private set; }
+    [NotNull] public GameObject CurrentTarget { get; private set; }
     
     private void Start()
     {
@@ -29,14 +29,14 @@ public class TargetSystem : MonoBehaviour
         visibleTargets = OrderByDistanceToCenterOfScreen(visibleTargets);
         if (visibleTargets.Count > 0)
         {
-            VisibleTarget = visibleTargets[0];
+            CurrentTarget = visibleTargets[0];
         }
         else
         {
-            VisibleTarget = null;
+            CurrentTarget = null;
         }
 
-        if (_debug)
+        if (DEBUG)
         {
             foreach (GameObject target in _targets)
             {
@@ -71,12 +71,14 @@ public class TargetSystem : MonoBehaviour
             if (Utils.IsVisibleByCamera(target, _player.Camera))
             {
                 // If object obstructs the view of the player, it is not visible
-                if (Physics.Raycast(transform.position, target.transform.position - transform.position, out RaycastHit hit, _targetRange))
+                RaycastHit[] hits = Physics.RaycastAll(transform.position, target.transform.position - transform.position,
+                    _targetRange);
+
+                hits.Select(x => x.transform.gameObject != _player.PickUpDropSystem.PickableObject.gameObject);
+                
+                if (hits[0].collider.gameObject == target)
                 {
-                    if (hit.collider.gameObject == target)
-                    {
-                        visibleTargets.Add(target);
-                    }
+                    visibleTargets.Add(target);
                 }
             }
         }
