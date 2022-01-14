@@ -81,12 +81,18 @@ public class PickUpDropSystem : MonoBehaviour
                 Utils.IsVisibleByCamera(pickableObject.transform.position, _player.Camera) &&
                 pickableObject.IsPickable).ToArray(); // Take only visible objects
 
-            PickableObject closestPickableObject = pickableObjects.OrderBy(pickableObject =>
-                    Vector3.Distance(pickableObject.transform.position, _player.Camera.transform.position))
-                .ToArray()[0]; // Take the closest object
+            try
+            {
+                PickableObject closestPickableObject = pickableObjects.OrderBy(pickableObject =>
+                        Vector3.Distance(pickableObject.transform.position, _player.Camera.transform.position))
+                    .ToArray()[0]; // Take the closest object
 
-            PickableObject = closestPickableObject;
-            PickableObject.PickUp();
+                PickableObject = closestPickableObject;
+                PickableObject.PickUp();
+            }
+            catch (Exception e)
+            {
+            }
         }
     }
 }

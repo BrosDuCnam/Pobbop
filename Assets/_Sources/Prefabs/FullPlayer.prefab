@@ -23,12 +23,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8208638909360619854}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.198}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.45700002, z: 1.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 8797491869613382541}
-  m_RootOrder: 2
+  m_Father: {fileID: 8797491871191967944}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8797491869613382536
 GameObject:
@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 506940942206868999}
   - component: {fileID: 8456191531379536459}
   - component: {fileID: 852052934866384312}
+  - component: {fileID: 2322464712195177290}
   m_Layer: 0
   m_Name: FullPlayer
   m_TagString: Untagged
@@ -70,7 +71,6 @@ Transform:
   m_Children:
   - {fileID: 8797491870898878602}
   - {fileID: 8797491871191967944}
-  - {fileID: 8067262303577883277}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -101,7 +101,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c70e075a2144ba04784d74b7b2889fd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -260,8 +260,8 @@ MonoBehaviour:
     m_ActionName: Player/PickupDrop[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5000011437541627098}
-        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+      - m_Target: {fileID: 2322464712195177290}
+        m_TargetAssemblyTypeName: ThrowSystem, Assembly-CSharp
         m_MethodName: ThrowInput
         m_Mode: 0
         m_Arguments:
@@ -353,16 +353,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetSystem: {fileID: 0}
   _pickUpDropSystem: {fileID: 0}
-  _minForce: 10
-  _maxForce: 35
-  _maxChargeTime: 5
-  _chargeFactor:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  DEBUG: 1
   Camera: {fileID: 0}
 --- !u!114 &506940942206868999
 MonoBehaviour:
@@ -376,8 +366,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd159f846c404e38bc639ff0fb274798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetRange: 10
-  DEBUG: 0
+  _targetRange: 99999
+  DEBUG: 1
   _player: {fileID: 0}
   _targets:
   - {fileID: 0}
@@ -419,6 +409,73 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 6c4731c7aef3fe44c8f33c50b038b697
   hasSpawned: 0
+--- !u!114 &2322464712195177290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797491869613382536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cbb9ebdd43d4033bd807764d70dda79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _rigidbody: {fileID: 0}
+  _minThrowForce: 10
+  _maxThrowForce: 35
+  _maxChargeTime: 5
+  _chargeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _speedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 2.2514267
+      outSlope: 2.2514267
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.01772652
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _minStepMultiplier: 2
+  _maxnStepMultiplier: 30
 --- !u!1 &8797491870898878601
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,7 +503,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8797491870898878601}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.069, y: 0.505, z: 0.325}
+  m_LocalPosition: {x: 0.07, y: 0.505, z: 0.39}
   m_LocalScale: {x: 0.52030385, y: 0.3169908, z: 0.32676613}
   m_Children: []
   m_Father: {fileID: 8797491869613382541}
@@ -479,7 +536,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6615f1708a4932646adcdc55932feefa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -525,6 +582,7 @@ GameObject:
   - component: {fileID: 8797491871191967944}
   - component: {fileID: 8797491871191967959}
   - component: {fileID: 8797491871191967958}
+  - component: {fileID: 7494676346703981137}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -542,7 +600,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.45700002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 8067262303577883277}
   m_Father: {fileID: 8797491869613382541}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -597,3 +656,36 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8797491871191967957}
   m_Enabled: 1
+--- !u!114 &7494676346703981137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797491871191967957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2

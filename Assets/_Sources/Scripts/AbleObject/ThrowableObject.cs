@@ -31,6 +31,14 @@ public class ThrowableObject : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
+    public void Throw(Vector3 direction, float force)
+    {
+        if (IsThrown) return;
+        IsThrown = true;
+        _rigidbody.AddForce(transform.position + direction * (force * 50), ForceMode.Acceleration);
+        Debug.DrawRay(transform.position, transform.position + direction * (force * 50), Color.red, 10);
+    }
+
     public void Throw(Vector3 step, Transform target, float speed, AnimationCurve curve)
     {
         StartCoroutine(ThrowEnumerator(step, target, speed, curve));
@@ -62,7 +70,7 @@ public class ThrowableObject : MonoBehaviour
             _rigidbody.MovePosition(nextPos);
             
             new WaitForEndOfFrame();
-            time += (i * curve.Evaluate(time)) * Time.deltaTime;
+            time += (i * (curve.Evaluate(time * 3))) * Time.deltaTime; // TODO - Hacky fix for curve
             yield return null;
         }
         _stopThrowPath = false;
@@ -74,8 +82,8 @@ public class ThrowableObject : MonoBehaviour
     {
         if (_isThrown)
         {
-            print("Collide");
             _stopThrowPath = true;
+            _isThrown = false;
         }
     }
 }

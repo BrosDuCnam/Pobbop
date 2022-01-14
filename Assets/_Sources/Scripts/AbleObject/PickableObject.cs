@@ -8,7 +8,7 @@ public class PickableObject : MonoBehaviour
 {
     [SerializeField] [CanBeNull] private Collider _collider;
     [SerializeField] [CanBeNull] private Rigidbody _rigidbody;
-    [SerializeField] private bool _isPicked = false;
+    [SerializeField] private bool _isPicked ;
     
     public UnityEvent OnStateChanged;
     public bool IsPicked

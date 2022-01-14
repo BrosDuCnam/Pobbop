@@ -14,8 +14,12 @@ public class TargetSystem : MonoBehaviour
     [Header("Needed Components")]
     [SerializeField] private Player _player;
     [SerializeField] private List<GameObject> _targets;
-    
-    public List<GameObject> Targets { get { return _targets; } }
+
+    public List<GameObject> Targets
+    {
+        get { return _targets; }
+        set { _targets = value; }
+    }
     [NotNull] public GameObject CurrentTarget { get; private set; }
     
     private void Start()
@@ -74,9 +78,9 @@ public class TargetSystem : MonoBehaviour
                 RaycastHit[] hits = Physics.RaycastAll(transform.position, target.transform.position - transform.position,
                     _targetRange);
 
-                hits.Select(x => x.transform.gameObject != _player.PickUpDropSystem.PickableObject.gameObject);
+                hits.Select(x => x.transform.gameObject != _player.HoldingObject.gameObject);
                 
-                if (hits[0].collider.gameObject == target)
+                if (hits.Length > 0 && hits[0].collider.gameObject == target)
                 {
                     visibleTargets.Add(target);
                 }
