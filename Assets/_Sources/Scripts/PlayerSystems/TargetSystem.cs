@@ -13,6 +13,8 @@ public class TargetSystem : MonoBehaviour
 
     [Header("Needed Components")]
     [SerializeField] private Player _player;
+    
+    //La liste est en static pour quelle puisse être modifié
     [SerializeField] private List<GameObject> _targets;
 
     public List<GameObject> Targets
@@ -89,4 +91,5 @@ public class TargetSystem : MonoBehaviour
 
         return visibleTargets;
     }
+    
 }

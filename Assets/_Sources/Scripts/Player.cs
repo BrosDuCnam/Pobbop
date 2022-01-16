@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
         get => _targetSystem.CurrentTarget.gameObject;
     }
     
-
+    
     void Start()
     {
         Camera = Camera.main; //TODO: pas opti pour le moment
