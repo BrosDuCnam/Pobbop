@@ -29,6 +29,7 @@ public class SteamLobby : MonoBehaviour
 
     private void Update()
     {
+        //Debug
         if (SearchLobby)
         {
             JoinLobby();

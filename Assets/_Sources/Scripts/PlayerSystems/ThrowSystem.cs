@@ -61,6 +61,11 @@ public class ThrowSystem : MonoBehaviour
             if (_player.HasTarget) // If player has a target
             {
                 GameObject target = _player.Target;
+                //Sets the other player's ui handler to warn him of the incoming ball
+                if (target.TryGetComponent(out DirIndicatorHandler uiHandler))
+                {
+                    uiHandler.incomingBall = throwableObject.transform;
+                }
                 
                 // Calculate the multiplier of step distance
                 float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude); 

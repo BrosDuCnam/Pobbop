@@ -5,7 +5,9 @@ using Mirror;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.PlayerLoop;
 
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class NewController : NetworkBehaviour
 {
 
@@ -52,7 +54,13 @@ public class NewController : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    
+
+    [ClientCallback]
+    private void Update()
+    {
+        if (!crouch && isGrounded && Time.time > lastBoost + minSlidePause)
+            enterSliding = true;
+    }
 
     [ClientCallback]
     private void FixedUpdate()
@@ -322,8 +330,6 @@ public class NewController : NetworkBehaviour
     public void CrouchInput(InputAction.CallbackContext ctx)
     {
         crouch = ctx.performed;
-        if (ctx.canceled && isGrounded)
-            enterSliding = true;
         CrouchScale();
     }
     #endregion
