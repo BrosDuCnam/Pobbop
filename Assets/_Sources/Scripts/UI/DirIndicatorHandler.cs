@@ -9,11 +9,14 @@ public class DirIndicatorHandler : MonoBehaviour
 {
     [SerializeField] private Material uiMat;
     [SerializeField] private Camera cam;
+    [SerializeField] private float minSize = 7;
+    [SerializeField] private float sizeFact = 0.5f;
+    [SerializeField] private float lengthSize = 0.5f;
 
     private float ballAngle;
     private Transform me;
     [CanBeNull] public Transform incomingBall;
-    private float angleX, angleY;
+    private float angleX, angleY, sizeX, sizeY;
 
     
     private void Start()
@@ -29,6 +32,7 @@ public class DirIndicatorHandler : MonoBehaviour
             Vector3 ballPos = incomingBall.position;
             Vector3 ballOnScreen = cam.WorldToViewportPoint(ballPos);
             
+            //Transform variable from [0 ; 1] to [-5 ; 5]
             angleX = ballOnScreen.x * 10 - 5;
             angleY = ballOnScreen.y * 10 - 5;
 
@@ -48,14 +52,17 @@ public class DirIndicatorHandler : MonoBehaviour
                 angleY = uiPos.y;
             }
 
-            //angleX = Mathf.Clamp(angleX, -5, 5);
-            //angleY = Mathf.Clamp(angleY, -5, 5);
+            angleX = Mathf.Clamp(angleX, -5, 5);
+            angleY = Mathf.Clamp(angleY, -5, 5);
 
+            sizeX = (minSize - Mathf.Abs(angleX * lengthSize)) * sizeFact;
+            sizeY = (minSize - Mathf.Abs(angleY * lengthSize)) * sizeFact;
+            
             uiMat.SetFloat("PosX", angleX);
             uiMat.SetFloat("PosY", angleY);
-            
-            
-            
+            uiMat.SetFloat("SizeX", sizeY);
+            uiMat.SetFloat("SizeY", sizeX);
+
         }
     }
 

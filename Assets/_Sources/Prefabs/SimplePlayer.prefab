@@ -552,54 +552,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiMat: {fileID: 2100000, guid: 7ef2d01e838e22648926d383a4e989ae, type: 2}
   cam: {fileID: 6684906263438855545}
-  uiExpFactX:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: -0.024571741
-      outSlope: -0.024571741
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.27871624
-    - serializedVersion: 3
-      time: 1.1024425
-      value: 2.7911284
-      inSlope: 5.6577826
-      outSlope: 5.6577826
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.04283097
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  uiExpFactY:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: -0.0020828247
-      value: 1.0272673
-      inSlope: -0.015048907
-      outSlope: -0.015048907
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.63037485
-    - serializedVersion: 3
-      time: 1.0175139
-      value: 8.802286
-      inSlope: 20.902742
-      outSlope: 20.902742
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.038038656
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  minSize: 7
+  sizeFact: 1.5
+  lengthSize: 1.2
   incomingBall: {fileID: 0}
 --- !u!114 &-69509633031566860
 MonoBehaviour:
