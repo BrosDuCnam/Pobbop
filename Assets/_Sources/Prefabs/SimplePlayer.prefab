@@ -258,8 +258,7 @@ GameObject:
   - component: {fileID: 6684906265089900071}
   - component: {fileID: 3262890219445815215}
   - component: {fileID: 3204091307977020947}
-  - component: {fileID: 7183502005921984884}
-  - component: {fileID: 6019372681731577829}
+  - component: {fileID: 2042341140092393419}
   - component: {fileID: -69509633031566860}
   - component: {fileID: -5903042100223321338}
   m_Layer: 0
@@ -456,7 +455,7 @@ MonoBehaviour:
     m_ActionName: Player/MouseAxis[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6019372681731577829}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PickUpSystem, Assembly-CSharp
         m_MethodName: TryToPickUp
         m_Mode: 0
@@ -539,7 +538,7 @@ MonoBehaviour:
   minSlidePause: 1
   slideDeceleration: 0.1
   crouchScale: 0.3
---- !u!114 &7183502005921984884
+--- !u!114 &2042341140092393419
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -548,56 +547,60 @@ MonoBehaviour:
   m_GameObject: {fileID: 6684906265089900070}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa9d648386cf2084fadb13aa54081d06, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f71892627ed528499e98bf6b9a266f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minForce: 10
-  maxForce: 35
-  maxChargeTime: 5
-  chargeFactor:
+  uiMat: {fileID: 2100000, guid: 7ef2d01e838e22648926d383a4e989ae, type: 2}
+  cam: {fileID: 6684906263438855545}
+  uiExpFactX:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: -0.024571741
+      outSlope: -0.024571741
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
+      outWeight: 0.27871624
+    - serializedVersion: 3
+      time: 1.1024425
+      value: 2.7911284
+      inSlope: 5.6577826
+      outSlope: 5.6577826
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.04283097
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  debug: 1
-  Camera: {fileID: 0}
---- !u!114 &6019372681731577829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6684906265089900070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42215542fd214f87ada0ba29aef393bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _pickUpDistance: 1.5
-  _autoPickUpGround: 0
-  _pickUpPoint: {fileID: 5271422374136178467}
-  _pickableObject: {fileID: 0}
-  _camera: {fileID: 0}
-  _player: {fileID: 0}
+  uiExpFactY:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0020828247
+      value: 1.0272673
+      inSlope: -0.015048907
+      outSlope: -0.015048907
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.63037485
+    - serializedVersion: 3
+      time: 1.0175139
+      value: 8.802286
+      inSlope: 20.902742
+      outSlope: 20.902742
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.038038656
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  incomingBall: {fileID: 0}
 --- !u!114 &-69509633031566860
 MonoBehaviour:
   m_ObjectHideFlags: 0

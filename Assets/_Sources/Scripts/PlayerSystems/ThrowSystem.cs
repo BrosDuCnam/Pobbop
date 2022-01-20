@@ -54,6 +54,11 @@ public class ThrowSystem : MonoBehaviour
             if (_player.HasTarget)
             {
                 GameObject target = _player.Target;
+                //Sets the other player's ui handler to warn him of the incoming ball
+                if (target.TryGetComponent(out DirIndicatorHandler uiHandler))
+                {
+                    uiHandler.incomingBall = throwableObject.transform;
+                }
                 
                 float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude);
                 multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxnStepMultiplier);

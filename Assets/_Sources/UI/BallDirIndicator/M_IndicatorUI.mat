@@ -59,6 +59,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_0559b2f852de42d7a84b1daede95beba_Texture_1:
+        m_Texture: {fileID: 2800000, guid: f48d513b00e16364787a17763c28b1d4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_8245b60fc61a4c3a86dbc0792154467d_Texture_1:
         m_Texture: {fileID: 2800000, guid: 7453abfe9e8b2c04a8a47eb536fe21eb, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -80,7 +84,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_b5d4113c00b447468b2a56cdfbcf78c9: 0
+    - PosX: -2.6097763
+    - PosY: 6.4953113
+    - SizeX: 2
+    - SizeY: 2
+    - Vector1_779b6b815bc945f1b9df797523dfa240: 0
+    - Vector1_96ab8416f84b420998ae1dc72acd51ef: 1
+    - Vector1_b5d4113c00b447468b2a56cdfbcf78c9: 0.1
+    - Vector1_f996cbf4f6954f6dafdcc45eb9f799a1: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -107,6 +118,7 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - ballAngle: 396.72656
     m_Colors:
     - Vector2_57f3923b6b8d4ce8af86a87ef35ab309: {r: 16, g: 9, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
