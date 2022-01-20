@@ -8,6 +8,10 @@ using UnityEngine.Events;
 public class ThrowableObject : MonoBehaviour
 {
     public UnityEvent OnStateChanged;
+    
+    /// <summary>
+    /// Returns true if the object is currently being thrown.
+    /// </summary>
     public bool IsThrown
     {
         get => _isThrown;
@@ -21,7 +25,8 @@ public class ThrowableObject : MonoBehaviour
     
     [SerializeField] private bool _isThrown = false;
     [SerializeField] private Rigidbody _rigidbody;
-
+    [SerializeField] [CanBeNull] private Player _player;
+    
     [SerializeField] private bool DEBUG;
 
     private bool _stopThrowPath = false;
@@ -31,31 +36,64 @@ public class ThrowableObject : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    public void Throw(Vector3 direction, float force)
+    private void Update()
+    {
+        //print("etat :"+IsThrown);
+    }
+
+    /// <summary>
+    /// Function to throw the object.
+    /// </summary>
+    /// <param name="direction">Direction to throw</param>
+    /// <param name="force">Force in meter/s</param>
+    public void Throw(Player player, Vector3 direction, float force)
     {
         if (IsThrown) return;
+        _player = player;
         IsThrown = true;
         _rigidbody.AddForce(transform.position + direction * (force * 50), ForceMode.Acceleration);
     }
 
-    public void Throw(Vector3 step, Transform target, float speed, AnimationCurve curve)
+    /// <summary>
+    /// Function to throw the object.
+    /// </summary>
+    /// <param name="step">The position step of bezier curve</param>
+    /// <param name="target">The transform of the target</param>
+    /// <param name="speed">The speed in meter/s</param>
+    /// <param name="curve">The curve of speed during time</param>
+    public void Throw(Player player , Vector3 step, Transform target, float speed, AnimationCurve curve)
     {
-        StartCoroutine(ThrowEnumerator(step, target, speed, curve));
+        StartCoroutine(ThrowEnumerator(_player, step, target, speed, curve));
     }
     
-    public void Throw(Vector3 step, Transform target, float speed)
+    /// <summary>
+    /// Function to throw the object.
+    /// </summary>
+    /// <param name="step">The position step of bezier curve</param>
+    /// <param name="target">The transform of the target</param>
+    /// <param name="speed">The speed in meter/s</param>
+    public void Throw(Player player, Vector3 step, Transform target, float speed)
     {
-        StartCoroutine(ThrowEnumerator(step, target, speed, AnimationCurve.Linear(0, 1, 1, 1)));
+        StartCoroutine(ThrowEnumerator(_player, step, target, speed, AnimationCurve.Linear(0, 1, 1, 1)));
     }
     
-    private IEnumerator ThrowEnumerator(Vector3 step, Transform target, float speed, AnimationCurve curve)
+    
+    /// <summary>
+    /// Enumerator to throw the object during time.
+    /// </summary>
+    /// <param name="step">The position step of bezier curve</param>
+    /// <param name="target">The transform of the target</param>
+    /// <param name="speed">The speed in meter/s</param>
+    /// <param name="curve">The curve of speed during time</param>
+    private IEnumerator ThrowEnumerator(Player player, Vector3 step, Transform target, float speed, AnimationCurve curve)
     {
+        IsThrown = true;
+
+        _player = player;
         Vector3 origin = transform.position;
         Vector3 torqueDirection = -Vector3.Cross(origin - step, Vector3.up).normalized;
         
         //_rigidbody.useGravity = false;
-        _isThrown = true;
-        
         if (DEBUG)
         {
             Utils.DebugBezierCurve(origin, step, target.position, 10, Color.red, 5);
@@ -82,19 +120,24 @@ public class ThrowableObject : MonoBehaviour
             
             yield return null;
         }
+        _player = null;
         _stopThrowPath = false;
         _rigidbody.useGravity = true;
-        _isThrown = false;
+        IsThrown = false;
         
         _rigidbody.AddForce(direction*50, ForceMode.Acceleration);
     }
 
+    /// <summary>
+    /// Function to stop the throw path.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (_isThrown)
+        if (IsThrown && other.gameObject == _player?.gameObject)
         {
             _stopThrowPath = true;
-            _isThrown = false;
+            IsThrown = false;
         }
     }
 }

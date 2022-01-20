@@ -49,29 +49,5 @@ public class Player : MonoBehaviour
 
         _targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
     }
-
     
-    private void Update()
-    {/*
-        if (targeter.CurrentTarget != null && debug)
-        {
-            target = targeter.CurrentTarget.transform;
-
-            Vector3 VtoTarget = target.position - cam.transform.position;
-            float d = Vector3.Distance(cam.transform.position, target.position) / 2;
-            float rAngle = Vector3.Angle(VtoTarget, cam.transform.forward);
-            float h = Mathf.Abs(d * (1 / Mathf.Cos(Mathf.Deg2Rad * rAngle)));
-
-            angle = cam.transform.position + cam.transform.forward * h;
-            Vector3 midPoint = target.position - ((target.position - cam.transform.position) * 0.5f);
-            Vector3 o = (angle - midPoint);
-            
-            
-            Debug.DrawLine(cam.transform.position, target.position, Color.white);
-            Debug.DrawLine(cam.transform.position, angle, Color.blue);
-            Debug.DrawLine(midPoint, angle, Color.magenta);
-            Debug.DrawRay(midPoint, Vector3.Cross(VtoTarget, o), Color.red);
-
-        }*/
-    }
 }
