@@ -107,7 +107,9 @@ public class ThrowSystem : MonoBehaviour
 
                 Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
                 
-                throwableObject.Throw(_player, stepPosition, target.transform, force, _speedCurve); // Throw the object
+                float accuracy = (force - _minThrowForce) / (_maxThrowForce - _minThrowForce); // TODO - Maybe need to calculate the accuracy in other way
+
+                throwableObject.Throw(_player, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
             }
             else
             {

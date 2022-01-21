@@ -61,9 +61,9 @@ public class ThrowableObject : MonoBehaviour
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
     /// <param name="curve">The curve of speed during time</param>
-    public void Throw(Player player , Vector3 step, Transform target, float speed, AnimationCurve curve)
+    public void Throw(Player player , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
     {
-        StartCoroutine(ThrowEnumerator(_player, step, target, speed, curve));
+        StartCoroutine(ThrowEnumerator(_player, step, target, speed, accuracy, curve));
     }
     
     /// <summary>
@@ -72,9 +72,9 @@ public class ThrowableObject : MonoBehaviour
     /// <param name="step">The position step of bezier curve</param>
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
-    public void Throw(Player player, Vector3 step, Transform target, float speed)
+    public void Throw(Player player, Vector3 step, Transform target, float speed, float accuracy)
     {
-        StartCoroutine(ThrowEnumerator(_player, step, target, speed, AnimationCurve.Linear(0, 1, 1, 1)));
+        StartCoroutine(ThrowEnumerator(_player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1)));
     }
     
     
@@ -85,15 +85,16 @@ public class ThrowableObject : MonoBehaviour
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
     /// <param name="curve">The curve of speed during time</param>
-    private IEnumerator ThrowEnumerator(Player player, Vector3 step, Transform target, float speed, AnimationCurve curve)
+    private IEnumerator ThrowEnumerator(Player player, Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
     {
         IsThrown = true;
 
         _player = player;
         Vector3 origin = transform.position;
+        Vector3 originTargetPosition = target.position;
         Vector3 torqueDirection = -Vector3.Cross(origin - step, Vector3.up).normalized;
         
-        //_rigidbody.useGravity = false;
+        
         if (DEBUG)
         {
             Utils.DebugBezierCurve(origin, step, target.position, 10, Color.red, 5);
@@ -108,7 +109,8 @@ public class ThrowableObject : MonoBehaviour
         
         while (time < 1 && !_stopThrowPath)
         {
-            Vector3 nextPos = Utils.BezierCurve(origin, step, target.position, time);
+            Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
+            Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
             
             _rigidbody.MovePosition(nextPos);
             _rigidbody.AddTorque(torqueDirection * Mathf.Pow(10, time));
