@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +8,7 @@ public class ThrowSystem : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Player _player;
     [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] private LineRenderer _lineRenderer;
 
     [Header("Settings")]
     [SerializeField] private float _minThrowForce = 10f;
@@ -16,6 +18,7 @@ public class ThrowSystem : MonoBehaviour
     [SerializeField] private AnimationCurve _speedCurve;
     [SerializeField] private float _minStepMultiplier = 2f;
     [SerializeField] private float _maxnStepMultiplier = 30f;
+    [SerializeField] private bool _drawCurve = true;
 
 
     private float _startChargeTime;
@@ -24,6 +27,15 @@ public class ThrowSystem : MonoBehaviour
     {
         _player = GetComponent<Player>();
         _rigidbody = GetComponent<Rigidbody>();
+        if (_lineRenderer == null) _lineRenderer = GetComponent<LineRenderer>();
+    }
+
+    private void Update()
+    {
+        if (_drawCurve)
+        {
+            DrawCurve();
+        }
     }
 
     /// <summary>
@@ -43,6 +55,28 @@ public class ThrowSystem : MonoBehaviour
             float multiplier = (_maxThrowForce - _minThrowForce) / _maxChargeTime;
             float force = multiplier * chargeValue + _minThrowForce;
             Throw(force);
+        }
+    }
+
+    private void DrawCurve()
+    {
+        if (_player.HasTarget && _player.IsHoldingObject)
+        {
+            _lineRenderer.enabled = true;
+            
+            // Calculate the multiplier of step distance
+            float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude); 
+            multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxnStepMultiplier);
+
+            Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
+            
+            Vector3[] positions = Utils.GetBezierCurvePositions(_player.HoldingObject.transform.position, stepPosition, _player.Target.transform.position, 30);
+            _lineRenderer.positionCount = positions.Length;
+            _lineRenderer.SetPositions(positions);
+        }
+        else
+        {
+            _lineRenderer.enabled = false;
         }
     }
     
