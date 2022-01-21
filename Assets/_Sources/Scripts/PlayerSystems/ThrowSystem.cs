@@ -2,6 +2,7 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class ThrowSystem : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ThrowSystem : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private LineRenderer _lineRenderer;
+    [SerializeField] private Slider _slider;
 
     [Header("Settings")]
     [SerializeField] private float _minThrowForce = 10f;
@@ -17,11 +19,31 @@ public class ThrowSystem : MonoBehaviour
     [SerializeField] private AnimationCurve _chargeCurve;
     [SerializeField] private AnimationCurve _speedCurve;
     [SerializeField] private float _minStepMultiplier = 2f;
-    [SerializeField] private float _maxnStepMultiplier = 30f;
+    [SerializeField] private float _maxStepMultiplier = 30f;
     [SerializeField] private bool _drawCurve = true;
-
-
+    
     private float _startChargeTime;
+    private bool _isCharging;
+
+    public bool IsCharging
+    {
+        get => _isCharging;
+        private set => _isCharging = value;
+    }
+
+    public float ChargeValue
+    {
+        get
+        {
+            if (!IsCharging) return 0;
+            
+            float chargeTime = Time.time - _startChargeTime;
+            float chargeValue = chargeTime / _maxChargeTime;
+            
+            return Mathf.Clamp(chargeValue, 0, 1);
+        }
+    }
+    
     
     private void Start()
     {
@@ -36,6 +58,7 @@ public class ThrowSystem : MonoBehaviour
         {
             DrawCurve();
         }
+        _slider.value = ChargeValue;
     }
 
     /// <summary>
@@ -47,8 +70,15 @@ public class ThrowSystem : MonoBehaviour
         if (ctx.started)
             _startChargeTime = Time.time;
 
+        if (ctx.performed && _player.IsHoldingObject)
+        {
+            IsCharging = true;
+        }
+
         if (ctx.canceled)
         {
+            if (IsCharging) IsCharging = false;
+            
             //Counts the charging time of the ball and converts it to the fore applied
             float chargeTime = Mathf.Clamp(Time.time - _startChargeTime, 0, _maxChargeTime);
             float chargeValue = _chargeCurve.Evaluate(chargeTime / _maxChargeTime) * _maxChargeTime;
@@ -66,9 +96,11 @@ public class ThrowSystem : MonoBehaviour
             
             // Calculate the multiplier of step distance
             float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude); 
-            multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxnStepMultiplier);
+            multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxStepMultiplier);
 
             Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
+            Debug.DrawLine(transform.position, stepPosition, Color.red);
+
             
             Vector3[] positions = Utils.GetBezierCurvePositions(_player.HoldingObject.transform.position, stepPosition, _player.Target.transform.position, 30);
             _lineRenderer.positionCount = positions.Length;
@@ -103,11 +135,13 @@ public class ThrowSystem : MonoBehaviour
                 
                 // Calculate the multiplier of step distance
                 float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude); 
-                multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxnStepMultiplier);
+                multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxStepMultiplier);
 
                 Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
+                Debug.DrawLine(transform.position, stepPosition, Color.red, 10);
                 
-                float accuracy = (force - _minThrowForce) / (_maxThrowForce - _minThrowForce); // TODO - Maybe need to calculate the accuracy in other way
+                
+                float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
 
                 throwableObject.Throw(_player, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
             }

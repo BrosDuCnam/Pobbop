@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [Header("Components")]
     [SerializeField] private TargetSystem _targetSystem;
     [SerializeField] private PickUpDropSystem _pickUpDropSystem;
+    [SerializeField] private ThrowSystem _throwSystem;
     //private Ball _pickDropSystem.PickableObject;
     //private Targeter targeter;
     
@@ -38,14 +39,19 @@ public class Player : MonoBehaviour
     {
         get => _targetSystem.CurrentTarget.gameObject;
     }
-    
-    
+    public bool IsCharging
+    {
+        get => _throwSystem.IsCharging;
+    }
+
+
     void Start()
     {
         Camera = Camera.main; //TODO: pas opti pour le moment
 
         _targetSystem = GetComponent<TargetSystem>();
         _pickUpDropSystem = GetComponent<PickUpDropSystem>();
+        _throwSystem = GetComponent<ThrowSystem>();
 
         _targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
     }
