@@ -119,7 +119,6 @@ public class PickUpDropSystem : MonoBehaviour
 
         if (hits.Length > 0) // If the list of object is not empty
         {
-            if (_pickupMode != PickupMode.Manual) return;
 
             PickableObject[] pickableObjects =
                 hits.Where(hit => hit.collider.GetComponent<PickableObject>() != null)
@@ -137,8 +136,13 @@ public class PickUpDropSystem : MonoBehaviour
             if (pickableObjects.Length > 0) // If there is at least one object in range
             {
                 PickableObject closestPickableObject = pickableObjects[0]; // Take the closest object
-
+                
+                // If the player is not in Manual mode or if the closest object is thrown (To catch the thrown object)
+                ThrowableObject throwableObject = closestPickableObject.GetComponent<ThrowableObject>();
+                if (_pickupMode != PickupMode.Manual || (throwableObject && !throwableObject.IsThrown)) return;
+                
                 PickableObject = closestPickableObject;
+
                 PickableObject.PickUp();
             }
         }
