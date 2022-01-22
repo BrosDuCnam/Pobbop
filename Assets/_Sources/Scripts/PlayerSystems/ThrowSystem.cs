@@ -99,12 +99,11 @@ public class ThrowSystem : MonoBehaviour
             multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxStepMultiplier);
 
             Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
-            Debug.DrawLine(transform.position, stepPosition, Color.red);
 
-            
             Vector3[] positions = Utils.GetBezierCurvePositions(_player.HoldingObject.transform.position, stepPosition, _player.Target.transform.position, 30);
-            _lineRenderer.positionCount = positions.Length;
+            _lineRenderer.positionCount = positions.Length+1;
             _lineRenderer.SetPositions(positions);
+            _lineRenderer.SetPosition(_lineRenderer.positionCount-1, _player.Target.transform.position);
         }
         else
         {
@@ -138,17 +137,15 @@ public class ThrowSystem : MonoBehaviour
                 multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxStepMultiplier);
 
                 Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
-                Debug.DrawLine(transform.position, stepPosition, Color.red, 10);
-                
-                
+
                 float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
 
-                throwableObject.Throw(_player, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
+                throwableObject.Throw(_player.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
             }
             else
             {
                 Vector3 direction = _player.Camera.transform.forward;
-                throwableObject.Throw(_player, direction, force); // Throw the object in front of the camera
+                throwableObject.Throw(_player.gameObject, direction, force); // Throw the object in front of the camera
             }
         }
     }

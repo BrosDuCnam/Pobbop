@@ -1,14 +1,26 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class ThrowableObject : MonoBehaviour
-{
-    public UnityEvent OnStateChanged;
+{ 
+    [Header("Settings")]
+    [SerializeField] private bool DEBUG;
+    [SerializeField] private int _poolSize = 10;
     
+    private bool _isThrown = false;
+    private Rigidbody _rigidbody;
+    [CanBeNull] private GameObject _owner;
+    LimitedQueue<Vector3> _poolPositions;
+
+    
+    private bool _stopThrowPath = false;
+
+    public UnityEvent OnStateChanged;
     /// <summary>
     /// Returns true if the object is currently being thrown.
     /// </summary>
@@ -23,33 +35,30 @@ public class ThrowableObject : MonoBehaviour
         }
     }
     
-    [SerializeField] private bool _isThrown = false;
-    [SerializeField] private Rigidbody _rigidbody;
-    [SerializeField] [CanBeNull] private Player _player;
-    
-    [SerializeField] private bool DEBUG;
-
-    private bool _stopThrowPath = false;
-
     private void OnEnable()
     {
         _rigidbody = GetComponent<Rigidbody>();
+
+        _poolPositions = new LimitedQueue<Vector3>(_poolSize);
     }
 
     private void Update()
     {
-        //print("etat :"+IsThrown);
+        _poolPositions.Enqueue(transform.position);
+        
+        //print(_owner == null);
     }
+
 
     /// <summary>
     /// Function to throw the object.
     /// </summary>
     /// <param name="direction">Direction to throw</param>
     /// <param name="force">Force in meter/s</param>
-    public void Throw(Player player, Vector3 direction, float force)
+    public void Throw(GameObject player, Vector3 direction, float force)
     {
         if (IsThrown) return;
-        _player = player;
+        _owner = player;
         IsThrown = true;
         _rigidbody.AddForce(transform.position + direction * (force * 50), ForceMode.Acceleration);
     }
@@ -61,9 +70,9 @@ public class ThrowableObject : MonoBehaviour
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
     /// <param name="curve">The curve of speed during time</param>
-    public void Throw(Player player , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
+    public void Throw(GameObject player , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
     {
-        StartCoroutine(ThrowEnumerator(_player, step, target, speed, accuracy, curve));
+        StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, curve));
     }
     
     /// <summary>
@@ -72,9 +81,9 @@ public class ThrowableObject : MonoBehaviour
     /// <param name="step">The position step of bezier curve</param>
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
-    public void Throw(Player player, Vector3 step, Transform target, float speed, float accuracy)
+    public void Throw(GameObject player, Vector3 step, Transform target, float speed, float accuracy)
     {
-        StartCoroutine(ThrowEnumerator(_player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1)));
+        StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1)));
     }
     
     
@@ -85,11 +94,12 @@ public class ThrowableObject : MonoBehaviour
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
     /// <param name="curve">The curve of speed during time</param>
-    private IEnumerator ThrowEnumerator(Player player, Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
+    private IEnumerator ThrowEnumerator(GameObject player, Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
     {
         IsThrown = true;
 
-        _player = player;
+        _owner = player;
+
         Vector3 origin = transform.position;
         Vector3 originTargetPosition = target.position;
         Vector3 torqueDirection = -Vector3.Cross(origin - step, Vector3.up).normalized;
@@ -115,14 +125,14 @@ public class ThrowableObject : MonoBehaviour
             _rigidbody.MovePosition(nextPos);
             _rigidbody.AddTorque(torqueDirection * Mathf.Pow(10, time));
 
-            new WaitForEndOfFrame();
+            new WaitForFixedUpdate();
             time += (i * (curve.Evaluate(time * 3))) * Time.deltaTime; // TODO - Hacky fix for curve
             
             direction = nextPos - lastPos;
             
             yield return null;
         }
-        _player = null;
+        _owner = null;
         _stopThrowPath = false;
         _rigidbody.useGravity = true;
         IsThrown = false;
@@ -136,7 +146,27 @@ public class ThrowableObject : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (IsThrown && other.gameObject == _player?.gameObject)
+        HealthSystem livingObject = other.GetComponent<HealthSystem>();
+        if (livingObject != null)
+        {
+            if (IsThrown || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
+            {
+                livingObject.TakeDamage(1); // TODO - change the damage
+                
+                if (livingObject.Health <= 0)
+                {
+                    Vector3 direction = -_rigidbody.velocity.normalized;
+        
+                    float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude); 
+                    multiplier = Mathf.Clamp(multiplier, 2, 30);
+        
+                    Throw(null, transform.position + direction * multiplier, _owner.transform, _rigidbody.velocity.magnitude, 1f);
+                }
+                
+            }
+        }
+        
+        if (IsThrown && other.gameObject == _owner?.gameObject)
         {
             _stopThrowPath = true;
             IsThrown = false;
