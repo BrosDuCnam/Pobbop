@@ -68,10 +68,8 @@ public class PickUpDropSystem : MonoBehaviour
     {
         RaycastHit[] hits = Physics.SphereCastAll(_player.Camera.transform.position, _pickUpDistance, 
             _player.Camera.transform.forward, _pickUpDistance); // Get all objects in range
-
         if (hits.Length > 0) // If the list of object is not empty
         {
-
             PickableObject[] pickableObjects =
                 hits.Where(hit => hit.collider.GetComponent<PickableObject>() != null)
                     .Select(hit => hit.collider.GetComponent<PickableObject>())
