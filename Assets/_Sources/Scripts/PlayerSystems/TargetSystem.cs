@@ -74,11 +74,15 @@ public class TargetSystem : MonoBehaviour
             _targetImage.enabled = true;
             
             Vector2 canvasSize = _targetImage.GetComponent<RectTransform>().sizeDelta;
-            Vector2 targetPosition = _player.Camera.WorldToScreenPoint(CurrentTarget.transform.position);
-            
-            Vector2 targetPositionInCanvas = new Vector2(targetPosition.x / canvasSize.x * 100, targetPosition.y / canvasSize.y * 100);
-            
-            _targetImage.rectTransform.position = targetPositionInCanvas; // Set target image position to the current target
+            Vector3 targetPosition = _player.Camera.WorldToScreenPoint(CurrentTarget.transform.position);
+
+            // TODO - Correct bug that the target image is not on edge of screen when player lokk behind the target
+            Vector3 targetPositionInCanvas = new Vector2(targetPosition.x / canvasSize.x * 100,
+                targetPosition.y / canvasSize.y * 100);
+            targetPositionInCanvas.x = Mathf.Clamp(targetPositionInCanvas.x, 0, Screen.width);
+            targetPositionInCanvas.y = Mathf.Clamp(targetPositionInCanvas.y, 0, Screen.height);
+
+                _targetImage.rectTransform.position = targetPositionInCanvas; // Set target image position to the current target
         } else
         {
             _targetImage.enabled = false;
@@ -120,7 +124,6 @@ public class TargetSystem : MonoBehaviour
                 }
             }
         }
-
         return visibleTargets;
     }
     

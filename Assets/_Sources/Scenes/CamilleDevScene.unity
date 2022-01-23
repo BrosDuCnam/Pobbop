@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -564,6 +564,38 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1275390252775522, guid: 5f6c85b6f6ab0b24abedd3e57447539c, type: 3}
   m_PrefabInstance: {fileID: 717655610}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &481844787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481844783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eef1fb263e34c238279c67fc83a139a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthSystem: {fileID: 0}
+--- !u!114 &481844788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481844783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7afae40e6cc24e749ee77288cd1288f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 1
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthZero:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &486085701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -626,6 +658,38 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1275390252775522, guid: 5f6c85b6f6ab0b24abedd3e57447539c, type: 3}
   m_PrefabInstance: {fileID: 475713569}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &502652357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502652353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eef1fb263e34c238279c67fc83a139a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthSystem: {fileID: 0}
+--- !u!114 &502652358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502652353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7afae40e6cc24e749ee77288cd1288f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 1
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthZero:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &540214397 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4287461183192828, guid: 56ceb8b51a3ad9648beb54dc0c75f997, type: 3}
@@ -1868,7 +1932,6 @@ MonoBehaviour:
   ReceiveWindowSize: 4096
   MaxRetransmit: 40
   NonAlloc: 1
-  MaximizeSendReceiveBuffersToOSLimit: 1
   ReliableMaxMessageSize: 298449
   UnreliableMaxMessageSize: 1199
   debugLog: 0
@@ -2165,12 +2228,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fea0e16fa034dd5aa8305e33022f728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DEBUG: 0
+  _poolSize: 10
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  _isThrown: 0
-  _rigidbody: {fileID: 0}
-  DEBUG: 0
 --- !u!114 &1895903495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2183,34 +2245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 788afe7504f14d03928cc58104ba768c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _throwableObject: {fileID: 0}
-  _throwForce: 5
-  _throwTarget: {fileID: 161948847}
-  _throwStep: {fileID: 113318250}
-  _throwCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.0000003501773
-      value: 0.95
-      inSlope: 0.006698186
-      outSlope: 0.006698186
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.093088515
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0.40359592
-      outSlope: 0.40359592
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.036187887
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!135 &1895903496
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2388,6 +2422,38 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1275390252775522, guid: 5f6c85b6f6ab0b24abedd3e57447539c, type: 3}
   m_PrefabInstance: {fileID: 943220482}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1976305123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1976305119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eef1fb263e34c238279c67fc83a139a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthSystem: {fileID: 0}
+--- !u!114 &1976305124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1976305119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7afae40e6cc24e749ee77288cd1288f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 1
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthZero:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &2107104230 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4415813332437900, guid: 64b779ce33d2fad4294882414467baa2, type: 3}

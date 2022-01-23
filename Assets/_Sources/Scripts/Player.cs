@@ -16,9 +16,8 @@ public class Player : NetworkBehaviour
     [SerializeField] private TargetSystem _targetSystem;
     [SerializeField] private PickUpDropSystem _pickUpDropSystem;
     [SerializeField] private ThrowSystem _throwSystem;
-    //private Ball _pickDropSystem.PickableObject;
-    //private Targeter targeter;
-    
+    [SerializeField] private HealthSystem _healthSystem;
+
     public Camera Camera;
 
     public bool IsHoldingObject
@@ -53,8 +52,8 @@ public class Player : NetworkBehaviour
         _targetSystem = GetComponent<TargetSystem>();
         _pickUpDropSystem = GetComponent<PickUpDropSystem>();
         _throwSystem = GetComponent<ThrowSystem>();
+        _healthSystem = GetComponent<HealthSystem>();
 
         _targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
     }
-    
 }
