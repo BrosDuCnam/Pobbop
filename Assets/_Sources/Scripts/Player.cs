@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO.Compression;
 using JetBrains.Annotations;
+using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(NewController))]
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     [Header("Components")]
     [SerializeField] private TargetSystem _targetSystem;

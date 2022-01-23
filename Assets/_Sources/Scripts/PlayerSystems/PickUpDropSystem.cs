@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
 using JetBrains.Annotations;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class PickUpDropSystem : MonoBehaviour
+public class PickUpDropSystem : NetworkBehaviour
 {
     [Header("PickUp Settings")]
     [SerializeField] private float _pickUpDistance = 1.5f;
@@ -53,6 +54,7 @@ public class PickUpDropSystem : MonoBehaviour
         if (PickableObject != null)
         {
             PickableObject.GetComponent<Rigidbody>().MovePosition(_pickUpPoint.position);
+            PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
         }
     }
 
@@ -77,7 +79,9 @@ public class PickUpDropSystem : MonoBehaviour
         if (PickableObject != null) // If the player has an object in hand
         {
             PickableObject.Drop();
+            PickableObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
             PickableObject = null;
+            
         }
     }
 
@@ -135,12 +139,12 @@ public class PickUpDropSystem : MonoBehaviour
             {
                 PickableObject closestPickableObject = pickableObjects[0]; // Take the closest object
                 
+                
                 // If the player is not in Manual mode or if the closest object is thrown (To catch the thrown object)
                 ThrowableObject throwableObject = closestPickableObject.GetComponent<ThrowableObject>();
                 if (_pickupMode != PickupMode.Manual || (throwableObject && !throwableObject.IsThrown)) return;
                 
                 PickableObject = closestPickableObject;
-
                 PickableObject.PickUp();
             }
         }

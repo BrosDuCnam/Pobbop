@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using JetBrains.Annotations;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-public class ThrowableObject : MonoBehaviour
+public class ThrowableObject : NetworkBehaviour
 {
     public UnityEvent OnStateChanged;
     
@@ -46,7 +47,7 @@ public class ThrowableObject : MonoBehaviour
     /// </summary>
     /// <param name="direction">Direction to throw</param>
     /// <param name="force">Force in meter/s</param>
-    public void Throw(Player player, Vector3 direction, float force)
+    [Command] public void Throw(Player player, Vector3 direction, float force)
     {
         if (IsThrown) return;
         _player = player;
@@ -61,7 +62,7 @@ public class ThrowableObject : MonoBehaviour
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
     /// <param name="curve">The curve of speed during time</param>
-    public void Throw(Player player , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
+     public void Throw(Player player , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
     {
         StartCoroutine(ThrowEnumerator(_player, step, target, speed, accuracy, curve));
     }
@@ -112,8 +113,8 @@ public class ThrowableObject : MonoBehaviour
             Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
             
-            _rigidbody.MovePosition(nextPos);
-            _rigidbody.AddTorque(torqueDirection * Mathf.Pow(10, time));
+            ApplyMovePosition(nextPos);
+            ApplyTorque(torqueDirection, time);
 
             new WaitForEndOfFrame();
             time += (i * (curve.Evaluate(time * 3))) * Time.deltaTime; // TODO - Hacky fix for curve
@@ -127,9 +128,31 @@ public class ThrowableObject : MonoBehaviour
         _rigidbody.useGravity = true;
         IsThrown = false;
         
+        ApplyThrowForce(direction);
+    }
+    
+    //fonction appelé dans la coroutine
+    [Command]
+    private void ApplyThrowForce(Vector3 direction)
+    {
+        Debug.Log("test");
         _rigidbody.AddForce(direction*50, ForceMode.Acceleration);
     }
 
+    //fonction appelé dans la coroutine
+    [Command]
+    private void ApplyMovePosition(Vector3 nextPos)
+    {
+        _rigidbody.MovePosition(nextPos);
+    }
+
+    //fonction appelé dans la coroutine
+    [Command]
+    private void ApplyTorque(Vector3 torqueDirection, float time)
+    {
+        _rigidbody.AddTorque(torqueDirection * Mathf.Pow(10, time));
+    }
+    
     /// <summary>
     /// Function to stop the throw path.
     /// </summary>

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
 using JetBrains.Annotations;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 
 
 //TODO - peut etre moyen d'opti cette class
-public class PickableObject : MonoBehaviour
+public class PickableObject : NetworkBehaviour
 {
     [SerializeField] [CanBeNull] private Collider _collider;
     [SerializeField] [CanBeNull] private Rigidbody _rigidbody;

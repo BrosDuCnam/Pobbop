@@ -1,10 +1,11 @@
 ﻿using System;
-using UnityEditor.Experimental.GraphView;
+using Mirror;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class ThrowSystem : MonoBehaviour
+public class ThrowSystem : NetworkBehaviour
 {
     [Header("Components")]
     [SerializeField] private Player _player;
@@ -44,14 +45,19 @@ public class ThrowSystem : MonoBehaviour
         }
     }
     
-    
-    private void Start()
+    public override void OnStartAuthority()
     {
+        enabled = true;
         _player = GetComponent<Player>();
         _rigidbody = GetComponent<Rigidbody>();
+    }
+    private void Start()
+    {
+        //_player = GetComponent<Player>();
+        //_rigidbody = GetComponent<Rigidbody>();
         if (_lineRenderer == null) _lineRenderer = GetComponent<LineRenderer>();
     }
-
+    
     private void Update()
     {
         if (_drawCurve)
@@ -116,6 +122,7 @@ public class ThrowSystem : MonoBehaviour
     /// Function to throw the current picked object
     /// </summary>
     /// <param name="force">speed at the begin in meter/s</param>
+    
     public void Throw(float force)
     {
         if (_player.IsHoldingObject) // If player hold an object
