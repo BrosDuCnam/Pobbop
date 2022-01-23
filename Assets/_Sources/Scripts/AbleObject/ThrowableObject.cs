@@ -194,6 +194,7 @@ public class ThrowableObject : NetworkBehaviour
         {
             _stopThrowPath = true;
             IsThrown = false;
+            GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
         }
     }
 }
