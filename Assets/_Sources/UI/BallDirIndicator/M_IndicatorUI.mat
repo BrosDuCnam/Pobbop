@@ -84,10 +84,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - PosX: -0.21132913
+    - PosX: -1.1735547
     - PosY: 5
-    - SizeX: 3.75
-    - SizeY: 10.214705
+    - SizeX: 1.5
+    - SizeY: 8.387602
     - Vector1_779b6b815bc945f1b9df797523dfa240: 0
     - Vector1_96ab8416f84b420998ae1dc72acd51ef: 1
     - Vector1_b5d4113c00b447468b2a56cdfbcf78c9: 0.1

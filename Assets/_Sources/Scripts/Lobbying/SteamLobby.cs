@@ -8,36 +8,23 @@ using UnityEngine.PlayerLoop;
 
 public class SteamLobby : MonoBehaviour
 {
-    [SerializeField] private GameObject buttons;
-    [SerializeField] private GameObject lobbyList;
-    [SerializeField] private bool filterLobbies = false;
-    [SerializeField] private bool SearchLobby = false;
-
+    [SerializeField] private bool filterLobbies;
     
     public static SteamLobby instance;
 
-    private NetworkManager networkManager;
-    private const string HostAdressKey = "HostAdress";
+    protected NetworkManager networkManager;
+    protected const string HostAdressKey = "HostAdress";
     
-    private List<CSteamID> lobbyIDS = new List<CSteamID>();
+    protected List<CSteamID> lobbyIDS = new List<CSteamID>();
 
     protected Callback<LobbyCreated_t> lobbyCreated;
     protected Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
     protected Callback<LobbyEnter_t> lobbyEntered;
     protected Callback<LobbyMatchList_t> lobbyListRetrieved;
     protected Callback<LobbyDataUpdate_t> lobbyDataUpdated;
+    
 
-    private void Update()
-    {
-        //Debug
-        if (SearchLobby)
-        {
-            JoinLobby();
-            SearchLobby = false;
-        }
-    }
-
-    private void Start()
+    protected  virtual void Start()
     {
         if (!SteamManager.Initialized) {return;}
         MakeInstance();
@@ -49,22 +36,16 @@ public class SteamLobby : MonoBehaviour
         lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
         lobbyListRetrieved = Callback<LobbyMatchList_t>.Create(OnLobbyListRetrieved);
         lobbyDataUpdated = Callback<LobbyDataUpdate_t>.Create(OnGetLobbyInfo);
-        
-        
-        lobbyList.SetActive(false);
+
     }
 
-    public void HostLobby()
+    protected void HostLobby(ELobbyType lobbyType, int maxPlayers)
     {
-        buttons.SetActive(false);
-        
-        SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
+        SteamMatchmaking.CreateLobby(lobbyType, maxPlayers);
     }
 
-    public void JoinLobby()
+    public virtual void StartJoinLobby()
     {
-        buttons.SetActive(false);
-        lobbyList.SetActive(true);
         if (filterLobbies)
         {
             SteamMatchmaking.AddRequestLobbyListStringFilter("game", "pobbop", ELobbyComparison.k_ELobbyComparisonEqual);
@@ -74,6 +55,7 @@ public class SteamLobby : MonoBehaviour
 
     private void OnLobbyListRetrieved(LobbyMatchList_t callback)
     {
+        lobbyIDS.Clear();
         for (int i = 0; i < callback.m_nLobbiesMatching; i++)
         {
             CSteamID lobbyID = SteamMatchmaking.GetLobbyByIndex(i);
@@ -82,22 +64,15 @@ public class SteamLobby : MonoBehaviour
         }
     }
 
-    private void OnGetLobbyInfo(LobbyDataUpdate_t callback)
+    protected virtual void OnGetLobbyInfo(LobbyDataUpdate_t callback)
     {
-        lobbyList.GetComponent<LobbyListManager>().DisplayLobbies(lobbyIDS, callback);
+        //Stuff
     }
 
-    private void OnLobbyCreated(LobbyCreated_t callback)
+    protected virtual void OnLobbyCreated(LobbyCreated_t callback)
     {
-        if (callback.m_eResult != EResult.k_EResultOK)
-        {
-            buttons.SetActive(true);
-            return;
-        }
-        
         networkManager.StartHost();
 
-        SteamMatchmaking.SetLobbyJoinable(new CSteamID(callback.m_ulSteamIDLobby), true);
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", "Default Name");
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "game", "pobbop");
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey,
@@ -110,15 +85,13 @@ public class SteamLobby : MonoBehaviour
         SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
     }
 
-    private void OnLobbyEntered(LobbyEnter_t callback)
+    protected virtual void OnLobbyEntered(LobbyEnter_t callback)
     {
         if (NetworkServer.active) {return;}
 
         string hostAdress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey);
         networkManager.networkAddress = hostAdress;
         networkManager.StartClient();
-        
-        buttons.SetActive(false);
     }
 
     public void JoinLobby(CSteamID lobbyId)

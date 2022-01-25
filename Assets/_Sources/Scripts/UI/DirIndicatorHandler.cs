@@ -58,6 +58,7 @@ public class DirIndicatorHandler : MonoBehaviour
             sizeX = (minSize - Mathf.Abs(angleX * lengthSize)) * sizeFact;
             sizeY = (minSize - Mathf.Abs(angleY * lengthSize)) * sizeFact;
             
+
             uiMat.SetFloat("PosX", angleX);
             uiMat.SetFloat("PosY", angleY);
             uiMat.SetFloat("SizeX", sizeY);
