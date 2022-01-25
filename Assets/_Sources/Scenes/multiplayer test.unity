@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -474,13 +474,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 446039732}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d560edd71d1dce746a5e5fc037a06218, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e8d6047e37646246a7109102729f5de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  filterLobbies: 0
   buttons: {fileID: 180952667}
   lobbyList: {fileID: 1601416932}
-  filterLobbies: 0
-  SearchLobby: 0
 --- !u!114 &446039734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,6 +535,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs: []
   nbPlayers: 0
+  nbTeams: 0
 --- !u!4 &446039737
 Transform:
   m_ObjectHideFlags: 0
@@ -802,8 +802,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 446039733}
-        m_TargetAssemblyTypeName: SteamLobby, Assembly-CSharp
-        m_MethodName: HostLobby
+        m_TargetAssemblyTypeName: LobbyBrowser, Assembly-CSharp
+        m_MethodName: HostMyLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2013,8 +2013,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 446039733}
-        m_TargetAssemblyTypeName: SteamLobby, Assembly-CSharp
-        m_MethodName: JoinLobby
+        m_TargetAssemblyTypeName: LobbyBrowser, Assembly-CSharp
+        m_MethodName: StartJoinLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

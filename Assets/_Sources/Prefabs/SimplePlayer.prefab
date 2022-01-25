@@ -553,7 +553,7 @@ MonoBehaviour:
   uiMat: {fileID: 2100000, guid: 7ef2d01e838e22648926d383a4e989ae, type: 2}
   cam: {fileID: 6684906263438855545}
   minSize: 7
-  sizeFact: 1.5
+  sizeFact: 1.2
   lengthSize: 1.2
   incomingBall: {fileID: 0}
 --- !u!114 &-69509633031566860

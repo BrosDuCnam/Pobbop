@@ -2209,6 +2209,7 @@ GameObject:
   - component: {fileID: 1895903495}
   - component: {fileID: 1895903494}
   - component: {fileID: 1895903500}
+  - component: {fileID: 1895903503}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -2228,6 +2229,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fea0e16fa034dd5aa8305e33022f728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   DEBUG: 0
   _poolSize: 10
   OnStateChanged:
@@ -2336,6 +2339,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3842a810155d4d08bbf4515c00e7bf34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _collider: {fileID: 0}
   _rigidbody: {fileID: 0}
   _isPicked: 0
@@ -2371,6 +2376,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1895903503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895903493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 2484398514
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!4 &1918019927 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4619688038427212, guid: 5f6c85b6f6ab0b24abedd3e57447539c, type: 3}
