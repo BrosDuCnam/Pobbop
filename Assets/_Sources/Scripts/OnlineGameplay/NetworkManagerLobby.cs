@@ -7,9 +7,10 @@ using UnityEngine;
 
 public class NetworkManagerLobby : NetworkManager
 {
-    public static event Action<List<NetworkConnection>> OnServerReadied;
-    public static List<NetworkConnection> playerList;
-    List<List<NetworkConnection>> teamLists;
+    public static event Action<List<List<NetworkConnection>>> OnServerReadied;
+
+    private List<NetworkConnection> playerList;
+    private List<List<NetworkConnection>> teamLists;
 
     private System.Random random = new System.Random();
 
@@ -26,13 +27,14 @@ public class NetworkManagerLobby : NetworkManager
         base.OnServerReady(conn);
         playerList.Add(conn);
 
-        if (playerList.Count == 4)
+        if (playerList.Count == nbPlayers)
         {
-            OnServerReadied?.Invoke(playerList);
+            GenerateTeams();
+            OnServerReadied?.Invoke(teamLists);
         }
     }
 
-    private void GenerateTeams(List<NetworkConnection> playerList)
+    private void GenerateTeams()
     {
         int teamNumber = 0;
         int n = nbPlayers / nbTeams;

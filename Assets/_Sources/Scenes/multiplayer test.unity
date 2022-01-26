@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1340,7 +1340,7 @@ GameObject:
   - component: {fileID: 1137601912}
   m_Layer: 0
   m_Name: SpawnPoint (3)
-  m_TagString: Untagged
+  m_TagString: StartTagTeam2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1437,7 +1437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 1215070383
-  serverOnly: 0
+  serverOnly: 1
   visible: 0
   m_AssetId: 
   hasSpawned: 0
@@ -1683,7 +1683,7 @@ GameObject:
   - component: {fileID: 1473332194}
   m_Layer: 0
   m_Name: SpawnPoint
-  m_TagString: Untagged
+  m_TagString: StartTagTeam1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1713,7 +1713,7 @@ GameObject:
   - component: {fileID: 1545719813}
   m_Layer: 0
   m_Name: SpawnPoint (2)
-  m_TagString: Untagged
+  m_TagString: StartTagTeam2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2181,7 +2181,7 @@ GameObject:
   - component: {fileID: 2109738330}
   m_Layer: 0
   m_Name: SpawnPoint (1)
-  m_TagString: Untagged
+  m_TagString: StartTagTeam1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

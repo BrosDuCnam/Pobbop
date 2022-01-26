@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ball
+  - StartTagTeam1
+  - StartTagTeam2
   layers:
   - Default
   - TransparentFX
