@@ -555,6 +555,7 @@ MonoBehaviour:
   minSize: 7
   sizeFact: 1.2
   lengthSize: 1.2
+  displayFactor: 0.1
   incomingBall: {fileID: 0}
 --- !u!114 &-69509633031566860
 MonoBehaviour:
