@@ -17,7 +17,7 @@ public class DirIndicatorHandler : MonoBehaviour
     private float ballAngle;
     private Transform me;
     [CanBeNull] public Transform incomingBall;
-    private float angleX, angleY, sizeX, sizeY;
+    private float angleX, angleY, sizeX, sizeY, rotation;
 
     
     private void Start()
@@ -36,6 +36,7 @@ public class DirIndicatorHandler : MonoBehaviour
             uiMat.SetFloat("PosY", angleY);
             uiMat.SetFloat("SizeX", sizeY);
             uiMat.SetFloat("SizeY", sizeX);
+            uiMat.SetFloat("Rotation", rotation);
         }
     }
 
@@ -43,6 +44,7 @@ public class DirIndicatorHandler : MonoBehaviour
     {
         Vector3 ballPos = incomingBall.position;
         Vector3 ballOnScreen = cam.WorldToViewportPoint(ballPos);
+
         float lerpFactX = 1;
         float lerpFactY = 1;
         
@@ -81,8 +83,6 @@ public class DirIndicatorHandler : MonoBehaviour
             }
         }
 
-
-
         if (ballOnScreen.z > 0)
         {
             angleX *= -1;
@@ -101,8 +101,10 @@ public class DirIndicatorHandler : MonoBehaviour
 
         angleX = Mathf.Clamp(angleX, -5, 5);
         angleY = Mathf.Clamp(angleY, -5, 5);
-        
-        
+
+        rotation = Vector2.Angle(Vector2.up, new Vector2(angleX, angleY));
+        if (Vector2.Angle(Vector2.right, new Vector2(angleX, angleY)) < 90)
+            rotation = 360 - rotation;
         sizeX = (minSize - Mathf.Abs(angleX * lengthSize)) * sizeFact * lerpFactX;
         sizeY = (minSize - Mathf.Abs(angleY * lengthSize)) * sizeFact * lerpFactY;
         
@@ -149,7 +151,7 @@ public class DirIndicatorHandler : MonoBehaviour
     {
         GUIStyle guiStyle = new GUIStyle();
         GUI.color = Color.black;
-        guiStyle.fontSize = 25;
+        guiStyle.fontSize = 30;
         GUILayout.Space(50);
         GUILayout.Label("x :" + angleX + " y : " + angleY, guiStyle);
     }
