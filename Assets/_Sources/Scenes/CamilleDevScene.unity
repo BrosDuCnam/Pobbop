@@ -384,7 +384,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4930c6ffa5b9b9f4098249a43abf8506, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1166,7 +1166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4619688038427212, guid: 5f6c85b6f6ab0b24abedd3e57447539c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.3339586
+      value: 10.9
       objectReference: {fileID: 0}
     - target: {fileID: 4619688038427212, guid: 5f6c85b6f6ab0b24abedd3e57447539c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1267,7 +1267,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4930c6ffa5b9b9f4098249a43abf8506, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1846,7 +1846,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4930c6ffa5b9b9f4098249a43abf8506, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2206,7 +2206,6 @@ GameObject:
   - component: {fileID: 1895903501}
   - component: {fileID: 1895903496}
   - component: {fileID: 1895903502}
-  - component: {fileID: 1895903495}
   - component: {fileID: 1895903494}
   - component: {fileID: 1895903500}
   - component: {fileID: 1895903503}
@@ -2233,21 +2232,10 @@ MonoBehaviour:
   syncInterval: 0.1
   DEBUG: 0
   _poolSize: 10
+  _reboundOnKill: 1
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1895903495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1895903493}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 788afe7504f14d03928cc58104ba768c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!135 &1895903496
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2469,7 +2457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afae40e6cc24e749ee77288cd1288f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 1
+  _maxHealth: 10
   OnHealthChanged:
     m_PersistentCalls:
       m_Calls: []

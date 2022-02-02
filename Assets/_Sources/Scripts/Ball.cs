@@ -18,7 +18,7 @@ public class Ball : MonoBehaviour
         {
             _ballState = BallState.Picked;
         }
-        else if (_throwableObject.IsThrown)
+        else if (_throwableObject.ThrowState != ThrowState.Idle)
         {
             _ballState = BallState.Thrown;
         }

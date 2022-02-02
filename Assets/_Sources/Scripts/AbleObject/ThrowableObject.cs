@@ -12,27 +12,37 @@ public class ThrowableObject : NetworkBehaviour
     [Header("Settings")]
     [SerializeField] private bool DEBUG;
     [SerializeField] private int _poolSize = 10;
+    [SerializeField] private bool _reboundOnKill;
     
-    private bool _isThrown = false;
+    private ThrowState _throwState = ThrowState.Idle;
     private Rigidbody _rigidbody;
     [CanBeNull] private GameObject _owner;
     LimitedQueue<Vector3> _poolPositions;
-    
-    
-    private bool _stopThrowPath = false;
 
     public UnityEvent OnStateChanged;
+    
+    private bool _stopThrow;
+
     /// <summary>
     /// Returns true if the object is currently being thrown.
     /// </summary>
-    public bool IsThrown
+    public ThrowState ThrowState
     {
-        get => _isThrown;
+        get => _throwState;
         set
         {
-            if (_isThrown == value) return;
-            _isThrown = value;
+            if (_throwState == value) return;
+            _throwState = value;
             OnStateChanged.Invoke();
+        }
+    }
+    
+    public GameObject Owner
+    {
+        get => _owner;
+        private set
+        {
+            _owner = value;
         }
     }
     
@@ -59,48 +69,58 @@ public class ThrowableObject : NetworkBehaviour
     [Command] 
     public void Throw(GameObject player, Vector3 direction, float force)
     {
-        if (IsThrown) return;
-        _owner = player;
-        IsThrown = true;
+        if (ThrowState != ThrowState.Idle) return;
+        Owner = player;
+        ThrowState = ThrowState.Thrown;
         _rigidbody.AddForce(transform.position + direction * (force * 50), ForceMode.Acceleration);
     }
 
     /// <summary>
     /// Function to throw the object.
     /// </summary>
+    /// <param name="player">The player who throw the object</param>
     /// <param name="step">The position step of bezier curve</param>
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
+    /// <param name="accuracy">The accuracy of throw (ex: 1 = object finish path on the target, 0.5 = object finish path between first position and now position of the target</param>
     /// <param name="curve">The curve of speed during time</param>
-    public void Throw(GameObject player , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
+    /// <param name="state">The future state of the object</param>
+    public void Throw(GameObject player , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve, ThrowState state = ThrowState.Thrown)
     {
-        StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, curve));
+        StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, curve, state));
     }
-    
+
     /// <summary>
     /// Function to throw the object.
     /// </summary>
+    /// <param name="player">The player who throw the object</param>
     /// <param name="step">The position step of bezier curve</param>
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
-    public void Throw(GameObject player, Vector3 step, Transform target, float speed, float accuracy)
+    /// <param name="accuracy">The accuracy of throw (ex: 1 = object finish path on the target, 0.5 = object finish path between first position and now position of the target</param>
+    /// <param name="state">The future state of the object</param>
+    public void Throw(GameObject player, Vector3 step, Transform target, float speed, float accuracy, ThrowState state = ThrowState.Thrown)
     {
-        StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1)));
+        StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1), state));
     }
-    
-    
+
+
     /// <summary>
     /// Enumerator to throw the object during time.
     /// </summary>
+    /// <param name="player"></param>
     /// <param name="step">The position step of bezier curve</param>
     /// <param name="target">The transform of the target</param>
     /// <param name="speed">The speed in meter/s</param>
+    /// <param name="accuracy">The accuracy of throw (ex: 1 = object finish path on the target, 0.5 = object finish path between first position and now position of the target</param>
     /// <param name="curve">The curve of speed during time</param>
-    private IEnumerator ThrowEnumerator(GameObject player, Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve)
+    /// <param name="state">The future state of the object</param>
+    private IEnumerator ThrowEnumerator(GameObject player, Vector3 step, Transform target, float speed, float accuracy,
+        AnimationCurve curve, ThrowState state = ThrowState.Thrown)
     {
-        IsThrown = true;
+        ThrowState = ThrowState.Thrown;ThrowState = state;
 
-        _owner = player;
+        Owner = player;
 
         Vector3 origin = transform.position;
         Vector3 originTargetPosition = target.position;
@@ -119,7 +139,7 @@ public class ThrowableObject : NetworkBehaviour
         Vector3 direction = (target.position - step);
         Vector3 lastPos = origin;
         
-        while (time < 1 && !_stopThrowPath)
+        while (time < 1 && ThrowState != ThrowState.Idle && !_stopThrow)
         {
             Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
@@ -132,12 +152,15 @@ public class ThrowableObject : NetworkBehaviour
             
             direction = nextPos - lastPos;
             
+            if (state == ThrowState.Rebound) Debug.Log("Rebound");
+            
             yield return null;
         }
-        _owner = null;
-        _stopThrowPath = false;
+        
+        Owner = null;
         _rigidbody.useGravity = true;
-        IsThrown = false;
+        _stopThrow = false;
+        ThrowState = ThrowState.Idle;
         
         ApplyThrowForce(direction);
     }
@@ -146,12 +169,11 @@ public class ThrowableObject : NetworkBehaviour
     [Command]
     private void ApplyThrowForce(Vector3 direction)
     {
-        Debug.Log("test");
         _rigidbody.AddForce(direction*50, ForceMode.Acceleration);
     }
 
     //fonction appelé dans la coroutine
-    [Command]
+    //[Command] // TODO - Fix this
     private void ApplyMovePosition(Vector3 nextPos)
     {
         _rigidbody.MovePosition(nextPos);
@@ -161,40 +183,83 @@ public class ThrowableObject : NetworkBehaviour
     [Command]
     private void ApplyTorque(Vector3 torqueDirection, float time)
     {
-        _rigidbody.AddTorque(torqueDirection * Mathf.Pow(10, time));
+        _rigidbody.AddTorque(torqueDirection * Mathf.Pow(100, time));
     }
     
     /// <summary>
     /// Function to stop the throw path.
     /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other)
+    /// <param name="other">The collision</param>
+    private void OnCollisionEnter(Collision other)
     {
-        HealthSystem livingObject = other.GetComponent<HealthSystem>();
+        StartCoroutine(OnCollisionEnterCoroutine(other));
+    }
+
+    /// <summary>
+    /// Coroutine to stop the throw path.
+    /// </summary>
+    /// <param name="other">The collision</param>
+    private IEnumerator OnCollisionEnterCoroutine(Collision other)
+    {
+        GameObject owner = Owner;
+        GameObject otherObject = other.gameObject;
+        if (ThrowState != ThrowState.Idle)
+        {
+            Player playerParent = otherObject.GetComponentInParent<Player>();
+            // If the player is the owner of the object
+            if (Owner != null && (otherObject == Owner || (playerParent != null && playerParent.gameObject == Owner))) yield return null;
+            else
+            {
+                _stopThrow = true;
+                GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
+            }
+        }
+
+        while (ThrowState != ThrowState.Idle) yield return null; // Wait for the end of the throw
+
+        HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
         if (livingObject != null)
         {
-            if (IsThrown || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
+            if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
             {
                 livingObject.TakeDamage(1); // TODO - change the damage
                 
-                if (livingObject.Health <= 0)
+                if (_reboundOnKill)
                 {
-                    Vector3 direction = -_rigidbody.velocity.normalized;
-        
-                    float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude); 
-                    multiplier = Mathf.Clamp(multiplier, 2, 30);
-        
-                    Throw(null, transform.position + direction * multiplier, _owner.transform, _rigidbody.velocity.magnitude, 1f);
+                    if (livingObject.Health <= 1000 && owner != null) // TODO change 1000 to other value
+                    {
+                        Vector3 direction = _poolPositions.ToArray()[0] - transform.position;
+                        float multiplier = _rigidbody.velocity.magnitude;
+                        multiplier = Mathf.Clamp(multiplier, 2, 30);
+
+                        Throw(owner, transform.position + direction * multiplier, owner.transform,
+                            15, 1f, ThrowState.Rebound);
+                        
+                        //Utils.DebugBezierCurve(transform.position, transform.position + direction * multiplier, owner.transform.position, 100, Color.blue, 540);
+                    }
                 }
                 
             }
         }
-        
-        if (IsThrown && other.gameObject == _owner?.gameObject)
-        {
-            _stopThrowPath = true;
-            IsThrown = false;
-            GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
-        }
     }
+    
+}
+
+/// <summary>
+/// Enum to define the state of the throw.
+/// </summary>
+public enum ThrowState
+{
+    /// <summary>
+    /// The throw is idle.
+    /// </summary>
+    Idle,
+    /// <summary>
+    /// The throw is in progress.
+    /// </summary>
+    Thrown,
+    /// <summary>
+    /// The throw is in progress and the object is rebounding.
+    /// </summary>
+    Rebound
 }

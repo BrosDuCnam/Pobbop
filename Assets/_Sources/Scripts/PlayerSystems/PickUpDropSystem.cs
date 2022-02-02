@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Debug = UnityEngine.Debug;
 
 public class PickUpDropSystem : NetworkBehaviour
 {
@@ -98,8 +100,8 @@ public class PickUpDropSystem : NetworkBehaviour
         if ((pickableObject == null) || pickableObject == PickableObject || !pickableObject.IsPickable) return;
         
         ThrowableObject throwableObject = other.GetComponent<ThrowableObject>();
-        if (throwableObject != null && throwableObject.IsThrown) return; //TODO - change condition 
-
+        if (throwableObject != null && throwableObject.ThrowState != ThrowState.Idle) return; //TODO - change condition 
+        
         if (_pickupMode == PickupMode.Auto)
         {
             PickableObject = pickableObject;
@@ -110,6 +112,21 @@ public class PickUpDropSystem : NetworkBehaviour
             {
                 PickableObject = pickableObject;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (PickableObject != null) return; // If the player has an object in hand
+        
+        // If the object is not pickable
+        PickableObject pickableObject = other.GetComponent<PickableObject>();
+        if ((pickableObject == null) || pickableObject == PickableObject || !pickableObject.IsPickable) return;
+        
+        ThrowableObject throwableObject = other.GetComponent<ThrowableObject>();
+        if (throwableObject && throwableObject.ThrowState == ThrowState.Rebound && throwableObject.Owner == _player.gameObject)
+        {
+            PickableObject = pickableObject;
         }
     }
 
@@ -142,7 +159,7 @@ public class PickUpDropSystem : NetworkBehaviour
                 
                 // If the player is not in Manual mode or if the closest object is thrown (To catch the thrown object)
                 ThrowableObject throwableObject = closestPickableObject.GetComponent<ThrowableObject>();
-                if (_pickupMode != PickupMode.Manual || (throwableObject && !throwableObject.IsThrown)) return;
+                if (_pickupMode != PickupMode.Manual || (throwableObject && throwableObject.ThrowState != ThrowState.Idle)) return;
                 
                 PickableObject = closestPickableObject;
                 PickableObject.PickUp();
