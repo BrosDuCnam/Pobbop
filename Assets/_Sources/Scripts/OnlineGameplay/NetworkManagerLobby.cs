@@ -12,6 +12,8 @@ public class NetworkManagerLobby : NetworkManager
     private List<NetworkConnection> playerList = new List<NetworkConnection>();
     private List<List<NetworkConnection>> teamLists = new List<List<NetworkConnection>>();
 
+    private static List<int> teamScores = new List<int>();
+
     private System.Random random = new System.Random();
 
     [SerializeField] private int nbPlayers;
@@ -56,10 +58,18 @@ public class NetworkManagerLobby : NetworkManager
     private void GenerateTeamAmount()
     {
         List<NetworkConnection> newList;
+        int newScore;
         for (int i = 0; i < nbTeams; i++)
         {
             newList = new List<NetworkConnection>();
+            newScore = 0;
             teamLists.Add(newList);
+            teamScores.Add(newScore);
         }
+    }
+
+    public static void AddPoint(int teamNumber)
+    {
+        teamScores[teamNumber - 1]++;
     }
 }

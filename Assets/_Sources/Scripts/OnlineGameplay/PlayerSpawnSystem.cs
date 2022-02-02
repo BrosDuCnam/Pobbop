@@ -13,9 +13,6 @@ public class PlayerSpawnSystem : NetworkBehaviour
     
     private static List<List<Transform>> teamTransformLists = new List<List<Transform>>();
 
-    [SerializeField] private List<Transform> testTm8;
-    [SerializeField] private List<Transform> testEnemie;
-
     private static bool test = true;
     public override void OnStartServer()
     {

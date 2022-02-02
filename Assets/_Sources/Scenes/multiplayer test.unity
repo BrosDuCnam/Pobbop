@@ -1424,11 +1424,6 @@ MonoBehaviour:
   - {fileID: 1545719813}
   - {fileID: 1137601912}
   playerPrefab: {fileID: 1007794748870628243, guid: 706410f838c7b4e4f9e441f7e7466a06, type: 3}
-  testTm8:
-  - {fileID: 0}
-  testEnemie:
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &1270193752
 MonoBehaviour:
   m_ObjectHideFlags: 0
