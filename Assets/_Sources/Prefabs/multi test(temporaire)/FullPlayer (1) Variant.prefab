@@ -19,6 +19,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5000011437541627098, guid: 6c4731c7aef3fe44c8f33c50b038b697, type: 3}
+      propertyPath: teamNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8797491869613382536, guid: 6c4731c7aef3fe44c8f33c50b038b697, type: 3}
       propertyPath: m_Name
       value: FullPlayer (1) Variant
@@ -82,6 +86,26 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8797491869613382536, guid: 6c4731c7aef3fe44c8f33c50b038b697, type: 3}
   m_PrefabInstance: {fileID: 8640894492888614942}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4405476027671596676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007794748870628246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7afae40e6cc24e749ee77288cd1288f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 1
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthZero:
+    m_PersistentCalls:
+      m_Calls: []
+  test: 0
 --- !u!114 &6883891536647975641
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,9 +17,11 @@ public class Player : NetworkBehaviour
     [SerializeField] private PickUpDropSystem _pickUpDropSystem;
     [SerializeField] private ThrowSystem _throwSystem;
     [SerializeField] private HealthSystem _healthSystem;
-
+    
     public Camera Camera;
 
+    [HideInInspector] public int teamNumber = 1;
+    
     public bool IsHoldingObject
     {
         get => _pickUpDropSystem.PickableObject != null;

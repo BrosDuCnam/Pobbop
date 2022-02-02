@@ -9,8 +9,8 @@ public class NetworkManagerLobby : NetworkManager
 {
     public static event Action<List<List<NetworkConnection>>> OnServerReadied;
 
-    private List<NetworkConnection> playerList;
-    private List<List<NetworkConnection>> teamLists;
+    private List<NetworkConnection> playerList = new List<NetworkConnection>();
+    private List<List<NetworkConnection>> teamLists = new List<List<NetworkConnection>>();
 
     private System.Random random = new System.Random();
 

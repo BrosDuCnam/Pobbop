@@ -12,6 +12,7 @@ public class HealthSystem : MonoBehaviour
     public UnityEvent OnHealthChanged; 
     public UnityEvent OnHealthZero;
     
+
     public int Health
     {
         get => _currentHealth;
@@ -33,11 +34,18 @@ public class HealthSystem : MonoBehaviour
     private void Start()
     {
         _currentHealth = _maxHealth;
+        OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
     }
 
     public void TakeDamage(int damage)
     {
         Health -= damage;
     }
-    
+
+    private void Eliminated()
+    {
+        int teamNumber = transform.GetComponent<Player>().teamNumber;
+        PlayerSpawnSystem.PlayerRemoveTransform(transform, teamNumber);
+        PlayerSpawnSystem.Respawn(transform, teamNumber);
+    }
 }
