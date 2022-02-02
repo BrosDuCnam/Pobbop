@@ -54,6 +54,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
                 Transform playerSpawned = Instantiate(playerPrefab, startSpawnPoints[spawnIndex].position, startSpawnPoints[spawnIndex].rotation);
                 NetworkServer.Spawn(playerSpawned.gameObject, conn);
                 teamTransformLists[i].Add(playerSpawned);
+                playerSpawned.GetComponent<Player>().teamNumber = i + 1;
                 spawnIndex++;
             }
         }

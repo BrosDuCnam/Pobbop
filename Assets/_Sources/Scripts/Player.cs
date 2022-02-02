@@ -20,7 +20,7 @@ public class Player : NetworkBehaviour
     
     public Camera Camera;
 
-    [HideInInspector] public int teamNumber = 1;
+    [HideInInspector] public int teamNumber = 0;
     
     public bool IsHoldingObject
     {
