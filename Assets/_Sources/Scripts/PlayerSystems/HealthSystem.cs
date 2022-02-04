@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +12,10 @@ public class HealthSystem : MonoBehaviour
     [Header("Events")]
     public UnityEvent OnHealthChanged; 
     public UnityEvent OnHealthZero;
+
+    [CanBeNull] private GameObject lastPlayerDamage;
     
+
     public int Health
     {
         get => _currentHealth;
@@ -33,11 +37,21 @@ public class HealthSystem : MonoBehaviour
     private void Start()
     {
         _currentHealth = _maxHealth;
+        OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, GameObject playerDamage)
     {
         Health -= damage;
+        lastPlayerDamage = playerDamage;
     }
-    
+
+    private void Eliminated()
+    {
+        int teamNumber = transform.GetComponent<Player>().teamNumber;
+        int enemyTeam = lastPlayerDamage.GetComponent<Player>().teamNumber;
+        NetworkManagerLobby.AddPoint(enemyTeam);
+        PlayerSpawnSystem.PlayerRemoveTransform(transform, teamNumber);
+        PlayerSpawnSystem.Respawn(transform, teamNumber);
+    }
 }

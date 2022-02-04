@@ -530,12 +530,12 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 1007794748870628246, guid: 706410f838c7b4e4f9e441f7e7466a06, type: 3}
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs: []
-  nbPlayers: 0
-  nbTeams: 0
+  nbPlayers: 1
+  nbTeams: 1
 --- !u!4 &446039737
 Transform:
   m_ObjectHideFlags: 0
@@ -1420,8 +1420,8 @@ MonoBehaviour:
   syncInterval: 0.1
   spawnPointsList:
   - {fileID: 1473332194}
-  - {fileID: 1545719813}
   - {fileID: 2109738330}
+  - {fileID: 1545719813}
   - {fileID: 1137601912}
   playerPrefab: {fileID: 1007794748870628243, guid: 706410f838c7b4e4f9e441f7e7466a06, type: 3}
 --- !u!114 &1270193752

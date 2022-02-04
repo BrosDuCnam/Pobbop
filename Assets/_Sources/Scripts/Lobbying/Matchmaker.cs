@@ -16,6 +16,11 @@ public class Matchmaker : SteamLobby
     private float lastChecked;
     private bool ready;
 
+    private CSteamID[] playerstoConnect;
+    
+    [SerializeField] private bool D_filterMatch;
+    
+
     public void SetReady()
     {
         ready = true;
@@ -38,14 +43,31 @@ public class Matchmaker : SteamLobby
         {
             if (Time.time > lastChecked + refreshRate)
             {
+                StartJoinLobby();
+
+                foreach (CSteamID lobbyId in lobbyIDS)
+                {
+                    Debug.Log("lobby :: " + lobbyId);
+                }
+                
                 //Is there enough players to create a match ?
-                if (lobbyIDS.Count >= GameInfos.GameModesPlayers[gameMode] - 1)
+                if (lobbyIDS.Count >= GameInfos.GameModesPlayers[gameMode])
                 {
                     //If yes, decide who is the host then create the connection
-                    
+                    for (int i = 0; i < GameInfos.GameModesPlayers[gameMode] - 1; i++)
+                    {
+                        playerstoConnect[i] = lobbyIDS[i];
+                    }
                 }
                 lastChecked = Time.time;
             }
         }
+    }
+
+    public override void StartJoinLobby()
+    {
+        if (D_filterMatch)
+            SteamMatchmaking.AddRequestLobbyListStringFilter("mode", gameMode.ToString(), ELobbyComparison.k_ELobbyComparisonEqual);
+        base.StartJoinLobby();
     }
 }

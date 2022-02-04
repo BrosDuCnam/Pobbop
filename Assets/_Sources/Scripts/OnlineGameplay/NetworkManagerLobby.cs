@@ -9,8 +9,10 @@ public class NetworkManagerLobby : NetworkManager
 {
     public static event Action<List<List<NetworkConnection>>> OnServerReadied;
 
-    private List<NetworkConnection> playerList;
-    private List<List<NetworkConnection>> teamLists;
+    private List<NetworkConnection> playerList = new List<NetworkConnection>();
+    private List<List<NetworkConnection>> teamLists = new List<List<NetworkConnection>>();
+
+    private static List<int> teamScores = new List<int>();
 
     private System.Random random = new System.Random();
 
@@ -56,10 +58,18 @@ public class NetworkManagerLobby : NetworkManager
     private void GenerateTeamAmount()
     {
         List<NetworkConnection> newList;
+        int newScore;
         for (int i = 0; i < nbTeams; i++)
         {
             newList = new List<NetworkConnection>();
+            newScore = 0;
             teamLists.Add(newList);
+            teamScores.Add(newScore);
         }
+    }
+
+    public static void AddPoint(int teamNumber)
+    {
+        teamScores[teamNumber - 1]++;
     }
 }
