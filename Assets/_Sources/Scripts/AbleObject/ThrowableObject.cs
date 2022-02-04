@@ -151,9 +151,7 @@ public class ThrowableObject : NetworkBehaviour
             time += (i * (curve.Evaluate(time * 3))) * Time.deltaTime; // TODO - Hacky fix for curve
             
             direction = nextPos - lastPos;
-            
-            if (state == ThrowState.Rebound) Debug.Log("Rebound");
-            
+
             yield return null;
         }
         

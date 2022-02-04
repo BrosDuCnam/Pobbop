@@ -60,11 +60,22 @@ public class ThrowSystem : NetworkBehaviour
     
     private void Update()
     {
+        _slider.value = ChargeValue;
+        
         if (_drawCurve)
         {
-            DrawCurve();
+            float force = 0;
+            
+            if (IsCharging)
+            {
+                float chargeTime = Mathf.Clamp(Time.time - _startChargeTime, 0, _maxChargeTime);
+                float chargeValue = _chargeCurve.Evaluate(chargeTime / _maxChargeTime) * _maxChargeTime;
+                float multiplier = (_maxThrowForce - _minThrowForce) / _maxChargeTime;
+                force = multiplier * chargeValue + _minThrowForce;
+            }
+            
+            DrawCurve(force);
         }
-        _slider.value = ChargeValue;
     }
 
     /// <summary>
@@ -94,14 +105,17 @@ public class ThrowSystem : NetworkBehaviour
         }
     }
 
-    private void DrawCurve()
+    
+    private void DrawCurve(float force)
     {
         if (_player.HasTarget && _player.IsHoldingObject)
         {
             _lineRenderer.enabled = true;
             
             // Calculate the multiplier of step distance
-            float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude); 
+            float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude);
+            multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
+
             multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxStepMultiplier);
 
             Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
@@ -115,6 +129,11 @@ public class ThrowSystem : NetworkBehaviour
         {
             _lineRenderer.enabled = false;
         }
+    }
+    
+    private float GetNormalizedForce(float force)
+    {
+        return (force - _minThrowForce) / (_maxThrowForce - _minThrowForce);
     }
     
     /// <summary>
@@ -140,7 +159,8 @@ public class ThrowSystem : NetworkBehaviour
                 }
                 
                 // Calculate the multiplier of step distance
-                float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude); 
+                float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude);
+                multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
                 multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxStepMultiplier);
 
                 Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
@@ -156,5 +176,4 @@ public class ThrowSystem : NetworkBehaviour
             }
         }
     }
-    
 }
