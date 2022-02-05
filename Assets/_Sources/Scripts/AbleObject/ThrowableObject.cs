@@ -132,6 +132,9 @@ public class ThrowableObject : NetworkBehaviour
             Utils.DebugBezierCurve(origin, step, target.position, 10, Color.red, 5);
         }
         
+        GetComponent<NetworkIdentity>().AssignClientAuthority(Owner.GetComponent<NetworkIdentity>().connectionToClient);
+        while (!GetComponent<NetworkIdentity>().hasAuthority) yield return null;
+        
         float time = 0;
         float distance = Utils.BezierCurveDistance(origin, step, target.position, 10);
         float i = 1 / (distance / speed);
@@ -161,6 +164,8 @@ public class ThrowableObject : NetworkBehaviour
         ThrowState = ThrowState.Idle;
         
         ApplyThrowForce(direction);
+        
+        GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
     }
     
     //fonction appelé dans la coroutine
@@ -171,7 +176,7 @@ public class ThrowableObject : NetworkBehaviour
     }
 
     //fonction appelé dans la coroutine
-    //[Command] // TODO - Fix this
+    [Command]
     private void ApplyMovePosition(Vector3 nextPos)
     {
         _rigidbody.MovePosition(nextPos);
@@ -209,7 +214,6 @@ public class ThrowableObject : NetworkBehaviour
             else
             {
                 _stopThrow = true;
-                GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
             }
         }
 
