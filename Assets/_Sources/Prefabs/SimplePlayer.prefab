@@ -256,8 +256,7 @@ GameObject:
   - component: {fileID: 6684906265089900068}
   - component: {fileID: 6684906265089900064}
   - component: {fileID: 6684906265089900071}
-  - component: {fileID: 3262890219445815215}
-  - component: {fileID: 3204091307977020947}
+  - component: {fileID: -7344982469457069069}
   - component: {fileID: 2042341140092393419}
   - component: {fileID: -69509633031566860}
   - component: {fileID: -5903042100223321338}
@@ -391,8 +390,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3204091307977020947}
-        m_TargetAssemblyTypeName: NewController, Assembly-CSharp
+      - m_Target: {fileID: -7344982469457069069}
+        m_TargetAssemblyTypeName: PlayerInputController, Assembly-CSharp
         m_MethodName: Axis
         m_Mode: 0
         m_Arguments:
@@ -407,8 +406,8 @@ MonoBehaviour:
     m_ActionName: Player/ZQSD
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3204091307977020947}
-        m_TargetAssemblyTypeName: NewController, Assembly-CSharp
+      - m_Target: {fileID: -7344982469457069069}
+        m_TargetAssemblyTypeName: PlayerInputController, Assembly-CSharp
         m_MethodName: RunInput
         m_Mode: 0
         m_Arguments:
@@ -423,8 +422,8 @@ MonoBehaviour:
     m_ActionName: Player/Run[/Keyboard/leftShift]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3204091307977020947}
-        m_TargetAssemblyTypeName: NewController, Assembly-CSharp
+      - m_Target: {fileID: -7344982469457069069}
+        m_TargetAssemblyTypeName: PlayerInputController, Assembly-CSharp
         m_MethodName: JumpInput
         m_Mode: 0
         m_Arguments:
@@ -439,9 +438,9 @@ MonoBehaviour:
     m_ActionName: Player/New action
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3262890219445815215}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: mouseAxis
+      - m_Target: {fileID: -7344982469457069069}
+        m_TargetAssemblyTypeName: PlayerInputController, Assembly-CSharp
+        m_MethodName: MouseInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -475,8 +474,8 @@ MonoBehaviour:
     m_ActionName: Player/Throw[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3204091307977020947}
-        m_TargetAssemblyTypeName: NewController, Assembly-CSharp
+      - m_Target: {fileID: -7344982469457069069}
+        m_TargetAssemblyTypeName: PlayerInputController, Assembly-CSharp
         m_MethodName: CrouchInput
         m_Mode: 0
         m_Arguments:
@@ -494,7 +493,7 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &3262890219445815215
+--- !u!114 &-7344982469457069069
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -503,24 +502,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6684906265089900070}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44060427f254f624f9714f8cee404992, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  myCam: {fileID: 6684906263438855547}
-  sensX: 0.08
-  sensY: 0.08
---- !u!114 &3204091307977020947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6684906265089900070}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4b394f3b160fca48bddcf9a08e86808, type: 3}
+  m_Script: {fileID: 11500000, guid: 1809aaf7612c2ea4588c62488153fa36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
@@ -538,6 +520,9 @@ MonoBehaviour:
   minSlidePause: 1
   slideDeceleration: 0.1
   crouchScale: 0.3
+  myCam: {fileID: 6684906263438855547}
+  sensX: 0.1
+  sensY: 0.1
 --- !u!114 &2042341140092393419
 MonoBehaviour:
   m_ObjectHideFlags: 0

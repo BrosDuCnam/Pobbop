@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-public class NewController : NetworkBehaviour
+public class Controller : NetworkBehaviour
 {
 
     private Rigidbody rb;
@@ -33,6 +34,11 @@ public class NewController : NetworkBehaviour
     //Crouch
     [SerializeField] private float crouchScale = 0.3f;
     
+    [Header("Camera Settings")]
+    [SerializeField] private GameObject myCam;
+    [SerializeField] private float sensX = 0.1f;
+    [SerializeField] private float sensY = 0.1f;
+    
     //Bools
     private bool isGrounded = false;
     private bool run;
@@ -41,10 +47,29 @@ public class NewController : NetworkBehaviour
     private bool sliding;
     private bool enterSliding = true;
 
+    protected UnityEvent<Vector2> onAxis = new UnityEvent<Vector2>();
+    protected UnityEvent onRunStart = new UnityEvent();
+    protected UnityEvent<bool> onJump = new UnityEvent<bool>();
+    protected UnityEvent<bool> onCrouch = new UnityEvent<bool>();
+    protected UnityEvent<Vector2> onMouseAxis = new UnityEvent<Vector2>();
+
     private float runInputTime;
     private List<float> yVelBuffer = new List<float>();
 
     private float lastBoost = 0;
+    
+    //Cam
+    private Vector2 camAxis;
+    private Vector2 currentLook;
+
+    private void Awake()
+    {
+        onAxis.AddListener(Axis);
+        onRunStart.AddListener(OnRun);
+        onJump.AddListener(OnJump);
+        onCrouch.AddListener(OnCrouch);
+        onMouseAxis.AddListener(OnDirection);
+    }
 
     public override void OnStartAuthority()
     {
@@ -53,6 +78,10 @@ public class NewController : NetworkBehaviour
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
+        //Cam
+        enabled = true;
+        myCam.SetActive(true);
     }
 
     [ClientCallback]
@@ -60,6 +89,7 @@ public class NewController : NetworkBehaviour
     {
         if (!crouch && isGrounded && Time.time > lastBoost + minSlidePause)
             enterSliding = true;
+        CalculateCam();
     }
 
     [ClientCallback]
@@ -67,12 +97,18 @@ public class NewController : NetworkBehaviour
     {
         dir = Direction();
 
+        Debug.Log(isGrounded);
         if (isGrounded)
         {
+
             if (crouch)
+            {
                 Crouch(dir, crouchSpeed, groundAcceleration);
+            }
             else
+            {
                 Walk(dir, run ? runSpeed : walkSpeed, groundAcceleration);
+            }
         }
         else
         {
@@ -80,6 +116,8 @@ public class NewController : NetworkBehaviour
             //Register vertical velocity to adapt the slide when finishing a jump (or fall)
             RegisterFloatBuffer(yVelBuffer, rb.velocity.y, 3);
         }
+
+        RotateCam();
     }
     
 
@@ -303,34 +341,56 @@ public class NewController : NetworkBehaviour
 
     #endregion
 
+    #region Camera
+
+    private void RotateCam()
+    {
+        myCam.transform.localRotation = Quaternion.AngleAxis(-currentLook.y, Vector3.right);
+        transform.localRotation = Quaternion.Euler(0, currentLook.x, 0);
+
+    }
+    
+    private void CalculateCam()
+    {
+        camAxis = new Vector2(camAxis.x * sensX, camAxis.y * sensY);
+
+        currentLook.x += camAxis.x;
+        currentLook.y = Mathf.Clamp(currentLook.y += camAxis.y, -90, 90);
+
+    }
+
+    #endregion
+
     #region Inputs
-    public void Axis(InputAction.CallbackContext ctx)
+    public void Axis(Vector2 axis)
     {
-        axis = ctx.ReadValue<Vector2>();
-        if (axis.magnitude == 0) run = false;
+        this.axis = axis;
+        if (this.axis.magnitude == 0) run = false;
     }
 
-    public void RunInput(InputAction.CallbackContext ctx)
+    public void OnRun()
     {
-        if (ctx.started)
-        {
-            run = true;
-            if (run) runInputTime = Time.time;
-        }
+        run = true;
+        if (run) runInputTime = Time.time;
     }
 
-    public void JumpInput(InputAction.CallbackContext ctx)
+    public void OnJump(bool pressed)
     {
         if (isGrounded && !jump)
-            jump = ctx.performed;
-        if (ctx.canceled)
+            jump = pressed;
+        if (!pressed)
             jump = false;
     }
-
-    public void CrouchInput(InputAction.CallbackContext ctx)
+    
+    public void OnCrouch(bool pressed)
     {
-        crouch = ctx.performed;
+        crouch = pressed;
         CrouchScale();
+    }
+
+    public void OnDirection(Vector2 axis)
+    {
+        camAxis = axis;
     }
     #endregion
         

@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
-[RequireComponent(typeof(NewController))]
+[RequireComponent(typeof(Controller))]
 public class Player : NetworkBehaviour
 {
     [Header("Components")]

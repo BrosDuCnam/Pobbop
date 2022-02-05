@@ -1,0 +1,98 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Update
+
+RWTexture2D<float4> Result;
+
+struct Agent
+{
+    float2 position;
+    float angle;
+};
+
+float moveSpeed;
+float deltaTime;
+float time;
+int numAgents;
+int textureSize;
+
+RWStructuredBuffer<Agent> agents;
+
+// Hash function
+uint hash(uint state)
+{
+    state ^= 2747636419u;
+    state *= 2654435769u;
+    state ^= state >> 16;
+    state *= 2654435769u;
+    state ^= state >> 16;
+    state *= 2654435769u;
+    return state;
+}
+
+float scaleToRange01(uint state)
+{
+    return state / 4294967295.0;
+}
+
+
+[numthreads(16,1,1)]
+void Update (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x > numAgents) { return; }
+    
+    
+    Agent agent = agents[id.x];
+
+    //Move agent
+    float2 direction = float2(cos(agent.angle), sin(agent.angle));
+    float2 newPos = agent.position + direction * moveSpeed * deltaTime;
+
+    uint random = hash(newPos.y * textureSize + newPos.x + hash(id.x * time + deltaTime * 100000));
+
+    //Limit to circle of radius the width
+    float distFromCenter = sqrt(pow(newPos.x - textureSize / 2, 2) + pow(newPos.y - textureSize / 2, 2));
+    if (distFromCenter >= textureSize / 2)
+    {
+        float randomAngle = scaleToRange01(random) * 3.1415 * 2;
+        agents[id.x].angle = randomAngle;
+    }
+    else
+    {
+        //Set position if valid
+        agents[id.x].position = newPos;
+    }
+    
+    Result[int2(newPos.x, newPos.y)] = 1;
+}
+
+#pragma kernel Diffuse
+
+float decayRate;
+float diffuseRate;
+RWTexture2D<float4> DiffusedMap;
+
+[numthreads(8,8,1)]
+void Diffuse (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x < 0 || id.x >= (uint)textureSize || id.y < 0 || id.y >= (uint)textureSize) { return; }
+
+    float4 sum = 0;
+    float4 originalCol = Result[id.xy];
+
+    // 3x3 blur
+    for (int offsetX = -1; offsetX <= 1; offsetX ++) {
+        for (int offsetY = -1; offsetY <= 1; offsetY ++) {
+            int sampleX = min(textureSize-1, max(0, id.x + offsetX));
+            int sampleY = min(textureSize-1, max(0, id.y + offsetY));
+            sum += Result[int2(sampleX,sampleY)];
+        }
+    }
+
+    float4 blurredCol = sum / 9;
+    float diffuseWeight = saturate(diffuseRate * deltaTime);
+    blurredCol = originalCol * (1 - diffuseWeight) + blurredCol * (diffuseWeight);
+
+    DiffusedMap[id.xy] = max(0, blurredCol - decayRate * deltaTime);
+}
+
+
