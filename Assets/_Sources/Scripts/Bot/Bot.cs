@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BotController))]
-public class Bot : BasePlayer
+public class Bot : MonoBehaviour
 {
     public BotController controller;
     private SBStateInfo _fsmStateInfo = new SBStateInfo();
@@ -12,8 +12,6 @@ public class Bot : BasePlayer
 
     private new void Awake()
     {
-        base.Awake();
-        
         controller = GetComponent<BotController>();
         _fsmStateInfo.bot = this;
         _fsmStateInfo.PeriodUpdate = 0.1f;

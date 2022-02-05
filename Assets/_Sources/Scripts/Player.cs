@@ -17,6 +17,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private PickUpDropSystem _pickUpDropSystem;
     [SerializeField] private ThrowSystem _throwSystem;
     [SerializeField] private HealthSystem _healthSystem;
+    [SerializeField] private PlayerInputController _controller;
     
     public Camera Camera;
 
@@ -47,7 +48,7 @@ public class Player : NetworkBehaviour
     }
 
 
-    void Start()
+    protected void Start()
     {
         Camera = Camera.main; //TODO: pas opti pour le moment
 
@@ -55,7 +56,10 @@ public class Player : NetworkBehaviour
         _pickUpDropSystem = GetComponent<PickUpDropSystem>();
         _throwSystem = GetComponent<ThrowSystem>();
         _healthSystem = GetComponent<HealthSystem>();
+        _controller = GetComponent<PlayerInputController>();
 
         _targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
+
+        _controller.additiveCamera = true;
     }
 }

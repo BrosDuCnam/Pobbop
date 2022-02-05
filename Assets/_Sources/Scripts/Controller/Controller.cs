@@ -46,12 +46,13 @@ public class Controller : NetworkBehaviour
     private bool crouch;
     private bool sliding;
     private bool enterSliding = true;
+    public bool additiveCamera = false;
 
     protected UnityEvent<Vector2> onAxis = new UnityEvent<Vector2>();
     protected UnityEvent onRunStart = new UnityEvent();
     protected UnityEvent<bool> onJump = new UnityEvent<bool>();
     protected UnityEvent<bool> onCrouch = new UnityEvent<bool>();
-    protected UnityEvent<Vector2> onMouseAxis = new UnityEvent<Vector2>();
+    protected UnityEvent<Vector2> onDirectionAxis = new UnityEvent<Vector2>();
 
     private float runInputTime;
     private List<float> yVelBuffer = new List<float>();
@@ -60,7 +61,7 @@ public class Controller : NetworkBehaviour
     
     //Cam
     private Vector2 camAxis;
-    private Vector2 currentLook;
+    protected Vector2 currentLook;
 
     private void Awake()
     {
@@ -68,7 +69,7 @@ public class Controller : NetworkBehaviour
         onRunStart.AddListener(OnRun);
         onJump.AddListener(OnJump);
         onCrouch.AddListener(OnCrouch);
-        onMouseAxis.AddListener(OnDirection);
+        onDirectionAxis.AddListener(OnDirection);
     }
 
     public override void OnStartAuthority()
@@ -84,15 +85,15 @@ public class Controller : NetworkBehaviour
         myCam.SetActive(true);
     }
 
-    [ClientCallback]
-    private void Update()
+    /*[ClientCallback]*/ //TODO: Voir avec Seb
+    protected void Update()
     {
         if (!crouch && isGrounded && Time.time > lastBoost + minSlidePause)
             enterSliding = true;
         CalculateCam();
     }
 
-    [ClientCallback]
+    /*[ClientCallback]*/ //TODO: Voir avec Seb
     private void FixedUpdate()
     {
         dir = Direction();
@@ -352,11 +353,20 @@ public class Controller : NetworkBehaviour
     
     private void CalculateCam()
     {
-        camAxis = new Vector2(camAxis.x * sensX, camAxis.y * sensY);
 
-        currentLook.x += camAxis.x;
-        currentLook.y = Mathf.Clamp(currentLook.y += camAxis.y, -90, 90);
+        if (additiveCamera)
+        {
+            camAxis = new Vector2(camAxis.x * sensX, camAxis.y * sensY);
 
+            currentLook.x += camAxis.x;
+            currentLook.y = Mathf.Clamp(currentLook.y += camAxis.y, -90, 90);
+        }
+        else
+        {
+            currentLook.x = camAxis.x;
+            currentLook.y = Mathf.Clamp(camAxis.y, -90, 90);
+        }
+        currentLook.x = currentLook.x % 360;
     }
 
     #endregion

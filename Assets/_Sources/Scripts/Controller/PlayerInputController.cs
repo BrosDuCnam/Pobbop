@@ -28,6 +28,6 @@ public class PlayerInputController : Controller
 
     public void MouseInput(InputAction.CallbackContext ctx)
     {
-        onMouseAxis.Invoke(ctx.ReadValue<Vector2>());
+        onDirectionAxis.Invoke(ctx.ReadValue<Vector2>());
     }
 }
