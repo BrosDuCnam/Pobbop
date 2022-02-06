@@ -208,9 +208,9 @@ public class ThrowableObject : NetworkBehaviour
         GameObject otherObject = other.gameObject;
         if (ThrowState != ThrowState.Idle)
         {
-            Player playerParent = otherObject.GetComponentInParent<Player>();
+            BasePlayer basePlayerParent = otherObject.GetComponentInParent<BasePlayer>();
             // If the player is the owner of the object
-            if (Owner != null && (otherObject == Owner || (playerParent != null && playerParent.gameObject == Owner))) yield return null;
+            if (Owner != null && (otherObject == Owner || (basePlayerParent != null && basePlayerParent.gameObject == Owner))) yield return null;
             else
             {
                 _stopThrow = true;

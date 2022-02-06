@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class ThrowSystem : NetworkBehaviour
 {
     [Header("Components")]
-    [SerializeField] private Player _player;
+    [SerializeField] private BasePlayer basePlayer;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private Slider _slider;
@@ -19,8 +19,8 @@ public class ThrowSystem : NetworkBehaviour
     [SerializeField] private float _maxChargeTime = 5;
     [SerializeField] private AnimationCurve _chargeCurve;
     [SerializeField] private AnimationCurve _speedCurve;
-    [SerializeField] private float _minStepMultiplier = 2f;
-    [SerializeField] private float _maxStepMultiplier = 30f;
+    [SerializeField] public float minStepMultiplier = 2f;
+    [SerializeField] public float maxStepMultiplier = 30f;
     [SerializeField] private bool _drawCurve = true;
     
     private float _startChargeTime;
@@ -48,7 +48,7 @@ public class ThrowSystem : NetworkBehaviour
     public override void OnStartAuthority()
     {
         enabled = true;
-        _player = GetComponent<Player>();
+        basePlayer = GetComponent<BasePlayer>();
         _rigidbody = GetComponent<Rigidbody>();
     }
     private void Start()
@@ -57,42 +57,25 @@ public class ThrowSystem : NetworkBehaviour
         //_rigidbody = GetComponent<Rigidbody>();
         if (_lineRenderer == null) _lineRenderer = GetComponent<LineRenderer>();
     }
-    
-    private void Update()
-    {
-        _slider.value = ChargeValue;
-        
-        if (_drawCurve)
-        {
-            float force = 0;
-            
-            if (IsCharging)
-            {
-                float chargeTime = Mathf.Clamp(Time.time - _startChargeTime, 0, _maxChargeTime);
-                float chargeValue = _chargeCurve.Evaluate(chargeTime / _maxChargeTime) * _maxChargeTime;
-                float multiplier = (_maxThrowForce - _minThrowForce) / _maxChargeTime;
-                force = multiplier * chargeValue + _minThrowForce;
-            }
-            
-            DrawCurve(force);
-        }
-    }
 
     /// <summary>
-    /// Function called when the player starts to throw
+    /// Function to start charging the throw
     /// </summary>
-    /// <param name="ctx">The context of input</param>
-    public void ThrowInput(InputAction.CallbackContext ctx)
+    public void ChargeThrow()
     {
-        if (ctx.started)
-            _startChargeTime = Time.time;
-
-        if (ctx.performed && _player.IsHoldingObject)
+        if (!IsCharging && basePlayer.IsHoldingObject)
         {
+            _startChargeTime = Time.time;
             IsCharging = true;
         }
-
-        if (ctx.canceled)
+    }
+    
+    /// <summary>
+    /// Function to stop charging the throw, and throw the object
+    /// </summary>
+    public void ReleaseThrow()
+    {
+        if (IsCharging && basePlayer.IsHoldingObject)
         {
             if (IsCharging) IsCharging = false;
             
@@ -104,32 +87,8 @@ public class ThrowSystem : NetworkBehaviour
             Throw(force);
         }
     }
-
     
-    private void DrawCurve(float force)
-    {
-        if (_player.HasTarget && _player.IsHoldingObject)
-        {
-            _lineRenderer.enabled = true;
-            
-            // Calculate the multiplier of step distance
-            float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude);
-            multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
-
-            multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxStepMultiplier);
-
-            Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
-
-            Vector3[] positions = Utils.GetBezierCurvePositions(_player.HoldingObject.transform.position, stepPosition, _player.Target.transform.position, 30);
-            _lineRenderer.positionCount = positions.Length+1;
-            _lineRenderer.SetPositions(positions);
-            _lineRenderer.SetPosition(_lineRenderer.positionCount-1, _player.Target.transform.position);
-        }
-        else
-        {
-            _lineRenderer.enabled = false;
-        }
-    }
+    
     
     private float GetNormalizedForce(float force)
     {
@@ -143,15 +102,15 @@ public class ThrowSystem : NetworkBehaviour
     
     public void Throw(float force)
     {
-        if (_player.IsHoldingObject) // If player hold an object
+        if (basePlayer.IsHoldingObject) // If player hold an object
         {
-            ThrowableObject throwableObject = _player.HoldingObject.GetComponent<ThrowableObject>();
+            ThrowableObject throwableObject = basePlayer.HoldingObject.GetComponent<ThrowableObject>();
             if (throwableObject == null) return; // If the object is not throwable
             
-            _player.IsHoldingObject = false;
-            if (_player.HasTarget) // If player has a target
+            basePlayer.IsHoldingObject = false;
+            if (basePlayer.HasTarget) // If player has a target
             {
-                GameObject target = _player.Target;
+                GameObject target = basePlayer.Target;
                 //Sets the other player's ui handler to warn him of the incoming ball
                 if (target.TryGetComponent(out DirIndicatorHandler uiHandler))
                 {
@@ -161,18 +120,18 @@ public class ThrowSystem : NetworkBehaviour
                 // Calculate the multiplier of step distance
                 float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude);
                 multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
-                multiplier = Mathf.Clamp(multiplier, _minStepMultiplier, _maxStepMultiplier);
+                multiplier = Mathf.Clamp(multiplier, minStepMultiplier, maxStepMultiplier);
 
-                Vector3 stepPosition = (_player.Camera.transform.forward * multiplier) + _player.Camera.transform.position;
+                Vector3 stepPosition = (basePlayer.Camera.transform.forward * multiplier) + basePlayer.Camera.transform.position;
 
                 float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
 
-                throwableObject.Throw(_player.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
+                throwableObject.Throw(basePlayer.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
             }
             else
             {
-                Vector3 direction = _player.Camera.transform.forward;
-                throwableObject.Throw(_player.gameObject, direction, force); // Throw the object in front of the camera
+                Vector3 direction = basePlayer.Camera.transform.forward;
+                throwableObject.Throw(basePlayer.gameObject, direction, force); // Throw the object in front of the camera
             }
         }
     }

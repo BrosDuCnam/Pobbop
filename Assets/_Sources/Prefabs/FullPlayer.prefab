@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 8797491869613382542}
   - component: {fileID: 8797491869613382537}
   - component: {fileID: 651925560249347851}
-  - component: {fileID: 5000011437541627098}
+  - component: {fileID: 493625832157985704}
   - component: {fileID: 506940942206868999}
   - component: {fileID: 8456191531379536459}
   - component: {fileID: 2322464712195177290}
@@ -793,8 +793,8 @@ MonoBehaviour:
     m_ActionName: Player/MouseAxis[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8456191531379536459}
-        m_TargetAssemblyTypeName: PickUpDropSystem, Assembly-CSharp
+      - m_Target: {fileID: 493625832157985704}
+        m_TargetAssemblyTypeName: RealPlayer, Assembly-CSharp
         m_MethodName: TogglePickupDrop
         m_Mode: 0
         m_Arguments:
@@ -809,9 +809,9 @@ MonoBehaviour:
     m_ActionName: Player/PickupDrop[/Keyboard/e]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2322464712195177290}
-        m_TargetAssemblyTypeName: ThrowSystem, Assembly-CSharp
-        m_MethodName: ThrowInput
+      - m_Target: {fileID: 493625832157985704}
+        m_TargetAssemblyTypeName: RealPlayer, Assembly-CSharp
+        m_MethodName: Throw
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -871,11 +871,11 @@ MonoBehaviour:
   minSlidePause: 1
   slideDeceleration: 0.1
   crouchScale: 0.3
-  myCam: {fileID: 8797491871191967957}
+  camera: {fileID: 8797491871191967959}
   sensX: 0.1
   sensY: 0.1
-  additiveCamera: 0
---- !u!114 &5000011437541627098
+  additiveCamera: 1
+--- !u!114 &493625832157985704
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -884,7 +884,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8797491869613382536}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa9d648386cf2084fadb13aa54081d06, type: 3}
+  m_Script: {fileID: 11500000, guid: 9cb582b147e549ddb4763a0364339122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
@@ -894,8 +894,13 @@ MonoBehaviour:
   _throwSystem: {fileID: 0}
   _healthSystem: {fileID: 0}
   _controller: {fileID: 0}
+  _rigidbody: {fileID: 0}
   Camera: {fileID: 0}
   teamNumber: 0
+  _drawChargingCurve: 1
+  _targetImage: {fileID: 161273702623136940}
+  _chargingSlider: {fileID: 2016044968919198667}
+  _chargingCurveLineRenderer: {fileID: 1852058124636740154}
 --- !u!114 &506940942206868999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -910,8 +915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetRange: 99999
   DEBUG: 0
-  _player: {fileID: 0}
-  _targetImage: {fileID: 161273702623136940}
+  basePlayer: {fileID: 0}
   _targets:
   - {fileID: 0}
 --- !u!114 &8456191531379536459
@@ -933,8 +937,7 @@ MonoBehaviour:
   _pickupTriggerHandler: {fileID: 4690314380442766159}
   _pickUpPoint: {fileID: 8067262303577883277}
   _pickableObject: {fileID: 0}
-  _camera: {fileID: 0}
-  _player: {fileID: 0}
+  basePlayer: {fileID: 0}
   OnPickUp:
     m_PersistentCalls:
       m_Calls: []
@@ -952,7 +955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _player: {fileID: 0}
+  basePlayer: {fileID: 0}
   _rigidbody: {fileID: 0}
   _lineRenderer: {fileID: 0}
   _slider: {fileID: 2016044968919198667}
@@ -1007,8 +1010,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _minStepMultiplier: 2
-  _maxStepMultiplier: 30
+  minStepMultiplier: 2
+  maxStepMultiplier: 30
   _drawCurve: 1
 --- !u!114 &852052934866384312
 MonoBehaviour:

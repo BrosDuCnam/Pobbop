@@ -9,20 +9,24 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
-[RequireComponent(typeof(Controller))]
-public class Player : NetworkBehaviour
+[RequireComponent(typeof(Controller), typeof(Rigidbody))]
+public class BasePlayer : NetworkBehaviour
 {
     [Header("Components")]
-    [SerializeField] private TargetSystem _targetSystem;
-    [SerializeField] private PickUpDropSystem _pickUpDropSystem;
-    [SerializeField] private ThrowSystem _throwSystem;
-    [SerializeField] private HealthSystem _healthSystem;
-    [SerializeField] private PlayerInputController _controller;
+    [SerializeField] protected TargetSystem _targetSystem;
+    [SerializeField] protected PickUpDropSystem _pickUpDropSystem;
+    [SerializeField] protected ThrowSystem _throwSystem;
+    [SerializeField] protected HealthSystem _healthSystem;
+    [SerializeField] protected PlayerInputController _controller;
+    [SerializeField] protected Rigidbody _rigidbody;
     
     public Camera Camera;
 
     [HideInInspector] public int teamNumber = 0;
     
+    /// <summary>
+    /// Return true if the player hold an object
+    /// </summary>
     public bool IsHoldingObject
     {
         get => _pickUpDropSystem.PickableObject != null;
@@ -30,18 +34,34 @@ public class Player : NetworkBehaviour
             if (!value) _pickUpDropSystem.PickableObject = null;
         }
     }
+    
+    /// <summary>
+    /// Return the current holding object, null if the player is not holding an object
+    /// </summary>
     [CanBeNull] public GameObject HoldingObject
     {
         get => _pickUpDropSystem.PickableObject.gameObject;
     }
+    
+    /// <summary>
+    /// Return true if the player has a target, can be use to know if the player can see an enemy
+    /// </summary>
     public bool HasTarget
     {
         get => _targetSystem.CurrentTarget != null;
     }
+    
+    /// <summary>
+    /// Return the current target, null if the player has no target
+    /// </summary>
     [CanBeNull] public GameObject Target
     {
         get => _targetSystem.CurrentTarget.gameObject;
     }
+    
+    /// <summary>
+    /// Return true if the player is charging an attack
+    /// </summary>
     public bool IsCharging
     {
         get => _throwSystem.IsCharging;
@@ -50,16 +70,15 @@ public class Player : NetworkBehaviour
 
     protected void Start()
     {
-        Camera = Camera.main; //TODO: pas opti pour le moment
-
         _targetSystem = GetComponent<TargetSystem>();
         _pickUpDropSystem = GetComponent<PickUpDropSystem>();
         _throwSystem = GetComponent<ThrowSystem>();
         _healthSystem = GetComponent<HealthSystem>();
         _controller = GetComponent<PlayerInputController>();
+        _rigidbody = GetComponent<Rigidbody>();
 
         _targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
-
-        _controller.additiveCamera = true;
+        
+        Camera = _controller.camera;
     }
 }

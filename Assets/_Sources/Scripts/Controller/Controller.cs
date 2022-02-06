@@ -35,7 +35,7 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float crouchScale = 0.3f;
     
     [Header("Camera Settings")]
-    [SerializeField] private GameObject myCam;
+    [SerializeField] public Camera camera;
     [SerializeField] private float sensX = 0.1f;
     [SerializeField] private float sensY = 0.1f;
     
@@ -82,7 +82,7 @@ public class Controller : NetworkBehaviour
         
         //Cam
         enabled = true;
-        myCam.SetActive(true);
+        camera.gameObject.SetActive(true);
     }
 
     /*[ClientCallback]*/ //TODO: Voir avec Seb
@@ -97,8 +97,7 @@ public class Controller : NetworkBehaviour
     private void FixedUpdate()
     {
         dir = Direction();
-
-        Debug.Log(isGrounded);
+        
         if (isGrounded)
         {
 
@@ -346,7 +345,7 @@ public class Controller : NetworkBehaviour
 
     private void RotateCam()
     {
-        myCam.transform.localRotation = Quaternion.AngleAxis(-currentLook.y, Vector3.right);
+        camera.transform.localRotation = Quaternion.AngleAxis(-currentLook.y, Vector3.right);
         transform.localRotation = Quaternion.Euler(0, currentLook.x, 0);
 
     }

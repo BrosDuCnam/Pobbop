@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BotController))]
-public class Bot : MonoBehaviour
+public class BotPlayer : BasePlayer
 {
     public BotController controller;
     private SBStateInfo _fsmStateInfo = new SBStateInfo();

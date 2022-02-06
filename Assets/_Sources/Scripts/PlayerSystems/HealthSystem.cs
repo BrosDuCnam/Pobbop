@@ -48,8 +48,8 @@ public class HealthSystem : MonoBehaviour
 
     private void Eliminated()
     {
-        int teamNumber = transform.GetComponent<Player>().teamNumber;
-        int enemyTeam = lastPlayerDamage.GetComponent<Player>().teamNumber;
+        int teamNumber = transform.GetComponent<BasePlayer>().teamNumber;
+        int enemyTeam = lastPlayerDamage.GetComponent<BasePlayer>().teamNumber;
         NetworkManagerLobby.AddPoint(enemyTeam);
         PlayerSpawnSystem.PlayerRemoveTransform(transform, teamNumber);
         PlayerSpawnSystem.Respawn(transform, teamNumber);

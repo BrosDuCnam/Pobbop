@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Player))]
+[RequireComponent(typeof(BasePlayer))]
 public class TargetSystem : MonoBehaviour
 {
     [Header("Target Settings")]
@@ -13,9 +13,8 @@ public class TargetSystem : MonoBehaviour
     [SerializeField] private bool DEBUG;
 
     [Header("Needed Components")]
-    [SerializeField] private Player _player;
-    [SerializeField] private RawImage _targetImage;
-    
+    [SerializeField] private BasePlayer basePlayer;
+
     //La liste est en static pour quelle puisse être modifié
     [SerializeField] private List<GameObject> _targets;
 
@@ -28,12 +27,12 @@ public class TargetSystem : MonoBehaviour
     
     private void Start()
     {
-        _player = GetComponent<Player>();
+        basePlayer = GetComponent<BasePlayer>();
     }
 
     private void Update()
     {
-        if (!_player.IsCharging) // If player is not charger we can search for targets
+        if (!basePlayer.IsCharging) // If player is not charger we can search for targets
         {
             List<GameObject> visibleTargets = GetVisibleTargets(_targets); // Get all visible targets
             visibleTargets =
@@ -68,25 +67,6 @@ public class TargetSystem : MonoBehaviour
                 }
             }
         }
-        
-        if (CurrentTarget != null)
-        {
-            _targetImage.enabled = true;
-            
-            Vector2 canvasSize = _targetImage.GetComponent<RectTransform>().sizeDelta;
-            Vector3 targetPosition = _player.Camera.WorldToScreenPoint(CurrentTarget.transform.position);
-
-            // TODO - Correct bug that the target image is not on edge of screen when player lokk behind the target
-            Vector3 targetPositionInCanvas = new Vector2(targetPosition.x / canvasSize.x * 100,
-                targetPosition.y / canvasSize.y * 100);
-            targetPositionInCanvas.x = Mathf.Clamp(targetPositionInCanvas.x, 0, Screen.width);
-            targetPositionInCanvas.y = Mathf.Clamp(targetPositionInCanvas.y, 0, Screen.height);
-
-                _targetImage.rectTransform.position = targetPositionInCanvas; // Set target image position to the current target
-        } else
-        {
-            _targetImage.enabled = false;
-        }
     }
 
     /// <summary>
@@ -96,7 +76,7 @@ public class TargetSystem : MonoBehaviour
     /// <returns>An ordered list of target</returns>
     private List<GameObject> OrderByDistanceToCenterOfScreen(List<GameObject> targets)
     {
-        return targets.AsEnumerable().OrderBy(target => Utils.GetDistanceFromCenterOfScreen(target, _player.Camera)).ToList();
+        return targets.AsEnumerable().OrderBy(target => Utils.GetDistanceFromCenterOfScreen(target, basePlayer.Camera)).ToList();
     }
     
     /// <summary>
@@ -110,13 +90,13 @@ public class TargetSystem : MonoBehaviour
         foreach (GameObject target in targets)
         {
             // Check if target is in field of view of player camera
-            if (Utils.IsVisibleByCamera(target, _player.Camera))
+            if (Utils.IsVisibleByCamera(target, basePlayer.Camera))
             {
                 // If object obstructs the view of the player, it is not visible
                 RaycastHit[] hits = Physics.RaycastAll(transform.position, target.transform.position - transform.position,
                     _targetRange);
 
-                hits.Select(x => x.transform.gameObject != _player.HoldingObject.gameObject);
+                hits.Select(x => x.transform.gameObject != basePlayer.HoldingObject.gameObject);
                 
                 if (hits.Length > 0 && hits[0].collider.gameObject == target)
                 {
