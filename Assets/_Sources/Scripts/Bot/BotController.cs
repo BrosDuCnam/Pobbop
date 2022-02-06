@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 
 public class BotController : Controller
@@ -36,18 +39,34 @@ public class BotController : Controller
         }
     }
     
+    [CanBeNull] private NavMeshPath _navMeshPath;
+    private Vector3 _finalDestination;
+    private Vector3 _destination;
+    public Vector3 Destination
+    {
+        get => _finalDestination;
+    }
+
+    public bool HasDestination => _navMeshPath != null;
+
+    private new void Start()
+    {
+        base.Start();
+        _navMeshPath = null;
+
+        print(transform.position);
+    }
+    
     private new void Update()
     {
         base.Update();
-        
+
         if (_moveLookDirection)
         {
             if (Time.time < (_finalTime + _timeToReach))
             {
                 float normalizedTime = (Time.time - _finalTime) / _timeToReach;
-                print($"Interpolating {currentLook} to {_finalLookDirection}, speed: {_tempRotationSpeed}, time {normalizedTime}, now: {Vector2.Lerp(currentLook, _finalLookDirection, Time.deltaTime * _tempRotationSpeed)}");
                 onDirectionAxis.Invoke(Vector2.Lerp(_baseDirection, _finalLookDirection, normalizedTime));
-                print(Vector2.Lerp(currentLook, _finalLookDirection, normalizedTime));
             }
             else
             {
@@ -56,6 +75,47 @@ public class BotController : Controller
                 _tempRotationSpeed = _rotationSpeed;
             }
         }
+        
+        if (_navMeshPath != null)
+        {
+            //print(Vector3.Distance(_destination, transform.position));
+            //print(_destination);
+            if (Vector3.Distance(_destination, transform.position) < 1f) // If the bot is close enough to the destination
+            {
+                int index = Array.IndexOf(_navMeshPath.corners, _destination);
+                if (index < _navMeshPath.corners.Length - 1)
+                {
+                    _destination = _navMeshPath.corners[index + 1];
+                }
+                else _navMeshPath = null;
+            }
+            Debug.DrawLine(transform.position, _destination, Color.red);
+            
+            Vector3 direction = (_destination - transform.position).normalized;
+            print(direction);
+            Debug.DrawLine(transform.position, transform.position + direction*30, Color.blue);
+            
+            float xAxis = Utils.RadianToDegree(new Vector2(direction.y, direction.x));
+            xAxis %= 360;
+            print(xAxis);
+            if (Math.Abs(_finalLookDirection.x - xAxis) > 1f) // If the bot is not facing the right direction
+            {
+                print(_finalLookDirection);
+                LookAt(new Vector2(xAxis, currentLook.y));
+            }
+            MoveDirection = Vector2.up;
+        }
+    }
+    
+    public void SetDestination(Vector3 destination)
+    {
+        Debug.LogWarning("SetDestination : "+destination);
+        _navMeshPath = new NavMeshPath();
+        NavMesh.CalculatePath(transform.position, destination, NavMesh.AllAreas, _navMeshPath);
+        _finalDestination = destination;
+        print("Last corner : " + _navMeshPath.corners.Last());
+        _destination = _navMeshPath.corners[0];
+        //Utils.DebugNavMeshPath(_navMeshPath, 100);
     }
 
     /// <summary>
@@ -79,7 +139,6 @@ public class BotController : Controller
         _tempRotationSpeed = speed;
         _timeToReach = Vector2.Distance(currentLook, direction) / (1/speed * 360);
         _finalTime = Time.time;
-        print($"Final time: {_finalTime}");
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 public static class Utils
 {
@@ -110,5 +111,70 @@ public static class Utils
         for (int i=0; i<points.Length-1; i++) {
             Debug.DrawLine(points[i], points[i+1], color, time);
         }
+    }
+    
+    /// <summary>
+    /// Get random position on navmesh
+    /// </summary>
+    /// <param name="radius">Radius around origin</param>
+    /// <param name="origin">The center</param>
+    /// <returns>The final position</returns>
+    public static Vector3 RandomNavmeshLocation(float radius, Vector3 origin)
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * radius;
+        randomDirection += origin;
+        NavMeshHit hit;
+        Vector3 finalPosition = Vector3.zero;
+        if (NavMesh.SamplePosition(randomDirection, out hit, radius, 1)) {
+            finalPosition = hit.position;            
+        }
+        return finalPosition;
+    }
+    
+    
+    /// <summary>
+    /// Function do draw a navmesh path
+    /// </summary>
+    /// <param name="path">The path that we want to debug</param>
+    /// <param name="time">The time that the debug stay</param>
+    public static void DebugNavMeshPath(NavMeshPath path, float time = 0f)
+    {
+        DebugNavMeshPath(path, Color.red, time);
+    }
+    
+    /// <summary>
+    /// Function do draw a navmesh path
+    /// </summary>
+    /// <param name="path">The path that we want to debug</param>
+    /// <param name="color">The color of the debug</param>
+    /// <param name="time">The time that the debug stay</param>
+    public static void DebugNavMeshPath(NavMeshPath path, Color color, float time = 0f)
+    {
+        if (path.corners.Length > 0) {
+            for (int i=0; i<path.corners.Length-1; i++) {
+                Debug.DrawLine(path.corners[i], path.corners[i+1], color, time);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Radian vector to degree
+    /// </summary>
+    /// <param name="radian">The vector of cos and sin value</param>
+    /// <returns>The degree value</returns>
+    public static float RadianToDegree(Vector2 radian)
+    {
+        //Debug.Log(radian);
+        return Mathf.Atan2(radian.y, radian.x) * Mathf.Rad2Deg;
+    }
+
+    public static Vector2 RadianToVector2(float radian)
+    {
+        return new Vector2(Mathf.Cos(radian), Mathf.Sin(radian));
+    }
+  
+    public static Vector2 DegreeToVector2(float degree)
+    {
+        return RadianToVector2(degree * Mathf.Deg2Rad);
     }
 }

@@ -84,7 +84,7 @@ public class TargetSystem : MonoBehaviour
     /// </summary>
     /// <param name="targets">List of targets</param>
     /// <returns>List of visible target</returns>
-    private List<GameObject> GetVisibleTargets(List<GameObject> targets)
+    public List<GameObject> GetVisibleTargets(List<GameObject> targets)
     {
         List<GameObject> visibleTargets = new List<GameObject>();
         foreach (GameObject target in targets)

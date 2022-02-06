@@ -72,7 +72,7 @@ public class Controller : NetworkBehaviour
         onDirectionAxis.AddListener(OnDirection);
     }
 
-    public override void OnStartAuthority()
+    protected /*override*/ void Start() // TODO change OnStartAuthority cause of bot
     {
         enabled = true;
         rb = GetComponent<Rigidbody>();
