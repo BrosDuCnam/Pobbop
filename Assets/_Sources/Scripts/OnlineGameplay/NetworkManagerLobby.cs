@@ -22,6 +22,10 @@ public class NetworkManagerLobby : NetworkManager
         GenerateTeamAmount();
     }
     
+    /// <summary>
+    /// Ce callback est appellé à chaque fois qu'un joueur ce connecte au serveur
+    /// </summary>
+    /// <param name="conn"></param>
     public override void OnServerReady(NetworkConnection conn)
     {
         base.OnServerReady(conn);
@@ -34,6 +38,9 @@ public class NetworkManagerLobby : NetworkManager
         }
     }
 
+    /// <summary>
+    /// Cette fonction ajoute tous les joueurs du lobby dans des équipes aléatoirement
+    /// </summary>
     private void GenerateTeams()
     {
         int teamNumber = 0;
@@ -53,6 +60,9 @@ public class NetworkManagerLobby : NetworkManager
         }
     }
 
+    /// <summary>
+    /// Cette fonction ajoute des listes vides à la liste d'équipe
+    /// </summary>
     private void GenerateTeamAmount()
     {
         List<NetworkConnection> newList;
@@ -66,6 +76,10 @@ public class NetworkManagerLobby : NetworkManager
         }
     }
 
+    /// <summary>
+    /// Cette fonction permet d'ajouter un point à une équipe
+    /// </summary>
+    /// <param name="teamNumber"></param>
     public static void AddPoint(int teamNumber)
     {
         teamScores[teamNumber - 1]++;

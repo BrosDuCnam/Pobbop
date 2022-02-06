@@ -16,7 +16,10 @@ public class PlayerTargetUpdate : MonoBehaviour
         player = transform.gameObject;
     }
     
-    //Update de la liste de target appeler à chaque fois que la liste dans le game manger est modifié
+    /// <summary>
+    /// Cette fonction update la liste de target du joueur
+    /// </summary>
+    /// <param name="newTargetList"></param>
     public static void UpdateTargets(List<GameObject> newTargetList)
     {
         targets = newTargetList;
