@@ -14,6 +14,10 @@ public class PlayerSpawnSystem : NetworkBehaviour
     private static List<List<Transform>> teamTransformLists = new List<List<Transform>>();
 
     private static bool test = true;
+    
+    /// <summary>
+    /// Ce callback est apellé quand le serveur est crée
+    /// </summary>
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -23,6 +27,11 @@ public class PlayerSpawnSystem : NetworkBehaviour
         staticSpawnPointsList = spawnPointsList;
     }
 
+    
+    /// <summary>
+    /// Cette fonction permet de gérer le premier spawn de la partie
+    /// </summary>
+    /// <param name="teamLists"></param>
     private void SpawnPlayer(List<List<NetworkConnection>> teamLists)
     {
         string teamSpawnTag;
@@ -57,6 +66,11 @@ public class PlayerSpawnSystem : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Cette fonction permet de faire respawn un joueur
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="teamNumber"></param>
     public static void Respawn(Transform player, int teamNumber)
     {
         Transform spawnPoint = PickSpawnPoint(teamNumber);
@@ -65,6 +79,12 @@ public class PlayerSpawnSystem : NetworkBehaviour
         PlayerAddTransform(player, teamNumber);
     }
 
+    
+    /// <summary>
+    /// Cette fonction permet de choisir le meilleur point de spawn pour un joueur
+    /// </summary>
+    /// <param name="teamNumber"></param>
+    /// <returns></returns>
     private static Transform PickSpawnPoint(int teamNumber)
     {
         List<Transform> allEnemies = GetAllEnemies(teamNumber);
@@ -85,6 +105,13 @@ public class PlayerSpawnSystem : NetworkBehaviour
         return spawnPoint;
     }
 
+    /// <summary>
+    /// Cette fonction permet de calculer les distances entre un spawn point et les enemies et coéquipiés
+    /// </summary>
+    /// <param name="spawnPoint"></param>
+    /// <param name="allEnemies"></param>
+    /// <param name="allTm8"></param>
+    /// <returns></returns>
     private static float CalculateDist(Transform spawnPoint, List<Transform> allEnemies, List<Transform> allTm8)
     {
         float distFinal = 0f;
@@ -101,6 +128,11 @@ public class PlayerSpawnSystem : NetworkBehaviour
         return distFinal;
     }
 
+    /// <summary>
+    /// Cette fonction permet de récupérer tout les ennemies d'un joueur
+    /// </summary>
+    /// <param name="teamNumber"></param>
+    /// <returns></returns>
     private static List<Transform> GetAllEnemies(int teamNumber)
     {
         List<Transform> enemies = new List<Transform>();
@@ -117,17 +149,32 @@ public class PlayerSpawnSystem : NetworkBehaviour
         return enemies;
     }
 
+    /// <summary>
+    /// Cette fonction permet de récupérer tout les coéquipié d'un joueur
+    /// </summary>
+    /// <param name="teamNumber"></param>
+    /// <returns></returns>
     private static List<Transform> GetAllTm8(int teamNumber)
     {
  
         return teamTransformLists[teamNumber - 1];
     }
 
+    /// <summary>
+    /// Cette fonction permet d'ajouter un Transform à la liste des Transforms des équipes
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="teamNumber"></param>
     private static void PlayerAddTransform(Transform player, int teamNumber)
     {
         teamTransformLists[teamNumber - 1].Add(player);
     }
 
+    /// <summary>
+    /// Cette fonction permet d'enlever un Transform à la liste des Transforms des équipes
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="teamNumber"></param>
     public static void PlayerRemoveTransform(Transform player, int teamNumber)
     {
         teamTransformLists[teamNumber - 1].Remove(player);
