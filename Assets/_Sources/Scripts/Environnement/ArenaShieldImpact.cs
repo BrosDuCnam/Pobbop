@@ -12,7 +12,7 @@ using ComputeShaderUtility;
 
 public class ArenaShieldImpact : MonoBehaviour
 {
-
+    [Header("Impact Effect")]
     [SerializeField] private Material impactMat;
     [SerializeField] private ComputeShader compute;
     [SerializeField] private RenderTexture map;
@@ -20,23 +20,40 @@ public class ArenaShieldImpact : MonoBehaviour
 
     [SerializeField] private int numAgent;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float lifeDecay;
 
     [SerializeField] private int textureSize;
     
     [SerializeField] private float decayRate;
     [SerializeField] private float diffuseRate;
+
+    [SerializeField] private bool testAgents;
     
+    private ComputeBuffer agentBuffer;
+
+    [Header("Collision Detection")] 
+    [SerializeField] private int maxSimultaneousImpacts = 10;
+    [SerializeField] private float initialSize = 5;
+
+    private float shieldSize;
+    private Vector3 shieldPos;
     
-    ComputeBuffer agentBuffer;
-    
+    private int impactHistoryIndex = 1;
+
+    private void Awake()
+    {
+        shieldSize = initialSize * transform.localScale.x;
+        shieldPos = transform.position;
+    }
+
+
     private struct Agent
     {
         public Vector2 position;
         public float angle;
+        public float health;
     }
-    
 
-    
     private void Start()
     {
         map = new RenderTexture(textureSize, textureSize, 24);
@@ -47,42 +64,87 @@ public class ArenaShieldImpact : MonoBehaviour
         diffusedMap.Create();
 
         //Init agents
-        Agent[] agents = new Agent[numAgent];
+        Agent[] agents = new Agent[numAgent * maxSimultaneousImpacts];
         for (int i = 0; i < agents.Length; i++)
         {
             Vector2 center = new Vector2(textureSize / 2, textureSize / 2);
             Vector2 startPos = center;
             float randomAngle = Random.value * Mathf.PI * 2;
 
-            agents[i] = new Agent{position = startPos, angle = randomAngle};
+            agents[i] = new Agent{position = startPos, angle = randomAngle, health = 0};
         }
         
         //Send initial values to the compute shader
 
         ComputeHelper.CreateAndSetBuffer<Agent>(ref agentBuffer, agents, compute, "agents", 0);
         compute.SetBuffer(0, "agents", agentBuffer);
-        compute.SetInt("numAgents", numAgent);
+        compute.SetInt("numAgents", numAgent * maxSimultaneousImpacts);
         compute.SetInt("textureSize", textureSize);
         compute.SetFloat("moveSpeed", moveSpeed);
+        compute.SetFloat("lifeDecay", lifeDecay);
         compute.SetFloat("deltaTime", 0);
         compute.SetFloat("time", 0);
+        
         compute.SetFloat("decayRate", decayRate);
         compute.SetFloat("diffuseRate", diffuseRate);
-        
-        
+
         compute.SetTexture(0, "Result", map);
+        
+        compute.SetTexture(1, "Result", map);
         compute.SetTexture(1, "DiffusedMap", diffusedMap); 
-        
-        
-        impactMat.SetTexture("_BaseMap", map);
+
+        impactMat.SetTexture("ImpactParticles", map);
     }
 
     private void Update()
     {
         compute.SetFloat("deltaTime", Time.deltaTime);
         compute.SetFloat("time", Time.time);
-        ComputeHelper.Dispatch(compute, numAgent, 1, 1, 0);
-        //ComputeHelper.Dispatch(compute, textureSize, textureSize, 1, compute.FindKernel("Diffuse"));
-        //ComputeHelper.CopyRenderTexture(diffusedMap, map);
+        ComputeHelper.Dispatch(compute, numAgent * maxSimultaneousImpacts, 1, 1, 0);
+        ComputeHelper.Dispatch(compute, textureSize, textureSize, 1, 1);
+        ComputeHelper.CopyRenderTexture(diffusedMap, map);
+        
+    }
+    
+    void OnDestroy()
+    {
+        ComputeHelper.Release(agentBuffer);
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        Vector3 impactPos = col.contacts[0].point;
+        impactPos -= shieldPos; 
+        Vector2 uvPos = new Vector2(-impactPos.x, -impactPos.z) / shieldSize * 2;
+        
+        Debug.Log(uvPos);
+        newImpact();
+        agentBuffer.SetData(CreateAgentsAtPos(uvPos), 0,
+            impactHistoryIndex * numAgent, numAgent);
+        compute.SetBuffer(0, "agents", agentBuffer);
+    }
+
+    private Agent[] CreateAgentsAtPos(Vector2 pos)
+    {
+        Agent[] agents = new Agent[numAgent];
+        for (int i = 0; i < agents.Length; i++)
+        {
+            Vector2 center = new Vector2(textureSize / 2, textureSize / 2);
+            Vector2 startPos = center + pos * textureSize / 2;
+            float randomAngle = Random.value * Mathf.PI * 2;
+
+            agents[i] = new Agent{position = startPos, angle = randomAngle, health = 1f};
+        }
+
+        return agents;
+    }
+
+    private void newImpact()
+    {
+        if (impactHistoryIndex > maxSimultaneousImpacts - 2)
+        {
+            impactHistoryIndex = 1;
+        }
+        impactHistoryIndex += 1;
     }
 }

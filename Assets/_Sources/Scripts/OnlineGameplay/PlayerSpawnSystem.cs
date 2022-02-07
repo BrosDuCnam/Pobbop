@@ -21,7 +21,6 @@ public class PlayerSpawnSystem : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-
         NetworkManagerLobby.OnServerReadied += SpawnPlayer;
 
         staticSpawnPointsList = spawnPointsList;
@@ -54,11 +53,11 @@ public class PlayerSpawnSystem : NetworkBehaviour
                     startSpawnPoints.Add(spawn);
                 }
             }
-            
             foreach (NetworkConnection conn in teamLists[i])
             {
                 Transform playerSpawned = Instantiate(playerPrefab, startSpawnPoints[spawnIndex].position, startSpawnPoints[spawnIndex].rotation);
                 NetworkServer.Spawn(playerSpawned.gameObject, conn);
+                playerSpawned.gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
                 teamTransformLists[i].Add(playerSpawned);
                 playerSpawned.GetComponent<BasePlayer>().teamNumber = i + 1;
                 spawnIndex++;

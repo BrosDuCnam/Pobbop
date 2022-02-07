@@ -77,7 +77,7 @@ public class BasePlayer : NetworkBehaviour
         _controller = GetComponent<Controller>();
         _rigidbody = GetComponent<Rigidbody>();
 
-        _targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
+        //_targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
         
         Camera = _controller.camera;
     }

@@ -520,9 +520,10 @@ MonoBehaviour:
   minSlidePause: 1
   slideDeceleration: 0.1
   crouchScale: 0.3
-  myCam: {fileID: 6684906263438855547}
+  camera: {fileID: 6684906263438855545}
   sensX: 0.1
   sensY: 0.1
+  additiveCamera: 1
 --- !u!114 &2042341140092393419
 MonoBehaviour:
   m_ObjectHideFlags: 0

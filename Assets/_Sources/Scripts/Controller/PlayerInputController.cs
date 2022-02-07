@@ -6,6 +6,21 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputController : Controller
 {
+    public override void OnStartAuthority()
+    {
+        print("alzhflakzh");
+        enabled = true;
+        
+        //Cam
+        camera.gameObject.SetActive(true);
+
+        rb = GetComponent<Rigidbody>();
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    
+
     public void Axis(InputAction.CallbackContext ctx)
     {
         onAxis.Invoke(ctx.ReadValue<Vector2>());

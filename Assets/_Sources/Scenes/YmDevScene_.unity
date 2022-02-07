@@ -242,15 +242,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0686ae41f69e671469ccaee790d87e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactMat: {fileID: 2100000, guid: f24e445f1211f7c4098dcc3eb54939c3, type: 2}
+  impactMat: {fileID: 2100000, guid: 5fdc8a464a27ae646b86a76423a79a62, type: 2}
   compute: {fileID: 7200000, guid: 2cc9b574431860b42bb3c7ff876cd372, type: 3}
   map: {fileID: 0}
   diffusedMap: {fileID: 0}
-  numAgent: 1
+  numAgent: 1000
   moveSpeed: 100
-  textureSize: 512
-  decayRate: 2
-  diffuseRate: 2
+  lifeDecay: 0.05
+  textureSize: 1024
+  decayRate: 1
+  diffuseRate: 5
+  testAgents: 0
+  maxSimultaneousImpacts: 10
+  initialSize: 5
+--- !u!64 &300349052
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300349050}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4044758634333102474, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}
 --- !u!1 &409117969
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,7 +701,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f24e445f1211f7c4098dcc3eb54939c3, type: 2}
+  - {fileID: 2100000, guid: 5fdc8a464a27ae646b86a76423a79a62, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -721,7 +739,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1205575033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.75, y: 2.25, z: 15}
+  m_LocalPosition: {x: 47.45, y: 0.49, z: 15}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
@@ -843,7 +861,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.46
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}
       propertyPath: m_LocalPosition.y
@@ -851,7 +869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.279827
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}
       propertyPath: m_LocalRotation.w
@@ -888,10 +906,14 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f24e445f1211f7c4098dcc3eb54939c3, type: 2}
+      objectReference: {fileID: 2100000, guid: 5fdc8a464a27ae646b86a76423a79a62, type: 2}
     - target: {fileID: 919132149155446097, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}
       propertyPath: m_Name
       value: ArenaShield
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b673f2a2b8ab444abf7942c458ccfee, type: 3}

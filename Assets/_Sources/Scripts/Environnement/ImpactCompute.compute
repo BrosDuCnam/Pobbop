@@ -1,5 +1,7 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel Update
+#pragma kernel Diffuse
+
 
 RWTexture2D<float4> Result;
 
@@ -7,11 +9,13 @@ struct Agent
 {
     float2 position;
     float angle;
+    float health;
 };
 
 float moveSpeed;
 float deltaTime;
 float time;
+float lifeDecay;
 int numAgents;
 int textureSize;
 
@@ -38,8 +42,7 @@ float scaleToRange01(uint state)
 [numthreads(16,1,1)]
 void Update (uint3 id : SV_DispatchThreadID)
 {
-    if (id.x > numAgents) { return; }
-    
+    if (id.x > numAgents || agents[id.x].health <= 0) { return; }    
     
     Agent agent = agents[id.x];
 
@@ -60,12 +63,11 @@ void Update (uint3 id : SV_DispatchThreadID)
     {
         //Set position if valid
         agents[id.x].position = newPos;
-    }
-    
-    Result[int2(newPos.x, newPos.y)] = 1;
+    }    
+    Result[int2(newPos.x, newPos.y)] = agents[id.x].health;
+    agents[id.x].health -= lifeDecay * deltaTime;
 }
 
-#pragma kernel Diffuse
 
 float decayRate;
 float diffuseRate;
@@ -78,7 +80,6 @@ void Diffuse (uint3 id : SV_DispatchThreadID)
 
     float4 sum = 0;
     float4 originalCol = Result[id.xy];
-
     // 3x3 blur
     for (int offsetX = -1; offsetX <= 1; offsetX ++) {
         for (int offsetY = -1; offsetY <= 1; offsetY ++) {
@@ -90,9 +91,9 @@ void Diffuse (uint3 id : SV_DispatchThreadID)
 
     float4 blurredCol = sum / 9;
     float diffuseWeight = saturate(diffuseRate * deltaTime);
-    blurredCol = originalCol * (1 - diffuseWeight) + blurredCol * (diffuseWeight);
-
+    blurredCol = originalCol * (1 - diffuseWeight) + blurredCol * diffuseWeight;
+    
     DiffusedMap[id.xy] = max(0, blurredCol - decayRate * deltaTime);
-}
 
+}
 

@@ -45,9 +45,9 @@ public class NetworkManagerLobby : NetworkManager
     {
         int teamNumber = 0;
         int n = nbPlayers / nbTeams;
-        List<NetworkConnection> removeList = playerList;
+        List<NetworkConnection> removeList = new List<NetworkConnection>(playerList);
         NetworkConnection player;
-
+        
         for (int i = 0; i < playerList.Count; i++)
         {
             if (i % n == 0 && i != 0)

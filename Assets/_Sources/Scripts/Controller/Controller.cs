@@ -12,7 +12,7 @@ using UnityEngine.PlayerLoop;
 public class Controller : NetworkBehaviour
 {
 
-    private Rigidbody rb;
+    protected Rigidbody rb;
 
     private Vector2 axis;
     private Vector3 dir = Vector3.zero;
@@ -72,17 +72,9 @@ public class Controller : NetworkBehaviour
         onDirectionAxis.AddListener(OnDirection);
     }
 
-    protected /*override*/ void Start() // TODO change OnStartAuthority cause of bot
+    protected virtual void Start()
     {
-        enabled = true;
-        rb = GetComponent<Rigidbody>();
         
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        
-        //Cam
-        enabled = true;
-        camera.gameObject.SetActive(true);
     }
 
     /*[ClientCallback]*/ //TODO: Voir avec Seb
