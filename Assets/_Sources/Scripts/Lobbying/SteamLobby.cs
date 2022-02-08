@@ -30,7 +30,7 @@ public class SteamLobby : MonoBehaviour
         if (!SteamManager.Initialized) {return;}
         MakeInstance();
         
-        networkManager = GetComponent<NetworkManager>();
+        networkManager = GetComponent<NetworkManagerLobby>();
 
         lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);

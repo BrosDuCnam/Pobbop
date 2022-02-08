@@ -8,7 +8,6 @@ public class PlayerInputController : Controller
 {
     public override void OnStartAuthority()
     {
-        print("alzhflakzh");
         enabled = true;
         
         //Cam

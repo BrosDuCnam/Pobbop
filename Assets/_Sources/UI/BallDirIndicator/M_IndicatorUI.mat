@@ -96,11 +96,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - PosX: -0.30509114
-    - PosY: 5
-    - Rotation: 3.491717
-    - SizeX: 1.2
-    - SizeY: 7.960669
+    - PosX: -0.84970266
+    - PosY: 0.7706332
+    - Rotation: 195.81706
+    - SizeX: 0
+    - SizeY: 0
     - Vector1_6563167c83e14435bafb6fb4fa7e9a04: 0
     - Vector1_779b6b815bc945f1b9df797523dfa240: 0
     - Vector1_96ab8416f84b420998ae1dc72acd51ef: 1

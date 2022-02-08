@@ -18,26 +18,24 @@ public class DirIndicatorHandler : MonoBehaviour
     private Transform me;
     [CanBeNull] public Transform incomingBall;
     private float angleX, angleY, sizeX, sizeY, rotation;
-
     
     private void Start()
     {
         me = gameObject.transform;
-        incomingBall = GameObject.FindWithTag("Ball").transform; // WIP
     }
 
     private void Update()
     {
-        if (incomingBall != null)
-        {
-            ClaculateUiPos();
+        if (incomingBall == null) return;
+        
+        ClaculateUiPos();
 
-            uiMat.SetFloat("PosX", angleX);
-            uiMat.SetFloat("PosY", angleY);
-            uiMat.SetFloat("SizeX", sizeY);
-            uiMat.SetFloat("SizeY", sizeX);
-            uiMat.SetFloat("Rotation", rotation);
-        }
+        uiMat.SetFloat("PosX", angleX);
+        uiMat.SetFloat("PosY", angleY);
+        uiMat.SetFloat("SizeX", sizeY);
+        uiMat.SetFloat("SizeY", sizeX);
+        uiMat.SetFloat("Rotation", rotation);
+    
     }
 
     private void ClaculateUiPos()
