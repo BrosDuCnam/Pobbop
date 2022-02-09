@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
 public class PlayerTargetUpdate : MonoBehaviour
@@ -13,26 +14,16 @@ public class PlayerTargetUpdate : MonoBehaviour
 
     private void Awake()
     {
-        player = transform.gameObject;
+        OnlineGameManager.OnTargetUpdate += UpdateTargets;
     }
     
     /// <summary>
     /// Cette fonction update la liste de target du joueur
     /// </summary>
     /// <param name="newTargetList"></param>
-    public static void UpdateTargets(List<GameObject> newTargetList)
+    public void UpdateTargets(List<GameObject> newTargetList)
     {
-        targets = newTargetList;
-        targets.Remove(player);
-        updateTarget = true;
-    }
-
-    private void Update()
-    {
-        if (updateTarget)
-        {
-            GetComponent<TargetSystem>().Targets = targets;
-            updateTarget = false;
-        }
+        GetComponent<TargetSystem>().Targets = newTargetList;
+        GetComponent<TargetSystem>().Targets.Remove(transform.gameObject);
     }
 }

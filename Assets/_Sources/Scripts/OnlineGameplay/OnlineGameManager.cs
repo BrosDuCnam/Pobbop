@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class OnlineGameManager : MonoBehaviour
 {
-    [SerializeField] private static List<GameObject> allTargets = new List<GameObject>();
+    private static List<GameObject> allTargets = new List<GameObject>();
+
+    public static event Action<List<GameObject>> OnTargetUpdate;
 
     /// <summary>
     /// Cette fonction ajoute un objet à la liste des targets
@@ -15,7 +17,7 @@ public class OnlineGameManager : MonoBehaviour
     public static void AddTarget(GameObject target)
     {
         allTargets.Add(target);
-        PlayerTargetUpdate.UpdateTargets(allTargets);
+        OnTargetUpdate.Invoke(allTargets);
     }
 
     /// <summary>
@@ -25,6 +27,6 @@ public class OnlineGameManager : MonoBehaviour
     public static void RemoveTarget(GameObject target)
     {
         allTargets.Remove(target);
-        PlayerTargetUpdate.UpdateTargets(allTargets);
+        OnTargetUpdate.Invoke(allTargets);
     }
 }

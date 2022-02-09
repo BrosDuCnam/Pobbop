@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 public class Target : MonoBehaviour
 {
-    private void Awake()
+    private void Start()
     {
         OnlineGameManager.AddTarget(transform.gameObject);
     }
