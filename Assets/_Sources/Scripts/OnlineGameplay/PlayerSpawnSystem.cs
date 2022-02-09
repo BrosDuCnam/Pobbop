@@ -7,52 +7,107 @@ using UnityEngine;
 public class PlayerSpawnSystem : NetworkBehaviour
 {
     [SerializeField] private List<Transform> spawnPointsList;
-    private static List<Transform> staticSpawnPointsList;
+    public static List<Transform> staticSpawnPointsList;
     
     [SerializeField] private Transform playerPrefab;
-    
-    private static List<List<Transform>> teamTransformLists = new List<List<Transform>>();
 
-    private static bool test = true;
+    private List<List<NetworkConnection>> teamLists;
+
+    private static List<List<Transform>> teamTransformLists = new List<List<Transform>>();
     
+    public static event Action OnInvokeSpawnPlayer ;
+    
+    int spawnIndex = 0;
+
     /// <summary>
     /// Ce callback est apellé quand le serveur est crée
     /// </summary>
     public override void OnStartServer()
     {
         base.OnStartServer();
-        NetworkManagerLobby.OnServerReadied += SpawnPlayer;
-
+        //NetworkManagerLobby.OnServerReadied += SpawnPlayer;
+        
+        NetworkManagerLobby.OnServerReadied += GetTeamLists;
+        SpawnMove.OnSpawnPlayer += OnPlayerSpawned;
+        
         staticSpawnPointsList = spawnPointsList;
     }
 
-    
-    /// <summary>
-    /// Cette fonction permet de gérer le premier spawn de la partie
-    /// </summary>
-    /// <param name="teamLists"></param>
+    private void OnPlayerSpawned(Transform player)
+    {
+        AssignTeamNumber(player);
+        teamTransformLists[player.GetComponent<BasePlayer>().teamNumber - 1].Add(player);
+        MoveSpawnPlayer(player);
+    }
+    private void AssignTeamNumber(Transform player)
+    {
+        NetworkIdentity playerConn = player.GetComponent<NetworkIdentity>();
+        for (int i = 0; i < teamLists.Count; i++)
+        {
+            foreach (NetworkConnection conn in teamLists[i])
+            {
+                if (conn.identity == playerConn)
+                {
+                    player.GetComponent<BasePlayer>().teamNumber = i + 1;
+                }
+            }
+        }
+    }
+
+    private void GetTeamLists(List<List<NetworkConnection>> teamLists)
+    {
+        this.teamLists = teamLists;
+        List<Transform> newTeam = new List<Transform>();
+        for (int i = 0; i < teamLists.Count; i++)
+        {
+            teamTransformLists.Add(newTeam);
+        }
+        
+        OnInvokeSpawnPlayer.Invoke();
+    }
+
+    private void MoveSpawnPlayer(Transform player)
+    {
+        List<Transform> startSpawnPoints = new List<Transform>();
+        int teamNumber = player.GetComponent<BasePlayer>().teamNumber;
+        startSpawnPoints = GetStartSpawnPoints(teamNumber);
+        if (spawnIndex >= teamTransformLists[teamNumber - 1].Count)
+        {
+                spawnIndex = 0;
+        } 
+        player.position = startSpawnPoints[spawnIndex].position;
+        player.rotation = startSpawnPoints[spawnIndex].rotation;
+        spawnIndex++;
+    }
+
+    private List<Transform> GetStartSpawnPoints(int teamNumber)
+    {
+        List<Transform> startSpawnPoints = new List<Transform>();
+        string teamSpawnTag = "StartTagTeam" + teamNumber.ToString();
+        foreach (Transform spawn in spawnPointsList)
+        {
+            if (spawn.CompareTag(teamSpawnTag))
+            {
+                startSpawnPoints.Add(spawn);
+            }
+        }
+
+        return startSpawnPoints;
+    }
+        
     private void SpawnPlayer(List<List<NetworkConnection>> teamLists)
     {
-        string teamSpawnTag;
-        int teamNumber;
         int spawnIndex;
-        List<Transform> startSpawnPoints = new List<Transform>();
+        List<Transform> startSpawnPoints;
         for(int i=0; i < teamLists.Count; i++)
         {
             spawnIndex = 0;
-            teamNumber = i + 1;
-            teamSpawnTag = "StartTagTeam" + teamNumber.ToString();
 
             List<Transform> transformTeam = new List<Transform>();
             teamTransformLists.Add(transformTeam);
+
+            startSpawnPoints = GetStartSpawnPoints(i + 1);
             
-            foreach (Transform spawn in spawnPointsList)
-            {
-                if (spawn.CompareTag(teamSpawnTag))
-                {
-                    startSpawnPoints.Add(spawn);
-                }
-            }
             foreach (NetworkConnection conn in teamLists[i])
             {
                 Transform playerSpawned = Instantiate(playerPrefab, startSpawnPoints[spawnIndex].position, startSpawnPoints[spawnIndex].rotation);
@@ -64,12 +119,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// Cette fonction permet de faire respawn un joueur
-    /// </summary>
-    /// <param name="player"></param>
-    /// <param name="teamNumber"></param>
+    
     public static void Respawn(Transform player, int teamNumber)
     {
         Transform spawnPoint = PickSpawnPoint(teamNumber);
@@ -77,13 +127,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
         player.rotation = spawnPoint.rotation;
         PlayerAddTransform(player, teamNumber);
     }
-
     
-    /// <summary>
-    /// Cette fonction permet de choisir le meilleur point de spawn pour un joueur
-    /// </summary>
-    /// <param name="teamNumber"></param>
-    /// <returns></returns>
     private static Transform PickSpawnPoint(int teamNumber)
     {
         List<Transform> allEnemies = GetAllEnemies(teamNumber);
@@ -103,14 +147,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
 
         return spawnPoint;
     }
-
-    /// <summary>
-    /// Cette fonction permet de calculer les distances entre un spawn point et les enemies et coéquipiés
-    /// </summary>
-    /// <param name="spawnPoint"></param>
-    /// <param name="allEnemies"></param>
-    /// <param name="allTm8"></param>
-    /// <returns></returns>
+    
     private static float CalculateDist(Transform spawnPoint, List<Transform> allEnemies, List<Transform> allTm8)
     {
         float distFinal = 0f;
@@ -126,12 +163,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
 
         return distFinal;
     }
-
-    /// <summary>
-    /// Cette fonction permet de récupérer tout les ennemies d'un joueur
-    /// </summary>
-    /// <param name="teamNumber"></param>
-    /// <returns></returns>
+    
     private static List<Transform> GetAllEnemies(int teamNumber)
     {
         List<Transform> enemies = new List<Transform>();
@@ -147,33 +179,18 @@ public class PlayerSpawnSystem : NetworkBehaviour
         }
         return enemies;
     }
-
-    /// <summary>
-    /// Cette fonction permet de récupérer tout les coéquipié d'un joueur
-    /// </summary>
-    /// <param name="teamNumber"></param>
-    /// <returns></returns>
+    
     private static List<Transform> GetAllTm8(int teamNumber)
     {
  
         return teamTransformLists[teamNumber - 1];
     }
-
-    /// <summary>
-    /// Cette fonction permet d'ajouter un Transform à la liste des Transforms des équipes
-    /// </summary>
-    /// <param name="player"></param>
-    /// <param name="teamNumber"></param>
+    
     private static void PlayerAddTransform(Transform player, int teamNumber)
     {
         teamTransformLists[teamNumber - 1].Add(player);
     }
-
-    /// <summary>
-    /// Cette fonction permet d'enlever un Transform à la liste des Transforms des équipes
-    /// </summary>
-    /// <param name="player"></param>
-    /// <param name="teamNumber"></param>
+    
     public static void PlayerRemoveTransform(Transform player, int teamNumber)
     {
         teamTransformLists[teamNumber - 1].Remove(player);

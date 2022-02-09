@@ -17,8 +17,14 @@ public class NetworkManagerLobby : NetworkManager
     [SerializeField] private int nbPlayers;
     [SerializeField] private int nbTeams;
 
+    [SerializeField] private List<Transform> listTransformEnable;
+
     private void Start()
     {
+        foreach (Transform t in listTransformEnable)
+        {
+            t.gameObject.SetActive(true);
+        }
         GenerateTeamAmount();
     }
     

@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/_Sources/Scenes/LobbyBrowser.unity
     guid: df0a4cc7aae4a364d816414151f24e87
   - enabled: 0
-    path: Assets/_Sources/Scenes/multiplayer test.unity
+    path: Assets/_Sources/Scenes/SebTest/multiplayer test.unity
     guid: cd433914d23bd6c45ac65e38a73f2beb
   - enabled: 0
     path: Assets/_Sources/Scenes/CamilleDevScene.unity
