@@ -334,11 +334,10 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 8797491869613382536, guid: 6c4731c7aef3fe44c8f33c50b038b697, type: 3}
   autoCreatePlayer: 1
-  playerSpawnMethod: 0
+  playerSpawnMethod: 1
   spawnPrefabs: []
   nbPlayers: 2
   nbTeams: 2
-  listTransformEnable: []
 --- !u!1 &542217526
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using UnityEngine;
 public class NetworkManagerLobby : NetworkManager
 {
     public static event Action<List<List<NetworkConnection>>> OnServerReadied;
+    public static event Action OnInvokeSpawnPlayer ;
 
     private List<NetworkConnection> playerList = new List<NetworkConnection>();
     private List<List<NetworkConnection>> teamLists = new List<List<NetworkConnection>>();
@@ -16,16 +17,12 @@ public class NetworkManagerLobby : NetworkManager
 
     [SerializeField] private int nbPlayers;
     [SerializeField] private int nbTeams;
-
-    [SerializeField] private List<Transform> listTransformEnable;
-
+    private int nbSpawnedPlayers = 0;
+    
     private void Start()
     {
-        foreach (Transform t in listTransformEnable)
-        {
-            t.gameObject.SetActive(true);
-        }
         GenerateTeamAmount();
+        SpawnMove.playerSpawned += playerSpawned;
     }
     
     /// <summary>
@@ -41,6 +38,15 @@ public class NetworkManagerLobby : NetworkManager
         {
             GenerateTeams();
             OnServerReadied?.Invoke(teamLists);
+        }
+    }
+
+    public void playerSpawned()
+    {
+        nbSpawnedPlayers++;
+        if (nbSpawnedPlayers == nbPlayers)
+        {
+            OnInvokeSpawnPlayer?.Invoke();
         }
     }
 

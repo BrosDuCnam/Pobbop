@@ -14,9 +14,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
     private List<List<NetworkConnection>> teamLists;
 
     private static List<List<Transform>> teamTransformLists = new List<List<Transform>>();
-    
-    public static event Action OnInvokeSpawnPlayer ;
-    
+
     int spawnIndex = 0;
 
     /// <summary>
@@ -62,19 +60,15 @@ public class PlayerSpawnSystem : NetworkBehaviour
         {
             teamTransformLists.Add(newTeam);
         }
-        
-        OnInvokeSpawnPlayer.Invoke();
     }
 
     private void MoveSpawnPlayer(Transform player)
     {
-        List<Transform> startSpawnPoints = new List<Transform>();
-        int teamNumber = player.GetComponent<BasePlayer>().teamNumber;
-        startSpawnPoints = GetStartSpawnPoints(teamNumber);
-        if (spawnIndex >= teamTransformLists[teamNumber - 1].Count)
+        List<Transform> startSpawnPoints = GetStartSpawnPoints(player.GetComponent<BasePlayer>().teamNumber);
+        if (spawnIndex >= startSpawnPoints.Count)
         {
-                spawnIndex = 0;
-        } 
+            spawnIndex = 0;
+        }
         player.position = startSpawnPoints[spawnIndex].position;
         player.rotation = startSpawnPoints[spawnIndex].rotation;
         spawnIndex++;
@@ -88,7 +82,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
         {
             if (spawn.CompareTag(teamSpawnTag))
             {
-                startSpawnPoints.Add(spawn);
+                startSpawnPoints.Add(spawn); ;
             }
         }
 

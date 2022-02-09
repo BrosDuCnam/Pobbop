@@ -7,14 +7,21 @@ using System;
 public class SpawnMove : MonoBehaviour
 {
     public static event Action<Transform> OnSpawnPlayer;
+
+    public static event Action playerSpawned;
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        PlayerSpawnSystem.OnInvokeSpawnPlayer += InvokeSpawnPlayer;
+        NetworkManagerLobby.OnInvokeSpawnPlayer += InvokeSpawnPlayer;
+    }
+
+    private void Start()
+    {
+        playerSpawned?.Invoke();
     }
 
     private void InvokeSpawnPlayer()
     {
-        OnSpawnPlayer.Invoke(transform);
+        OnSpawnPlayer?.Invoke(transform);
     }
 }
