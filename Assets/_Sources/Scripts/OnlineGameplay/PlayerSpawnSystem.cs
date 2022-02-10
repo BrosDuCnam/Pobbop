@@ -6,10 +6,9 @@ using UnityEngine;
 
 public class PlayerSpawnSystem : NetworkBehaviour
 {
-    [SerializeField] private List<Transform> spawnPointsList;
-    public static List<Transform> staticSpawnPointsList;
+    public static List<Transform> SpawnPointsList = new List<Transform>();
     
-    [SerializeField] private Transform playerPrefab;
+    [HideInInspector] public Transform playerPrefab;
 
     private List<List<NetworkConnection>> teamLists;
 
@@ -23,72 +22,14 @@ public class PlayerSpawnSystem : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-        //NetworkManagerLobby.OnServerReadied += SpawnPlayer;
-        
-        NetworkManagerLobby.OnServerReadied += GetTeamLists;
-        SpawnMove.OnSpawnPlayer += OnPlayerSpawned;
-        
-        staticSpawnPointsList = spawnPointsList;
+        NetworkManagerLobby.OnServerReadied += SpawnPlayer;
     }
 
-    private void OnPlayerSpawned(Transform player)
+    public static void AddSpawnPoint(Transform spawnPoint)
     {
-        AssignTeamNumber(player);
-        teamTransformLists[player.GetComponent<BasePlayer>().teamNumber - 1].Add(player);
-        MoveSpawnPlayer(player);
+        SpawnPointsList.Add(spawnPoint);
     }
-    private void AssignTeamNumber(Transform player)
-    {
-        NetworkIdentity playerConn = player.GetComponent<NetworkIdentity>();
-        for (int i = 0; i < teamLists.Count; i++)
-        {
-            foreach (NetworkConnection conn in teamLists[i])
-            {
-                if (conn.identity == playerConn)
-                {
-                    player.GetComponent<BasePlayer>().teamNumber = i + 1;
-                }
-            }
-        }
-    }
-
-    private void GetTeamLists(List<List<NetworkConnection>> teamLists)
-    {
-        this.teamLists = teamLists;
-        List<Transform> newTeam = new List<Transform>();
-        for (int i = 0; i < teamLists.Count; i++)
-        {
-            teamTransformLists.Add(newTeam);
-        }
-    }
-
-    private void MoveSpawnPlayer(Transform player)
-    {
-        List<Transform> startSpawnPoints = GetStartSpawnPoints(player.GetComponent<BasePlayer>().teamNumber);
-        if (spawnIndex >= startSpawnPoints.Count)
-        {
-            spawnIndex = 0;
-        }
-        player.position = startSpawnPoints[spawnIndex].position;
-        player.rotation = startSpawnPoints[spawnIndex].rotation;
-        spawnIndex++;
-    }
-
-    private List<Transform> GetStartSpawnPoints(int teamNumber)
-    {
-        List<Transform> startSpawnPoints = new List<Transform>();
-        string teamSpawnTag = "StartTagTeam" + teamNumber.ToString();
-        foreach (Transform spawn in spawnPointsList)
-        {
-            if (spawn.CompareTag(teamSpawnTag))
-            {
-                startSpawnPoints.Add(spawn); ;
-            }
-        }
-
-        return startSpawnPoints;
-    }
-        
+    
     private void SpawnPlayer(List<List<NetworkConnection>> teamLists)
     {
         int spawnIndex;
@@ -114,6 +55,21 @@ public class PlayerSpawnSystem : NetworkBehaviour
         }
     }
     
+    private List<Transform> GetStartSpawnPoints(int teamNumber)
+    {
+        List<Transform> startSpawnPoints = new List<Transform>();
+        string teamSpawnTag = "StartTagTeam" + teamNumber.ToString();
+        foreach (Transform spawn in SpawnPointsList)
+        {
+            if (spawn.CompareTag(teamSpawnTag))
+            {
+                startSpawnPoints.Add(spawn); ;
+            }
+        }
+
+        return startSpawnPoints;
+    }
+    
     public static void Respawn(Transform player, int teamNumber)
     {
         Transform spawnPoint = PickSpawnPoint(teamNumber);
@@ -129,7 +85,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
         Transform spawnPoint = null;
         float dist = 0f;
         float n = 0f;
-        foreach (Transform spawn in staticSpawnPointsList)
+        foreach (Transform spawn in SpawnPointsList)
         {
             n = CalculateDist(spawn, allEnemies, allTm8);
             if (n >= dist)

@@ -5,24 +5,29 @@ using UnityEngine;
 
 public class NetworkManagerLobby : NetworkManager
 {
+    private System.Random random = new System.Random();
+   
     public static event Action<List<List<NetworkConnection>>> OnServerReadied;
-    public static event Action OnInvokeSpawnPlayer ;
-
+    public static event Action OnNetworkManagerSpawn;
+    
     private List<NetworkConnection> playerList = new List<NetworkConnection>();
     private List<List<NetworkConnection>> teamLists = new List<List<NetworkConnection>>();
-
     private static List<int> teamScores = new List<int>();
 
-    private System.Random random = new System.Random();
-
+    [SerializeField] private GameObject gameManagerPrefab;
+    
     [SerializeField] private int nbPlayers;
     [SerializeField] private int nbTeams;
-    private int nbSpawnedPlayers = 0;
-    
-    private void Start()
+
+    public override void OnStartServer()
     {
+        base.OnStartServer();
+        
+        GameObject gameManagerObject = Instantiate(gameManagerPrefab);
+        NetworkServer.Spawn(gameManagerObject);
+        gameManagerObject.GetComponent<PlayerSpawnSystem>().playerPrefab = playerPrefab.transform;
+        OnNetworkManagerSpawn?.Invoke();
         GenerateTeamAmount();
-        SpawnMove.playerSpawned += playerSpawned;
     }
     
     /// <summary>
@@ -38,15 +43,6 @@ public class NetworkManagerLobby : NetworkManager
         {
             GenerateTeams();
             OnServerReadied?.Invoke(teamLists);
-        }
-    }
-
-    public void playerSpawned()
-    {
-        nbSpawnedPlayers++;
-        if (nbSpawnedPlayers == nbPlayers)
-        {
-            OnInvokeSpawnPlayer?.Invoke();
         }
     }
 
