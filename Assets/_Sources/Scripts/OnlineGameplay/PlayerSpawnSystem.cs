@@ -22,7 +22,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-        NetworkManagerLobby.OnServerReadied += SpawnPlayer;
+        //NetworkManagerLobby.OnServerReadied += SpawnPlayer;
     }
 
     public static void AddSpawnPoint(Transform spawnPoint)
@@ -72,10 +72,12 @@ public class PlayerSpawnSystem : NetworkBehaviour
     
     public static void Respawn(Transform player, int teamNumber)
     {
-        Transform spawnPoint = PickSpawnPoint(teamNumber);
+        //Transform spawnPoint = PickSpawnPoint(teamNumber);
+        System.Random random = new System.Random();
+        Transform spawnPoint = SpawnPointsList[random.Next(0, SpawnPointsList.Count)];
         player.position = spawnPoint.position;
         player.rotation = spawnPoint.rotation;
-        PlayerAddTransform(player, teamNumber);
+        //PlayerAddTransform(player, teamNumber);
     }
     
     private static Transform PickSpawnPoint(int teamNumber)

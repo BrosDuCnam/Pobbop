@@ -7,10 +7,11 @@ using UnityEngine;
 /// <summary>
 /// Ce scripts est mis sur un objet qui peut être un target
 /// </summary>
-public class Target : MonoBehaviour
+public class Target : NetworkBehaviour
 {
-    private void Start()
+    public override void OnStartServer()
     {
+        base.OnStartServer();
         OnlineGameManager.AddTarget(transform.gameObject);
     }
 }

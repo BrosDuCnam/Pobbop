@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class OnlineGameManager : MonoBehaviour
+public class OnlineGameManager : NetworkBehaviour
 {
     private static List<GameObject> allTargets = new List<GameObject>();
-
     public static event Action<List<GameObject>> OnTargetUpdate;
 
     /// <summary>
@@ -17,7 +16,7 @@ public class OnlineGameManager : MonoBehaviour
     public static void AddTarget(GameObject target)
     {
         allTargets.Add(target);
-        OnTargetUpdate.Invoke(allTargets);
+        OnTargetUpdate?.Invoke(allTargets);
     }
 
     /// <summary>
@@ -27,6 +26,6 @@ public class OnlineGameManager : MonoBehaviour
     public static void RemoveTarget(GameObject target)
     {
         allTargets.Remove(target);
-        OnTargetUpdate.Invoke(allTargets);
+        OnTargetUpdate?.Invoke(allTargets);
     }
 }

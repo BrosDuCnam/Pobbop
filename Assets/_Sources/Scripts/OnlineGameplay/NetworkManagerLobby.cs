@@ -15,7 +15,8 @@ public class NetworkManagerLobby : NetworkManager
     private static List<int> teamScores = new List<int>();
 
     [SerializeField] private GameObject gameManagerPrefab;
-    
+    [SerializeField] private GameObject ballPrefab;
+
     [SerializeField] private int nbPlayers;
     [SerializeField] private int nbTeams;
 
@@ -23,12 +24,18 @@ public class NetworkManagerLobby : NetworkManager
     {
         base.OnStartServer();
         
-        GameObject gameManagerObject = Instantiate(gameManagerPrefab);
-        NetworkServer.Spawn(gameManagerObject);
-        gameManagerObject.GetComponent<PlayerSpawnSystem>().playerPrefab = playerPrefab.transform;
+        GameObject gameManager = Instantiate(gameManagerPrefab);
+        NetworkServer.Spawn(gameManager);
+        gameManager.GetComponent<PlayerSpawnSystem>().playerPrefab = playerPrefab.transform;
+        GameObject spawnedObj = Instantiate(ballPrefab, Vector3.up, ballPrefab.transform.rotation);
+        NetworkServer.Spawn(spawnedObj);
+
+
         OnNetworkManagerSpawn?.Invoke();
         GenerateTeamAmount();
     }
+    
+    
     
     /// <summary>
     /// Ce callback est appellé à chaque fois qu'un joueur ce connecte au serveur
@@ -42,7 +49,7 @@ public class NetworkManagerLobby : NetworkManager
         if (playerList.Count == nbPlayers)
         {
             GenerateTeams();
-            OnServerReadied?.Invoke(teamLists);
+           OnServerReadied?.Invoke(teamLists);
         }
     }
 
