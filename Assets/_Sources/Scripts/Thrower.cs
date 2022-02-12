@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -32,6 +33,8 @@ public class Thrower : MonoBehaviour
             
             ThrowableObject throwableObject = Instantiate(_throwableObject, _throwPosition)
                 .GetComponent<ThrowableObject>();
+
+            NetworkServer.Spawn(throwableObject.gameObject);
             
             throwableObject.Throw(gameObject, transform.forward, Random.Range(10, 50));
         }
