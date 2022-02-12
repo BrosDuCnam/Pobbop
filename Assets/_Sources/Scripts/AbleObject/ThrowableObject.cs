@@ -206,7 +206,6 @@ public class ThrowableObject : NetworkBehaviour
     {
         GameObject owner = Owner;
         GameObject otherObject = other.gameObject;
-        print(ThrowState);
         if (ThrowState != ThrowState.Idle)
         {
             BasePlayer basePlayerParent = otherObject.GetComponentInParent<BasePlayer>();

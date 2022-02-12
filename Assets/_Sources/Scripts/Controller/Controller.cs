@@ -70,6 +70,8 @@ public class Controller : NetworkBehaviour
         onJump.AddListener(OnJump);
         onCrouch.AddListener(OnCrouch);
         onDirectionAxis.AddListener(OnDirection);
+
+        rb = GetComponent<Rigidbody>();
     }
     
     /*[ClientCallback]*/ //TODO: Voir avec Seb

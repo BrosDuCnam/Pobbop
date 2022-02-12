@@ -22,7 +22,6 @@ public class Thrower : MonoBehaviour
 
     private void Update()
     {
-        print(_timer);
         if (_timer > 0)
         {
             _timer -= Time.deltaTime;

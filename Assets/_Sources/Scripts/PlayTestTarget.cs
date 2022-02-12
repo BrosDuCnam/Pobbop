@@ -19,6 +19,7 @@ public class PlayTestTarget : MonoBehaviour
         
         _healthSystem.OnHealthZero.AddListener(() =>
         {
+            _target.gameObject.SetActive(false);
             _timeToRespawn = Time.time;
             _timer = _timeToRespawn;
         });
