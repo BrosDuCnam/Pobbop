@@ -12,6 +12,9 @@ public class LobbyElement : MonoBehaviour
 
     public CSteamID lobbySteamID;
 
+    /// <summary>
+    /// Join the assigned steam lobby ID (can be used for a join button)
+    /// </summary>
     public void JoinLobby()
     {
         SteamLobby.instance.JoinLobby(lobbySteamID);

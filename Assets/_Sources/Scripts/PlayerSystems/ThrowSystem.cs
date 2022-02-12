@@ -31,7 +31,9 @@ public class ThrowSystem : NetworkBehaviour
         get => _isCharging;
         private set => _isCharging = value;
     }
-
+/// <summary>
+/// Get charge value between 0 and 1
+/// </summary>
     public float ChargeValue
     {
         get
@@ -111,12 +113,7 @@ public class ThrowSystem : NetworkBehaviour
             if (basePlayer.HasTarget) // If player has a target
             {
                 GameObject target = basePlayer.Target;
-                //Sets the other player's ui handler to warn him of the incoming ball
-                if (target.TryGetComponent(out DirIndicatorHandler uiHandler))
-                {
-                    uiHandler.incomingBall = throwableObject.transform;
-                }
-                
+
                 // Calculate the multiplier of step distance
                 float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude);
                 multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
