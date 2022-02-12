@@ -24,11 +24,11 @@ public class NetworkManagerLobby : NetworkManager
     {
         base.OnStartServer();
         
-        GameObject gameManager = Instantiate(gameManagerPrefab);
-        NetworkServer.Spawn(gameManager);
-        gameManager.GetComponent<PlayerSpawnSystem>().playerPrefab = playerPrefab.transform;
-        GameObject spawnedObj = Instantiate(ballPrefab, Vector3.up, ballPrefab.transform.rotation);
-        NetworkServer.Spawn(spawnedObj);
+        //GameObject gameManager = Instantiate(gameManagerPrefab);
+        //NetworkServer.Spawn(gameManager);
+      //  gameManager.GetComponent<PlayerSpawnSystem>().playerPrefab = playerPrefab.transform;
+        //GameObject spawnedObj = Instantiate(ballPrefab, Vector3.up, ballPrefab.transform.rotation);
+      //  NetworkServer.Spawn(spawnedObj);
 
 
         OnNetworkManagerSpawn?.Invoke();
