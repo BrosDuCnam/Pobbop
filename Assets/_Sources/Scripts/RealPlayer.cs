@@ -1,5 +1,4 @@
 ﻿using System;
-using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -14,14 +13,7 @@ public class RealPlayer : BasePlayer
     [Tooltip("Line renderer of charging curve")]
     [SerializeField] private LineRenderer _chargingCurveLineRenderer;
 
-<<<<<<< Updated upstream
     private new void Awake()
-=======
-    private GameObject _currentTarget;
-    private DirIndicatorHandler _currentTargetIndicator;
-
-    private new void Start()
->>>>>>> Stashed changes
     {
         base.Awake();
         
@@ -82,16 +74,11 @@ public class RealPlayer : BasePlayer
             targetPositionInCanvas.y = Mathf.Clamp(targetPositionInCanvas.y, 0, Screen.height);
 
             _targetImage.rectTransform.position = targetPositionInCanvas; // Set target image position to the current target
-        }
-        else
-        {
-            
-        }
+        } else
         {
             _targetImage.enabled = false;
         }
     }
-<<<<<<< Updated upstream
     
     private void Eliminated()
     {
@@ -102,10 +89,6 @@ public class RealPlayer : BasePlayer
         PlayerSpawnSystem.Respawn(transform, teamNumber);
     }
     
-=======
-
-
->>>>>>> Stashed changes
     #region "Inputs"
     
     public void TogglePickupDrop(InputAction.CallbackContext ctx)

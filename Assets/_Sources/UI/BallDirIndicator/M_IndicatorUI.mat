@@ -96,10 +96,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - BorderSize: 0
-    - PosX: -3.3603654
-    - PosY: -1.0306158
-    - Rotation: 292.5831
+    - PosX: -0.84970266
+    - PosY: 0.7706332
+    - Rotation: 195.81706
     - SizeX: 0
     - SizeY: 0
     - Vector1_6563167c83e14435bafb6fb4fa7e9a04: 0
@@ -135,7 +134,6 @@ Material:
     - _ZWrite: 1
     - ballAngle: 396.72656
     m_Colors:
-    - BorderColor: {r: 1, g: 0, b: 0, a: 0}
     - Vector2_57f3923b6b8d4ce8af86a87ef35ab309: {r: 16, g: 9, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -13,30 +12,13 @@ public class DirIndicatorHandler : MonoBehaviour
     [SerializeField] private float minSize = 7;
     [SerializeField] private float sizeFact = 0.5f;
     [SerializeField] private float lengthSize = 0.5f;
-    [SerializeField] private float maxBorderSize = 1.5f;
-    //Lerp distance for the directional indicator to show or not
     [SerializeField] [Range(0,1)] private float displayFactor = 0.1f;
-    [SerializeField] private Color defaultColor;
 
-
-    [Header("Charge Colors")] 
-    [SerializeField] private Color minChargeColor;
-    [SerializeField] private Color maxChargeColor;
-    
-    
-    /// <summary>
-    /// Value to assign when the ball is thrown
-    /// </summary>
-    [HideInInspector] public float initialThrowDistance = 10;
-    
     private float ballAngle;
     private Transform me;
+    [CanBeNull] public Transform incomingBall;
     private float angleX, angleY, sizeX, sizeY, rotation;
     
-    [CanBeNull] private Transform incomingBall;
-    [SerializeField] [CanBeNull] private BasePlayer targeter;
-
-
     private void Start()
     {
         me = gameObject.transform;
@@ -44,23 +26,7 @@ public class DirIndicatorHandler : MonoBehaviour
 
     private void Update()
     {
-        //No targeter, no ball incoming
-        if (targeter == null && incomingBall == null) return;
-        
-        //Getting targeted
-        if (targeter.IsCharging && incomingBall == null)
-        {
-            //Change color according to the opponent charge
-            uiMat.SetColor("BorderColor", Color.Lerp(minChargeColor, maxChargeColor, targeter.ChargeValue));
-            return;
-        }
-        
-        //Ball incoming
-        uiMat.SetColor("BorderColor", defaultColor);
-        //Set the border size according to the distance between the ball and the player 
-        uiMat.SetFloat("BorderSize", 
-            maxBorderSize - maxBorderSize * Vector3.Distance(incomingBall.position, transform.position) / initialThrowDistance);
-
+        if (incomingBall == null) return;
         
         ClaculateUiPos();
 
@@ -71,10 +37,7 @@ public class DirIndicatorHandler : MonoBehaviour
         uiMat.SetFloat("Rotation", rotation);
     
     }
-    
-    /// <summary>
-    /// Calculates the ui directional indicator based on ball position
-    /// </summary>
+
     private void ClaculateUiPos()
     {
         Vector3 ballPos = incomingBall.position;
@@ -145,33 +108,42 @@ public class DirIndicatorHandler : MonoBehaviour
         
     }
 
-
-    /// <summary>
-    /// Set the ball targeted to the player how should be warned
-    /// </summary>
-    /// <param name="ball"></param>
-    public void SetIncomingBall(Transform ball)
+    private void newTest()
     {
-        incomingBall = ball;
+        Vector3 ballPos = incomingBall.position;
+        Vector3 screenPos = cam.WorldToViewportPoint(ballPos);
+
+        //Flip if is behind the camera
+        if (screenPos.z < 0) screenPos *= -1;
+        //Center the coordinates
+        screenPos -= screenPos / 2;
+        screenPos *= 2;
+
+        //Find the angle of the point
+        float angle = Mathf.Atan2(screenPos.x, screenPos.y);
+        angle -= 90 * Mathf.Deg2Rad;
+
+        float cos = Mathf.Cos(angle);
+        float sin = -Mathf.Sin(angle);
+            
+        float m = cos / sin;
+            
+        if (cos > 0) { screenPos = new Vector3(1/m, 1, 0); }
+        else { screenPos = new Vector3(-1/m, -1, 0); }
+            
+        if (screenPos.x > 1) { screenPos = new Vector3(1, 1*m, 0);  }
+        else if (screenPos.x < -1) { screenPos = new Vector3(-1, -1*m, 0);  }
+
+        angleX = screenPos.y * -5;
+        angleY = screenPos.x * -5;
+        sizeX = 1;
+        sizeY = 1;
     }
     
-    /// <summary>
-    /// Reset the incoming ball if the player didn't shoot, switched target, or the ball missed 
-    /// </summary>
-    public void ResetIncomingBall()
-    {
-        incomingBall = null;
-    }
+    public void SetIncominngBall(Transform ball) { incomingBall = ball; }
+    
+    public void ResetBall(){ incomingBall = null; }
 
-    public void SetTargeter(BasePlayer player)
-    {
-        targeter = player;
-    }
-
-    public void ResetTargeter()
-    {
-        targeter = null;
-    }
 
     private void OnGUI()
     {

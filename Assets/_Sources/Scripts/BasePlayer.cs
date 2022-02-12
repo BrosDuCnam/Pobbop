@@ -25,25 +25,6 @@ public class BasePlayer : NetworkBehaviour
     [HideInInspector] public int teamNumber = 0;
     
     /// <summary>
-    /// Define the actions of the player
-    /// </summary>
-    public enum PlayerState
-    {
-        /// <summary>
-        /// Charging a ball while targeting someone
-        /// </summary>
-        Targeting,
-        /// <summary>
-        /// From the moment the player has thrown his ball, to the moment the ball came back to Idle state
-        /// </summary>
-        Throwing,
-        /// <summary>
-        /// If is targeted by another player
-        /// </summary>
-        Targeted
-    }
-    
-    /// <summary>
     /// Return true if the player hold an object
     /// </summary>
     public bool IsHoldingObject
@@ -86,19 +67,8 @@ public class BasePlayer : NetworkBehaviour
         get => _throwSystem.IsCharging;
     }
 
-<<<<<<< Updated upstream
 
     protected void Awake()
-=======
-    public float ChargeValue
-    {
-        get => _throwSystem.ChargeValue;
-    }
-    
-    
-    
-    protected void Start()
->>>>>>> Stashed changes
     {
         _targetSystem = GetComponent<TargetSystem>();
         _pickUpDropSystem = GetComponent<PickUpDropSystem>();

@@ -34,8 +34,7 @@ public class ArenaShieldImpact : MonoBehaviour
     [Header("Collision Detection")] 
     [SerializeField] private int maxSimultaneousImpacts = 10;
     [SerializeField] private float initialSize = 5;
-    
-    //Values to calculate impact on the shield
+
     private float shieldSize;
     private Vector3 shieldPos;
     
@@ -64,8 +63,7 @@ public class ArenaShieldImpact : MonoBehaviour
         map.Create();
         diffusedMap.Create();
 
-        //Init agents at the center of the texture with a random angle
-        //It creates the max amount of particle at a time because the compute buffer needs to be initialized with an initial size
+        //Init agents
         Agent[] agents = new Agent[numAgent * maxSimultaneousImpacts];
         for (int i = 0; i < agents.Length; i++)
         {
@@ -77,6 +75,7 @@ public class ArenaShieldImpact : MonoBehaviour
         }
         
         //Send initial values to the compute shader
+
         ComputeHelper.CreateAndSetBuffer<Agent>(ref agentBuffer, agents, compute, "agents", 0);
         compute.SetBuffer(0, "agents", agentBuffer);
         compute.SetInt("numAgents", numAgent * maxSimultaneousImpacts);
@@ -103,7 +102,6 @@ public class ArenaShieldImpact : MonoBehaviour
         compute.SetFloat("time", Time.time);
         ComputeHelper.Dispatch(compute, numAgent * maxSimultaneousImpacts, 1, 1, 0);
         ComputeHelper.Dispatch(compute, textureSize, textureSize, 1, 1);
-        //The blur and diffuse effect on the trails is processed on a different maps then copied on the initial map 
         ComputeHelper.CopyRenderTexture(diffusedMap, map);
         
     }
@@ -115,14 +113,12 @@ public class ArenaShieldImpact : MonoBehaviour
 
     private void OnCollisionEnter(Collision col)
     {
-        //TODO : find a function to make the length of the return value linear  
         Vector3 impactPos = col.contacts[0].point;
         impactPos -= shieldPos; 
         Vector2 uvPos = new Vector2(-impactPos.x, -impactPos.z) / shieldSize * 2;
         
         Debug.Log(uvPos);
         newImpact();
-        //Generate a new spray of particles at the impact point
         agentBuffer.SetData(CreateAgentsAtPos(uvPos), 0,
             impactHistoryIndex * numAgent, numAgent);
         compute.SetBuffer(0, "agents", agentBuffer);
@@ -143,10 +139,6 @@ public class ArenaShieldImpact : MonoBehaviour
         return agents;
     }
 
-    /// <summary>
-    /// Loop in the agent buffer to have multiple impact trails at the same time
-    /// and override the oldest when it reaches the max value of particles
-    /// </summary>
     private void newImpact()
     {
         if (impactHistoryIndex > maxSimultaneousImpacts - 2)
