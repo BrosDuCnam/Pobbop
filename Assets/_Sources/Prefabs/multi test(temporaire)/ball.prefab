@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1e75d51d555dec54b90544819dd5e13a, type: 2}
+  - {fileID: 2100000, guid: c70e075a2144ba04784d74b7b2889fd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -147,6 +147,7 @@ MonoBehaviour:
   syncInterval: 0.1
   DEBUG: 0
   _poolSize: 10
+  _reboundOnKill: 0
   OnStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -185,7 +186,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   visible: 0
-  m_AssetId: 
+  m_AssetId: afa7d4c00cb239d4ab6c9412dbc949bb
   hasSpawned: 0
 --- !u!114 &3150921870575592317
 MonoBehaviour:

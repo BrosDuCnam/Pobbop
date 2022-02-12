@@ -13,11 +13,12 @@ public class RealPlayer : BasePlayer
     [Tooltip("Line renderer of charging curve")]
     [SerializeField] private LineRenderer _chargingCurveLineRenderer;
 
-    private new void Start()
+    private new void Awake()
     {
-        base.Start();
+        base.Awake();
         
         _controller.additiveCamera = true;
+        _healthSystem.OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
     }
     
     private void Update()
@@ -79,6 +80,14 @@ public class RealPlayer : BasePlayer
         }
     }
     
+    private void Eliminated()
+    {
+        int teamNumber = transform.GetComponent<BasePlayer>().teamNumber;
+        int enemyTeam = _healthSystem.LastPlayerDamage.GetComponent<BasePlayer>().teamNumber;
+        NetworkManagerLobby.AddPoint(enemyTeam);
+        PlayerSpawnSystem.PlayerRemoveTransform(transform, teamNumber);
+        PlayerSpawnSystem.Respawn(transform, teamNumber);
+    }
     
     #region "Inputs"
     

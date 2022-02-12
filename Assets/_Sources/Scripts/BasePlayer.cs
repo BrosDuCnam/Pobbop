@@ -68,7 +68,7 @@ public class BasePlayer : NetworkBehaviour
     }
 
 
-    protected void Start()
+    protected void Awake()
     {
         _targetSystem = GetComponent<TargetSystem>();
         _pickUpDropSystem = GetComponent<PickUpDropSystem>();

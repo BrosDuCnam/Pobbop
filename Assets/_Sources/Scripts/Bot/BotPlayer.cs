@@ -16,9 +16,9 @@ public class BotPlayer : BasePlayer
         get => SeeEnemyWithWeapon();
     }
     
-    private new void Start()
+    private new void Awake()
     {
-        base.Start();
+        base.Awake();
 
         _fsmStateInfo.bot = this;
         _fsmStateInfo.PeriodUpdate = 0.1f;
