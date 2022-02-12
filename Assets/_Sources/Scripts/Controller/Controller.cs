@@ -63,7 +63,7 @@ public class Controller : NetworkBehaviour
     private Vector2 camAxis;
     protected Vector2 currentLook;
 
-    private void Awake()
+    protected void Awake()
     {
         onAxis.AddListener(Axis);
         onRunStart.AddListener(OnRun);
@@ -71,12 +71,7 @@ public class Controller : NetworkBehaviour
         onCrouch.AddListener(OnCrouch);
         onDirectionAxis.AddListener(OnDirection);
     }
-
-    protected virtual void Start()
-    {
-        
-    }
-
+    
     /*[ClientCallback]*/ //TODO: Voir avec Seb
     protected void Update()
     {

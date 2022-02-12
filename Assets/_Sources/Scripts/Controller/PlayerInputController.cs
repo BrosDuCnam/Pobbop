@@ -9,9 +9,6 @@ public class PlayerInputController : Controller
     public override void OnStartAuthority()
     {
         enabled = true;
-        
-        //Cam
-        camera.gameObject.SetActive(true);
 
         rb = GetComponent<Rigidbody>();
         

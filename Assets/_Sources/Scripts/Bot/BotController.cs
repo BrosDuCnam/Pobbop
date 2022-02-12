@@ -49,9 +49,9 @@ public class BotController : Controller
 
     public bool HasDestination => _navMeshPath != null;
 
-    private new void Start()
+    private new void Awake()
     {
-        base.Start();
+        base.Awake();
         _navMeshPath = null;
 
         print(transform.position);

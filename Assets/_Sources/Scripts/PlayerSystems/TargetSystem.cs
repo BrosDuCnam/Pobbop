@@ -25,9 +25,11 @@ public class TargetSystem : MonoBehaviour
     }
     [NotNull] public GameObject CurrentTarget { get; private set; }
     
-    private void Start()
+    private void Awake()
     {
         basePlayer = GetComponent<BasePlayer>();
+
+        _targets = new List<GameObject>();
     }
 
     private void Update()

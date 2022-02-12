@@ -56,8 +56,8 @@ public class ThrowableObject : NetworkBehaviour
     private void Update()
     {
         _poolPositions.Enqueue(transform.position);
-        
-        //print(_owner == null);
+
+        //print(ThrowState);
     }
 
 
@@ -66,12 +66,12 @@ public class ThrowableObject : NetworkBehaviour
     /// </summary>
     /// <param name="direction">Direction to throw</param>
     /// <param name="force">Force in meter/s</param>
-    [Command] 
+    [Command]
     public void Throw(GameObject player, Vector3 direction, float force)
     {
         if (ThrowState != ThrowState.Idle) return;
         Owner = player;
-        ThrowState = ThrowState.Thrown;
+        ThrowState = ThrowState.FreeThrow;
         _rigidbody.AddForce(transform.position + direction * (force * 50), ForceMode.Acceleration);
     }
 
@@ -206,6 +206,7 @@ public class ThrowableObject : NetworkBehaviour
     {
         GameObject owner = Owner;
         GameObject otherObject = other.gameObject;
+        print(ThrowState);
         if (ThrowState != ThrowState.Idle)
         {
             BasePlayer basePlayerParent = otherObject.GetComponentInParent<BasePlayer>();
@@ -213,7 +214,8 @@ public class ThrowableObject : NetworkBehaviour
             if (Owner != null && (otherObject == Owner || (basePlayerParent != null && basePlayerParent.gameObject == Owner))) yield return null;
             else
             {
-                _stopThrow = true;
+                if (ThrowState == ThrowState.FreeThrow) ThrowState = ThrowState.Idle;
+                else _stopThrow = true;
             }
         }
 
@@ -228,7 +230,7 @@ public class ThrowableObject : NetworkBehaviour
                 
                 if (_reboundOnKill)
                 {
-                    if (livingObject.Health <= 1000 && owner != null) // TODO change 1000 to other value
+                    if (livingObject.Health <= 0 && owner != null) // TODO change 1000 to other value
                     {
                         Vector3 direction = _poolPositions.ToArray()[0] - transform.position;
                         float multiplier = _rigidbody.velocity.magnitude;
@@ -263,5 +265,9 @@ public enum ThrowState
     /// <summary>
     /// The throw is in progress and the object is rebounding.
     /// </summary>
-    Rebound
+    Rebound,
+    /// <summary>
+    /// The object is throw without curve
+    /// </summary>
+    FreeThrow
 }

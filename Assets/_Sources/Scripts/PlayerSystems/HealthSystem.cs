@@ -54,4 +54,9 @@ public class HealthSystem : MonoBehaviour
         PlayerSpawnSystem.PlayerRemoveTransform(transform, teamNumber);
         PlayerSpawnSystem.Respawn(transform, teamNumber);
     }
+
+    public void SetHealth(int healt)
+    {
+        _currentHealth = healt;
+    }
 }
