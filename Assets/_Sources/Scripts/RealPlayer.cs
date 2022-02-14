@@ -19,6 +19,7 @@ public class RealPlayer : BasePlayer
         
         _controller.additiveCamera = true;
         _healthSystem.OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
+        _healthSystem.OnHealthChanged.AddListener(() => _pickUpDropSystem.IsStone = true);
     }
     
     private void Update()

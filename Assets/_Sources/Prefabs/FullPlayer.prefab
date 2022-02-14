@@ -1085,6 +1085,7 @@ MonoBehaviour:
   _pickupTriggerHandler: {fileID: 4690314380442766159}
   _pickUpPoint: {fileID: 8067262303577883277}
   _pickableObject: {fileID: 0}
+  _stoneTime: 5
   basePlayer: {fileID: 0}
   OnPickUp:
     m_PersistentCalls:

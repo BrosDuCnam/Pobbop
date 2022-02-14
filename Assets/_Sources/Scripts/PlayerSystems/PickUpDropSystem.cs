@@ -16,10 +16,23 @@ public class PickUpDropSystem : NetworkBehaviour
     [SerializeField] private ColliderTriggerHandler _pickupTriggerHandler;
     [SerializeField] private Transform _pickUpPoint;
     [SerializeField] [CanBeNull] private PickableObject _pickableObject;
+    [SerializeField] private float _stoneTime;
     
     [Header("Needed Components")]
     [SerializeField] private BasePlayer basePlayer;
+    
+    private float _timeToStone = 0;
 
+    public bool IsStone
+    {
+        get => _timeToStone > 0;
+        set
+        {
+            if (value) _timeToStone = _stoneTime;
+            else _timeToStone = 0;
+        }
+    }
+    
     public UnityEvent OnPickUp;
 
     /// <summary>
@@ -73,6 +86,9 @@ public class PickUpDropSystem : NetworkBehaviour
             PickableObject.GetComponent<Rigidbody>().MovePosition(_pickUpPoint.position);
             //PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
         }
+
+        if (_timeToStone > 0) _timeToStone -= Time.deltaTime;
+        print(IsStone);
     }
 
     /// <summary>
@@ -124,6 +140,7 @@ public class PickUpDropSystem : NetworkBehaviour
         {
             if (Utils.IsVisibleByCamera(pickableObject.gameObject, basePlayer.Camera))
             {
+                Debug.Log(throwableObject.ThrowState, throwableObject);
                 PickableObject = pickableObject;
             }
         }
@@ -149,6 +166,8 @@ public class PickUpDropSystem : NetworkBehaviour
     /// </summary>
     private void TryToPickUp()
     {
+        if (IsStone) return;
+        
         RaycastHit[] hits = Physics.SphereCastAll(basePlayer.Camera.transform.position, _pickUpDistance, 
             basePlayer.Camera.transform.forward, _pickUpDistance); // Get all objects in range
         if (hits.Length > 0) // If the list of object is not empty
