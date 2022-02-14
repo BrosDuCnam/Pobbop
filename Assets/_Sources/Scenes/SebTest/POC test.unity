@@ -216,6 +216,7 @@ MonoBehaviour:
   OnHealthZero:
     m_PersistentCalls:
       m_Calls: []
+  LastPlayerDamage: {fileID: 0}
 --- !u!114 &392041689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,6 +229,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41583102031ed0f449ac9f7dad844775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+--- !u!114 &392041690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392041687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 4197482804
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 5f6c85b6f6ab0b24abedd3e57447539c
+  hasSpawned: 0
 --- !u!1 &495817067
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,7 +354,7 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 8797491869613382536, guid: 6c4731c7aef3fe44c8f33c50b038b697, type: 3}
   autoCreatePlayer: 0
-  playerSpawnMethod: 1
+  playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 3150921870575592290, guid: afa7d4c00cb239d4ab6c9412dbc949bb, type: 3}
   - {fileID: 5305093463617779374, guid: f55e2cd70bcda1e44bfd5c84678cf580, type: 3}
@@ -990,6 +1010,7 @@ MonoBehaviour:
   OnHealthZero:
     m_PersistentCalls:
       m_Calls: []
+  LastPlayerDamage: {fileID: 0}
 --- !u!114 &1941107059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,6 +1023,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41583102031ed0f449ac9f7dad844775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+--- !u!114 &1941107060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941107057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 1934357029
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 5f6c85b6f6ab0b24abedd3e57447539c
+  hasSpawned: 0
 --- !u!1001 &1950145570
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1095,6 +1135,7 @@ MonoBehaviour:
   OnHealthZero:
     m_PersistentCalls:
       m_Calls: []
+  LastPlayerDamage: {fileID: 0}
 --- !u!114 &1950145573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1107,6 +1148,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41583102031ed0f449ac9f7dad844775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+--- !u!114 &1950145574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950145571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 946753019
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 5f6c85b6f6ab0b24abedd3e57447539c
+  hasSpawned: 0
 --- !u!1 &2097646807
 GameObject:
   m_ObjectHideFlags: 0
