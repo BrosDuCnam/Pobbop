@@ -5,7 +5,7 @@ using Mirror;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Thrower : MonoBehaviour
+public class Thrower : NetworkBehaviour
 {
     [SerializeField] private GameObject _throwableObject;
     
@@ -29,14 +29,21 @@ public class Thrower : MonoBehaviour
         }
         if (_timer <= 0)
         {
+            print("throw");
             _timer = Random.Range(_minimalRandomTimeThrow, _maximalRandomTimeThrow);
             
-            ThrowableObject throwableObject = Instantiate(_throwableObject, _throwPosition)
+            ThrowableObject throwableObject = Instantiate(_throwableObject, _throwPosition.position, _throwPosition.rotation)
                 .GetComponent<ThrowableObject>();
 
-            NetworkServer.Spawn(throwableObject.gameObject);
             
-            throwableObject.Throw(gameObject, transform.forward, Random.Range(10, 50));
+            SpawnBall(throwableObject.gameObject);
+            
+            throwableObject.Throw(gameObject, transform.forward, Random.Range(1, 5));
         }
+    }
+    [Command]
+    private void SpawnBall(GameObject ball)
+    {
+        NetworkServer.Spawn(ball);
     }
 }

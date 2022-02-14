@@ -66,7 +66,7 @@ public class ThrowableObject : NetworkBehaviour
     /// </summary>
     /// <param name="direction">Direction to throw</param>
     /// <param name="force">Force in meter/s</param>
-    [Command]
+    //[Command]
     public void Throw(GameObject player, Vector3 direction, float force)
     {
         if (ThrowState != ThrowState.Idle) return;
@@ -132,7 +132,8 @@ public class ThrowableObject : NetworkBehaviour
             Utils.DebugBezierCurve(origin, step, target.position, 10, Color.red, 5);
         }
         
-        GetComponent<NetworkIdentity>().AssignClientAuthority(Owner.GetComponent<NetworkIdentity>().connectionToClient);
+        //AssignAuthority();
+        //GetComponent<NetworkIdentity>().AssignClientAuthority(Owner.GetComponent<NetworkIdentity>().connectionToClient);
         while (!GetComponent<NetworkIdentity>().hasAuthority) yield return null;
         
         float time = 0;
@@ -164,8 +165,21 @@ public class ThrowableObject : NetworkBehaviour
         ThrowState = ThrowState.Idle;
         
         ApplyThrowForce(direction);
-        
-        GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
+        //RemoveAuthority();
+        //GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
+    }
+
+    [Command]
+    private void RemoveAuthority()
+    {
+        GetComponent<NetworkIdentity>().RemoveClientAuthority();
+        print("Removed authority throw");
+    }
+
+    [Command]
+    private void AssignAuthority()
+    {
+        GetComponent<NetworkIdentity>().AssignClientAuthority(Owner.GetComponent<NetworkIdentity>().connectionToClient);
     }
     
     //fonction appelé dans la coroutine

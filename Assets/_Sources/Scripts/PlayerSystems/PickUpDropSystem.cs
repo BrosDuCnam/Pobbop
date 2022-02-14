@@ -30,6 +30,9 @@ public class PickUpDropSystem : NetworkBehaviour
         get => _pickableObject;
         set
         {
+            print("set pickable object");
+            
+            
             if(_pickableObject == value) return;
 
             if (_pickableObject != null) _pickableObject.IsPicked = false;
@@ -37,8 +40,22 @@ public class PickUpDropSystem : NetworkBehaviour
             
             if (_pickableObject != null) _pickableObject.IsPicked = true;
             OnPickUp.Invoke();
+            
+            if (PickableObject != null)
+                CmdAssignAuthority(PickableObject.gameObject);
         }
     }
+
+    [Command]
+    private void CmdAssignAuthority(GameObject ball)
+    {
+        ball.GetComponent<NetworkIdentity>().RemoveClientAuthority();
+        ball.GetComponent<NetworkIdentity>()
+            .AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
+        print("changed authority");
+
+    }
+    
     
     private void Start()
     {
@@ -54,7 +71,7 @@ public class PickUpDropSystem : NetworkBehaviour
         if (PickableObject != null)
         {
             PickableObject.GetComponent<Rigidbody>().MovePosition(_pickUpPoint.position);
-            PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
+            //PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
         }
     }
 
@@ -72,14 +89,17 @@ public class PickUpDropSystem : NetworkBehaviour
     /// </summary>
     private void Drop()
     {
+        print("drop");
         if (PickableObject != null) // If the player has an object in hand
         {
+            print("RemoveAuthority");
             PickableObject.Drop();
-            PickableObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
+            //RemoveAuthority(PickableObject.gameObject);
+            //PickableObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
             PickableObject = null;
-            
         }
     }
+    
 
     /// <summary>
     /// Function called when collider enter the trigger

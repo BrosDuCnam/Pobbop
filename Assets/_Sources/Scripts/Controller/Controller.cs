@@ -105,7 +105,6 @@ public class Controller : NetworkBehaviour
             //Register vertical velocity to adapt the slide when finishing a jump (or fall)
             RegisterFloatBuffer(yVelBuffer, rb.velocity.y, 3);
         }
-
         RotateCam();
     }
     
