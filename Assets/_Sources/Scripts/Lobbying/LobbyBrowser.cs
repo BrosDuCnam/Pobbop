@@ -16,7 +16,6 @@ public class LobbyBrowser : SteamLobby
 
     public void HostMyLobby()
     {
-        Debug.Log($"network manager : {networkManager == null}" );
         buttons.SetActive(false);
         HostLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
     }
@@ -48,5 +47,6 @@ public class LobbyBrowser : SteamLobby
     {
         base.OnLobbyEntered(callback);
         buttons.SetActive(false);
+        lobbyList.SetActive(false);
     }
 }
