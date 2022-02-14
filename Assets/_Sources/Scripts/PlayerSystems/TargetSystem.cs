@@ -98,8 +98,9 @@ public class TargetSystem : MonoBehaviour
                 RaycastHit[] hits = Physics.RaycastAll(transform.position, target.transform.position - transform.position,
                     _targetRange);
 
-                hits.Select(x => x.transform.gameObject != basePlayer.HoldingObject.gameObject);
-                
+                hits = hits.Where(x => x.transform.gameObject != basePlayer.HoldingObject.gameObject).ToArray();
+                hits = hits.OrderBy(x => x.distance).ToArray();
+
                 if (hits.Length > 0 && hits[0].collider.gameObject == target)
                 {
                     visibleTargets.Add(target);
