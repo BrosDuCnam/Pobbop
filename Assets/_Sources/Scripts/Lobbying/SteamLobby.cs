@@ -27,10 +27,14 @@ public class SteamLobby : MonoBehaviour
 
     protected  virtual void Start()
     {
-        if (!SteamManager.Initialized) {return;}
+        if (!SteamManager.Initialized)
+        {
+            Debug.Log("Can't access to steam networks");
+            return;
+        }
         MakeInstance();
         
-        networkManager = GetComponent<NetworkManagerLobby>();
+        networkManager = GetComponent<NetworkManager>();
 
         lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
