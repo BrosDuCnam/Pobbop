@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(BasePlayer))]
-public class TargetSystem : MonoBehaviour
+public class TargetSystem : NetworkBehaviour
 {
     [Header("Target Settings")]
     [SerializeField] private float _targetRange = 100f;
@@ -16,7 +17,7 @@ public class TargetSystem : MonoBehaviour
     [SerializeField] private BasePlayer basePlayer;
 
     //La liste est en static pour quelle puisse être modifié
-    [SerializeField] private List<GameObject> _targets;
+    [SyncVar] [SerializeField] private List<GameObject> _targets;
 
     public List<GameObject> Targets
     {

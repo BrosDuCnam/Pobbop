@@ -134,7 +134,7 @@ public class ThrowableObject : NetworkBehaviour
         
         //AssignAuthority();
         //GetComponent<NetworkIdentity>().AssignClientAuthority(Owner.GetComponent<NetworkIdentity>().connectionToClient);
-        while (!GetComponent<NetworkIdentity>().hasAuthority) yield return null;
+        //while (!GetComponent<NetworkIdentity>().hasAuthority) yield return null;
         
         float time = 0;
         float distance = Utils.BezierCurveDistance(origin, step, target.position, 10);
@@ -145,6 +145,8 @@ public class ThrowableObject : NetworkBehaviour
         
         while (time < 1 && ThrowState != ThrowState.Idle && !_stopThrow)
         {
+            print("throw in while");
+            
             Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
             
@@ -168,36 +170,23 @@ public class ThrowableObject : NetworkBehaviour
         //RemoveAuthority();
         //GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
     }
-
-    [Command]
-    private void RemoveAuthority()
-    {
-        GetComponent<NetworkIdentity>().RemoveClientAuthority();
-        print("Removed authority throw");
-    }
-
-    [Command]
-    private void AssignAuthority()
-    {
-        GetComponent<NetworkIdentity>().AssignClientAuthority(Owner.GetComponent<NetworkIdentity>().connectionToClient);
-    }
     
     //fonction appelé dans la coroutine
-    [Command]
+    //[Command]
     private void ApplyThrowForce(Vector3 direction)
     {
         _rigidbody.AddForce(direction*50, ForceMode.Acceleration);
     }
 
     //fonction appelé dans la coroutine
-    [Command]
+    //[Command]
     private void ApplyMovePosition(Vector3 nextPos)
     {
         _rigidbody.MovePosition(nextPos);
     }
 
     //fonction appelé dans la coroutine
-    [Command]
+    //[Command]
     private void ApplyTorque(Vector3 torqueDirection, float time)
     {
         _rigidbody.AddTorque(torqueDirection * Mathf.Pow(100, time));
