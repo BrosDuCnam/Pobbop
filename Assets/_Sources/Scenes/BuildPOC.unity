@@ -1068,7 +1068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e8d6047e37646246a7109102729f5de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filterLobbies: 0
+  filterLobbies: 1
   buttons: {fileID: 833326945}
   lobbyList: {fileID: 1408763342}
 --- !u!114 &1638600098
@@ -1585,9 +1585,17 @@ PrefabInstance:
       propertyPath: sceneId
       value: 2206022916
       objectReference: {fileID: 0}
+    - target: {fileID: 3976450459830343522, guid: d4b4c3ad70165064e8240654d923627f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3976450459830343523, guid: d4b4c3ad70165064e8240654d923627f, type: 3}
       propertyPath: sceneId
       value: 595920437
+      objectReference: {fileID: 0}
+    - target: {fileID: 3976450459830343525, guid: d4b4c3ad70165064e8240654d923627f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3976450459830343527, guid: d4b4c3ad70165064e8240654d923627f, type: 3}
       propertyPath: m_IsActive

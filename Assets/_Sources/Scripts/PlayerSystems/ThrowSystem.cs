@@ -99,7 +99,6 @@ public class ThrowSystem : NetworkBehaviour
     /// Function to throw the current picked object
     /// </summary>
     /// <param name="force">speed at the begin in meter/s</param>
-    
     public void Throw(float force)
     {
         if (basePlayer.IsHoldingObject) // If player hold an object
