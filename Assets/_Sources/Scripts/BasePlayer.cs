@@ -40,7 +40,11 @@ public class BasePlayer : NetworkBehaviour
     /// </summary>
     [CanBeNull] public GameObject HoldingObject
     {
-        get => _pickUpDropSystem.PickableObject.gameObject;
+        get
+        {
+            if (_pickUpDropSystem.PickableObject == null) return null;
+            return _pickUpDropSystem.PickableObject.gameObject; 
+        }
     }
     
     /// <summary>

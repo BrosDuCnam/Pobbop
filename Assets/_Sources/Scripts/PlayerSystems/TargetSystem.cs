@@ -98,10 +98,10 @@ public class TargetSystem : MonoBehaviour
                 RaycastHit[] hits = Physics.RaycastAll(transform.position, target.transform.position - transform.position,
                     _targetRange);
 
-                hits = hits.Where(x => x.transform.gameObject != basePlayer.HoldingObject.gameObject).ToArray();
+                hits = hits.Where(x => x.transform.gameObject != basePlayer.HoldingObject).ToArray();
                 hits = hits.OrderBy(x => x.distance).ToArray();
 
-                if (hits.Length > 0 && (hits[0].collider.gameObject == target || hits[0].transform.root.gameObject == target || hits[0].transform.root.GetComponentsInChildren<GameObject>().Contains(target)))
+                if (hits.Length > 0 && (hits[0].collider.gameObject == target || hits[0].transform.root.gameObject == target || hits[0].transform.root.GetComponentsInChildren<Transform>().Contains(target.transform)))
                 {
                     visibleTargets.Add(target);
                 }
