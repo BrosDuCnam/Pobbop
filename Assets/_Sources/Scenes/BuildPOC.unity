@@ -1585,6 +1585,14 @@ PrefabInstance:
       propertyPath: sceneId
       value: 2206022916
       objectReference: {fileID: 0}
+    - target: {fileID: 3972589183891085958, guid: d4b4c3ad70165064e8240654d923627f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3972589183891085958, guid: d4b4c3ad70165064e8240654d923627f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3976450459830343522, guid: d4b4c3ad70165064e8240654d923627f, type: 3}
       propertyPath: m_Enabled
       value: 0
