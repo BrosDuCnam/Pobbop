@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(Controller), typeof(Rigidbody))]
-public class BasePlayer : NetworkBehaviour
+public class BasePlayer : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] protected TargetSystem _targetSystem;

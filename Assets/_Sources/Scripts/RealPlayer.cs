@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -19,6 +20,11 @@ public class RealPlayer : BasePlayer
         
         _controller.additiveCamera = true;
         _healthSystem.OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
+    }
+
+    private void Start()
+    {
+        _targetSystem.Targets = LevelManager.Instance.targets;
     }
     
     private void Update()

@@ -8,7 +8,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 
-public class PickUpDropSystem : NetworkBehaviour
+public class PickUpDropSystem : MonoBehaviour
 {
     [Header("PickUp Settings")]
     [SerializeField] private float _pickUpDistance = 1.5f;
@@ -54,7 +54,7 @@ public class PickUpDropSystem : NetworkBehaviour
         if (PickableObject != null)
         {
             PickableObject.GetComponent<Rigidbody>().MovePosition(_pickUpPoint.position);
-            PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
+            //PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
         }
     }
 

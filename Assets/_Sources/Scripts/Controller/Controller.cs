@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-public class Controller : NetworkBehaviour
+public class Controller : MonoBehaviour
 {
 
     protected Rigidbody rb;
@@ -63,8 +63,10 @@ public class Controller : NetworkBehaviour
     private Vector2 camAxis;
     protected Vector2 currentLook;
 
-    protected void Awake()
+    protected void Start()
     {
+        print("Awake");
+        
         onAxis.AddListener(Axis);
         onRunStart.AddListener(OnRun);
         onJump.AddListener(OnJump);
@@ -86,7 +88,7 @@ public class Controller : NetworkBehaviour
     private void FixedUpdate()
     {
         dir = Direction();
-        
+
         if (isGrounded)
         {
 
@@ -271,7 +273,7 @@ public class Controller : NetworkBehaviour
     {
         float xAxis = axis.y;
         float yAxis = axis.x;
-
+        
         Vector3 direction = new Vector3(yAxis, 0, xAxis);
         return rb.transform.TransformDirection(direction);
     }

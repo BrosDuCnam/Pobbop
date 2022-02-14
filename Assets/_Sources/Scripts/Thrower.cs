@@ -31,12 +31,10 @@ public class Thrower : MonoBehaviour
         {
             _timer = Random.Range(_minimalRandomTimeThrow, _maximalRandomTimeThrow);
             
-            ThrowableObject throwableObject = Instantiate(_throwableObject, _throwPosition)
+            ThrowableObject throwableObject = Instantiate(_throwableObject, _throwPosition.position, Quaternion.identity)
                 .GetComponent<ThrowableObject>();
 
-            NetworkServer.Spawn(throwableObject.gameObject);
-            
-            throwableObject.Throw(gameObject, transform.forward, Random.Range(10, 50));
+            throwableObject.Throw(gameObject, transform.up, Random.Range(1, 10));
         }
     }
 }

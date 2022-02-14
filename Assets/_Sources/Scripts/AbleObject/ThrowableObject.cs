@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-public class ThrowableObject : NetworkBehaviour
+public class ThrowableObject : MonoBehaviour
 { 
     [Header("Settings")]
     [SerializeField] private bool DEBUG;
@@ -66,7 +66,6 @@ public class ThrowableObject : NetworkBehaviour
     /// </summary>
     /// <param name="direction">Direction to throw</param>
     /// <param name="force">Force in meter/s</param>
-    [Command]
     public void Throw(GameObject player, Vector3 direction, float force)
     {
         if (ThrowState != ThrowState.Idle) return;
@@ -132,8 +131,10 @@ public class ThrowableObject : NetworkBehaviour
             Utils.DebugBezierCurve(origin, step, target.position, 10, Color.red, 5);
         }
         
+        /*
         GetComponent<NetworkIdentity>().AssignClientAuthority(Owner.GetComponent<NetworkIdentity>().connectionToClient);
         while (!GetComponent<NetworkIdentity>().hasAuthority) yield return null;
+        */
         
         float time = 0;
         float distance = Utils.BezierCurveDistance(origin, step, target.position, 10);
@@ -165,25 +166,22 @@ public class ThrowableObject : NetworkBehaviour
         
         ApplyThrowForce(direction);
         
-        GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
+        //GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
     }
     
     //fonction appelé dans la coroutine
-    [Command]
     private void ApplyThrowForce(Vector3 direction)
     {
         _rigidbody.AddForce(direction*50, ForceMode.Acceleration);
     }
 
     //fonction appelé dans la coroutine
-    [Command]
     private void ApplyMovePosition(Vector3 nextPos)
     {
         _rigidbody.MovePosition(nextPos);
     }
 
     //fonction appelé dans la coroutine
-    [Command]
     private void ApplyTorque(Vector3 torqueDirection, float time)
     {
         _rigidbody.AddTorque(torqueDirection * Mathf.Pow(100, time));

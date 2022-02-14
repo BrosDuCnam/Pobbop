@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 
 //TODO - peut etre moyen d'opti cette class
-public class PickableObject : NetworkBehaviour
+public class PickableObject : MonoBehaviour
 {
     [SerializeField] [CanBeNull] private Collider _collider;
     [SerializeField] [CanBeNull] private Rigidbody _rigidbody;

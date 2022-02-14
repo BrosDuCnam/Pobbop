@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputController : Controller
 {
-    public override void OnStartAuthority()
+    public void Awake()
     {
         enabled = true;
 

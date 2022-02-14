@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class ThrowSystem : NetworkBehaviour
+public class ThrowSystem : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private BasePlayer basePlayer;
@@ -45,16 +45,11 @@ public class ThrowSystem : NetworkBehaviour
         }
     }
     
-    public override void OnStartAuthority()
+    private void Start()
     {
         enabled = true;
         basePlayer = GetComponent<BasePlayer>();
         _rigidbody = GetComponent<Rigidbody>();
-    }
-    private void Start()
-    {
-        //_player = GetComponent<Player>();
-        //_rigidbody = GetComponent<Rigidbody>();
         if (_lineRenderer == null) _lineRenderer = GetComponent<LineRenderer>();
     }
 
