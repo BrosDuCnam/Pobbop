@@ -101,7 +101,7 @@ public class TargetSystem : MonoBehaviour
                 hits = hits.Where(x => x.transform.gameObject != basePlayer.HoldingObject.gameObject).ToArray();
                 hits = hits.OrderBy(x => x.distance).ToArray();
 
-                if (hits.Length > 0 && hits[0].collider.gameObject == target)
+                if (hits.Length > 0 && (hits[0].collider.gameObject == target || hits[0].transform.root.gameObject == target || hits[0].transform.root.GetComponentsInChildren<GameObject>().Contains(target)))
                 {
                     visibleTargets.Add(target);
                 }
