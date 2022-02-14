@@ -30,7 +30,7 @@ public class PlayerTargetUpdate : NetworkBehaviour
     /// <param name="newTargetList"></param>
     public void UpdateTargets(List<GameObject> newTargetList)
     {
-        GetComponent<TargetSystem>().Targets = newTargetList;
+        GetComponent<TargetSystem>().Targets = new List<GameObject>(newTargetList);
         GetComponent<TargetSystem>().Targets.Remove(transform.gameObject);
     }
 }
