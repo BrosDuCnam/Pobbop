@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class PlayerTargetUpdate : NetworkBehaviour
+public class PlayerTargetUpdate : MonoBehaviour
 {
     private static List<GameObject> targets = new List<GameObject>();
     private static bool updateTarget = false;
@@ -16,14 +16,8 @@ public class PlayerTargetUpdate : NetworkBehaviour
     {
         OnlineGameManager.OnTargetUpdate += UpdateTargets;
     }
-    
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-        Debug.Log(transform.GetComponent<NetworkIdentity>().netId);
-    }
 
-    
+
     /// <summary>
     /// Cette fonction update la liste de target du joueur
     /// </summary>
