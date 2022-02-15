@@ -134,7 +134,8 @@ public class ThrowableObject : NetworkBehaviour
     private IEnumerator ThrowEnumerator(GameObject player, Vector3 step, Transform target, float speed, float accuracy,
         AnimationCurve curve, ThrowState state = ThrowState.Thrown)
     {
-        CmdWarnPlayer(target, true);
+        if (_throwState == ThrowState.Rebound)
+            CmdWarnPlayer(target, true);
 
         ThrowState = ThrowState.Thrown;ThrowState = state;
 
@@ -177,7 +178,9 @@ public class ThrowableObject : NetworkBehaviour
             yield return null;
         }
         
-        CmdWarnPlayer(target, false);
+        if (_throwState == ThrowState.Rebound)
+            CmdWarnPlayer(target, false);
+        
         Owner = null;
         _rigidbody.useGravity = true;
         _stopThrow = false;
