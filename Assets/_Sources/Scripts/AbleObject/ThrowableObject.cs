@@ -134,13 +134,13 @@ public class ThrowableObject : NetworkBehaviour
     private IEnumerator ThrowEnumerator(GameObject player, Vector3 step, Transform target, float speed, float accuracy,
         AnimationCurve curve, ThrowState state = ThrowState.Thrown)
     {
-        if (_throwState == ThrowState.Rebound)
-            CmdWarnPlayer(target, true);
-
         ThrowState = ThrowState.Thrown;ThrowState = state;
 
         Owner = player;
 
+        if (_throwState != ThrowState.Rebound)
+            CmdWarnPlayer(target, true);
+        
         Vector3 origin = transform.position;
         Vector3 originTargetPosition = target.position;
         Vector3 torqueDirection = -Vector3.Cross(origin - step, Vector3.up).normalized;
@@ -178,8 +178,7 @@ public class ThrowableObject : NetworkBehaviour
             yield return null;
         }
         
-        if (_throwState == ThrowState.Rebound)
-            CmdWarnPlayer(target, false);
+        CmdWarnPlayer(target, false);
         
         Owner = null;
         _rigidbody.useGravity = true;
