@@ -87,6 +87,7 @@ public class RealPlayer : BasePlayer
         //int enemyTeam = _healthSystem.LastPlayerDamage.GetComponent<BasePlayer>().teamNumber;
         //NetworkManagerLobby.AddPoint(enemyTeam);
         //PlayerSpawnSystem.PlayerRemoveTransform(transform, teamNumber);
+        Debug.Log("Eliminated");
         PlayerSpawnSystem.Respawn(transform, teamNumber);
     }
     

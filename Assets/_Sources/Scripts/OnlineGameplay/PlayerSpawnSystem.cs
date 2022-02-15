@@ -74,6 +74,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
     {
         //Transform spawnPoint = PickSpawnPoint(teamNumber);
         System.Random random = new System.Random();
+        Debug.Log("Respawn");
         Transform spawnPoint = SpawnPointsList[random.Next(0, SpawnPointsList.Count)];
         player.position = spawnPoint.position;
         player.rotation = spawnPoint.rotation;
