@@ -42,7 +42,7 @@ public class HealthSystem : MonoBehaviour
     public void TakeDamage(int damage, GameObject playerDamage)
     {
         Health -= damage;
-        LastPlayerDamage = playerDamage;
+        //LastPlayerDamage = playerDamage;
     }
 
     public void SetHealth(int healt)
