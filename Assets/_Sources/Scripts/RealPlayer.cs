@@ -63,14 +63,16 @@ public class RealPlayer : BasePlayer
     {
         if (HasTarget)
         {
-            _targetImage.enabled = true;
-            
             Vector2 canvasSize = _targetImage.GetComponent<RectTransform>().sizeDelta;
             Vector3 targetPosition = Camera.WorldToScreenPoint(Target.transform.position);
 
             // TODO - Correct bug that the target image is not on edge of screen when player lokk behind the target
             Vector3 targetPositionInCanvas = new Vector2(targetPosition.x / canvasSize.x * 100,
                 targetPosition.y / canvasSize.y * 100);
+            
+            print(targetPosition.z);
+            _targetImage.enabled = targetPosition.z < 0 ? false : true;
+            
             targetPositionInCanvas.x = Mathf.Clamp(targetPositionInCanvas.x, 0, Screen.width);
             targetPositionInCanvas.y = Mathf.Clamp(targetPositionInCanvas.y, 0, Screen.height);
 
