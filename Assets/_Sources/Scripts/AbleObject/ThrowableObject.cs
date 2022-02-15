@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class ThrowableObject : NetworkBehaviour
@@ -251,7 +252,8 @@ public class ThrowableObject : NetworkBehaviour
                 
                 if (_reboundOnKill)
                 {
-                    if (livingObject.Health <= 0 && owner != null) // TODO change 1000 to other value
+                    //if (livingObject.Health <= 0 && owner != null)
+                    if (Random.Range(0, 1) < 0.25)//TODO temp random value
                     {
                         Vector3 direction = _poolPositions.ToArray()[0] - transform.position;
                         float multiplier = _rigidbody.velocity.magnitude;
