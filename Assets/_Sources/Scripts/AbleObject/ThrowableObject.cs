@@ -253,7 +253,7 @@ public class ThrowableObject : NetworkBehaviour
                 if (_reboundOnKill)
                 {
                     //if (livingObject.Health <= 0 && owner != null)
-                    if (Random.Range(0, 1) < 0.25)//TODO temp random value
+                    if (false)//TODO temp random value
                     {
                         Vector3 direction = _poolPositions.ToArray()[0] - transform.position;
                         float multiplier = _rigidbody.velocity.magnitude;
