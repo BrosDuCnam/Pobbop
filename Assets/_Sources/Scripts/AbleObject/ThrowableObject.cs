@@ -145,8 +145,6 @@ public class ThrowableObject : NetworkBehaviour
         
         while (time < 1 && ThrowState != ThrowState.Idle && !_stopThrow)
         {
-            print("throw in while");
-            
             Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
             

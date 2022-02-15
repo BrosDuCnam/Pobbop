@@ -11,6 +11,8 @@ public class PickableObject : NetworkBehaviour
 {
     [SerializeField] [CanBeNull] private Collider _collider;
     [SerializeField] [CanBeNull] private Rigidbody _rigidbody;
+    
+    [SyncVar]
     [SerializeField] private bool _isPicked ;
     
     public UnityEvent OnStateChanged;
