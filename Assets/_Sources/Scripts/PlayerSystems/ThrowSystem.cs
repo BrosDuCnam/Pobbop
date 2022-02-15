@@ -123,7 +123,8 @@ public class ThrowSystem : NetworkBehaviour
 
                 Vector3 stepPosition = (basePlayer.Camera.transform.forward * multiplier) + basePlayer.Camera.transform.position;
 
-                float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
+                //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
+                float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
 
                 throwableObject.Throw(basePlayer.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
             }
