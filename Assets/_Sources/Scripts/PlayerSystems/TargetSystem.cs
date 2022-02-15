@@ -92,6 +92,7 @@ public class TargetSystem : NetworkBehaviour
         List<GameObject> visibleTargets = new List<GameObject>();
         foreach (GameObject target in targets)
         {
+            if (target == null) continue;
             // Check if target is in field of view of player camera
             if (Utils.IsVisibleByCamera(target, basePlayer.Camera))
             {

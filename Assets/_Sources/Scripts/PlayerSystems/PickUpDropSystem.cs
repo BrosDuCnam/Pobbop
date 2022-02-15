@@ -88,7 +88,6 @@ public class PickUpDropSystem : NetworkBehaviour
         }
 
         if (_timeToStone > 0) _timeToStone -= Time.deltaTime;
-        print(IsStone);
     }
 
     /// <summary>
