@@ -22,20 +22,26 @@ public class DirIndicatorHandler : MonoBehaviour
     private void Start()
     {
         me = gameObject.transform;
+        uiMat.SetFloat("BorderSize", 0);
+        uiMat.SetFloat("SizeX", 0);
+        uiMat.SetFloat("SizeY", 0);
     }
 
     private void Update()
     {
-        if (incomingBall == null) return;
+        if (incomingBall == null)
+        {
+            return;
+        }
         
         ClaculateUiPos();
 
+        uiMat.SetFloat("BorderSize", 0.2f);
         uiMat.SetFloat("PosX", angleX);
         uiMat.SetFloat("PosY", angleY);
         uiMat.SetFloat("SizeX", sizeY);
         uiMat.SetFloat("SizeY", sizeX);
         uiMat.SetFloat("Rotation", rotation);
-    
     }
 
     private void ClaculateUiPos()
@@ -141,8 +147,14 @@ public class DirIndicatorHandler : MonoBehaviour
     }
     
     public void SetIncominngBall(Transform ball) { incomingBall = ball; }
-    
-    public void ResetBall(){ incomingBall = null; }
+
+    public void ResetBall()
+    {
+        incomingBall = null;
+        uiMat.SetFloat("BorderSize", 0);
+        uiMat.SetFloat("SizeX", 0);
+        uiMat.SetFloat("SizeY", 0);
+    }
 
 
     private void OnGUI()

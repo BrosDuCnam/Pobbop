@@ -5629,7 +5629,7 @@
     },
     "m_Name": "BorderSize",
     "m_DefaultReferenceName": "Vector1_b5d4113c00b447468b2a56cdfbcf78c9",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "BorderSize",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,

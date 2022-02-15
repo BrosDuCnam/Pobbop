@@ -104,6 +104,22 @@ public class ThrowableObject : NetworkBehaviour
         StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1), state));
     }
 
+    [Command]
+    private void CmdWarnPlayer(Transform player, bool setBall)
+    {
+        WarnPlayer(player, setBall);
+    }
+
+    [ClientRpc]
+    private void WarnPlayer(Transform player, bool setBall)
+    {
+        if (player.gameObject.TryGetComponent(out DirIndicatorHandler handler))
+        {
+            if (setBall) handler.SetIncominngBall(gameObject.transform);
+            else handler.ResetBall();
+        }
+
+    }
 
     /// <summary>
     /// Enumerator to throw the object during time.
@@ -118,6 +134,8 @@ public class ThrowableObject : NetworkBehaviour
     private IEnumerator ThrowEnumerator(GameObject player, Vector3 step, Transform target, float speed, float accuracy,
         AnimationCurve curve, ThrowState state = ThrowState.Thrown)
     {
+        CmdWarnPlayer(target, true);
+
         ThrowState = ThrowState.Thrown;ThrowState = state;
 
         Owner = player;
@@ -159,6 +177,7 @@ public class ThrowableObject : NetworkBehaviour
             yield return null;
         }
         
+        CmdWarnPlayer(target, false);
         Owner = null;
         _rigidbody.useGravity = true;
         _stopThrow = false;
