@@ -157,12 +157,12 @@ public class DirIndicatorHandler : MonoBehaviour
     }
 
 
-    private void OnGUI()
+    /*private void OnGUI()
     {
         GUIStyle guiStyle = new GUIStyle();
         GUI.color = Color.black;
         guiStyle.fontSize = 30;
         GUILayout.Space(50);
         GUILayout.Label("x :" + angleX + " y : " + angleY, guiStyle);
-    }
+    }*/
 }
