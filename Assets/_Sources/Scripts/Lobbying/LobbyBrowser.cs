@@ -7,6 +7,7 @@ public class LobbyBrowser : SteamLobby
 {
     [SerializeField] private GameObject buttons;
     [SerializeField] private GameObject lobbyList;
+    [SerializeField] private GameObject content;
 
     protected override void Start()
     {
@@ -30,7 +31,7 @@ public class LobbyBrowser : SteamLobby
     protected override void OnGetLobbyInfo(LobbyDataUpdate_t callback)
     {
         base.OnGetLobbyInfo(callback);
-        lobbyList.GetComponent<LobbyListManager>().DisplayLobbies(lobbyIDS, callback);
+        content.GetComponent<LobbyListManager>().DisplayLobbies(lobbyIDS, callback);
     }
 
     protected override void OnLobbyCreated(LobbyCreated_t callback)

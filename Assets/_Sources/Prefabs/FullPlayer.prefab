@@ -718,6 +718,7 @@ GameObject:
   - component: {fileID: -3849717307327715205}
   - component: {fileID: -2548463494105341794}
   - component: {fileID: -7195001543482771180}
+  - component: {fileID: 290031660797357754}
   - component: {fileID: 852052934866384312}
   - component: {fileID: 4851549814950247118}
   m_Layer: 0
@@ -768,6 +769,7 @@ MonoBehaviour:
   - {fileID: 2322464712195177290}
   - {fileID: 8797491869613382537}
   - {fileID: -7195001543482771180}
+  - {fileID: 290031660797357754}
   gameObjectsToActivate:
   - {fileID: 7670746751545592647}
   - {fileID: 303592693524014540}
@@ -1061,6 +1063,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd159f846c404e38bc639ff0fb274798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _targetRange: 99999
   DEBUG: 1
   basePlayer: {fileID: 0}
@@ -1272,8 +1276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94890e84ca8a72747b2ecf5ae6c00de2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!114 &-2548463494105341794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1308,6 +1310,25 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LastPlayerDamage: {fileID: 0}
+--- !u!114 &290031660797357754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797491869613382536}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f71892627ed528499e98bf6b9a266f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiMat: {fileID: 2100000, guid: 7ef2d01e838e22648926d383a4e989ae, type: 2}
+  cam: {fileID: 4319097413319860161}
+  minSize: 7
+  sizeFact: 0.5
+  lengthSize: 0.5
+  displayFactor: 0.1
+  incomingBall: {fileID: 0}
 --- !u!114 &852052934866384312
 MonoBehaviour:
   m_ObjectHideFlags: 0
