@@ -1066,7 +1066,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _targetRange: 99999
-  DEBUG: 1
+  DEBUG: 0
   basePlayer: {fileID: 0}
   _targets:
   - {fileID: 0}
@@ -1329,6 +1329,7 @@ MonoBehaviour:
   lengthSize: 1.66
   displayFactor: 0.1
   incomingBall: {fileID: 0}
+  isTargeted: 0
 --- !u!114 &852052934866384312
 MonoBehaviour:
   m_ObjectHideFlags: 0

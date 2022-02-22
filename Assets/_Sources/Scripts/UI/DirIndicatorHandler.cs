@@ -19,7 +19,7 @@ public class DirIndicatorHandler : MonoBehaviour
     
     [CanBeNull] public Transform incomingBall;
     public bool isTargeted;
-
+    
     
     private void Start()
     {
@@ -38,7 +38,6 @@ public class DirIndicatorHandler : MonoBehaviour
         else
         {
             uiMat.SetFloat("BorderSize", 0);
-            return;
         }
         
         
@@ -161,7 +160,7 @@ public class DirIndicatorHandler : MonoBehaviour
         sizeX = 1;
         sizeY = 1;
     }
-    
+
     public void SetIncomingBall(Transform ball) { incomingBall = ball; }
 
     public void ResetBall()

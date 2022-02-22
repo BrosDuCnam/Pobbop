@@ -16,8 +16,10 @@ public class TargetSystem : NetworkBehaviour
     [Header("Needed Components")]
     [SerializeField] private BasePlayer basePlayer;
 
-    //La liste est en static pour quelle puisse être modifié
+    //La liste est en static pour qu'elle puisse être modifiée
     [SyncVar] [SerializeField] private List<GameObject> _targets;
+
+    private GameObject lastTarget;
 
     public List<GameObject> Targets
     {
@@ -69,6 +71,51 @@ public class TargetSystem : NetworkBehaviour
                     Debug.DrawLine(transform.position, target.transform.position, color);
                 }
             }
+        }
+
+        WarnTargetedPlayer();
+    }
+
+    private void WarnTargetedPlayer()
+    {
+        //Warn the other player if he is being targeted (active each time the thrower changes target or has a new one)
+        if (CurrentTarget != null)
+        {
+            Debug.Log(CurrentTarget.name);
+            
+            if (lastTarget == null)
+            {
+                CmdTargetPlayerWarn(CurrentTarget, true);
+                lastTarget = CurrentTarget;
+            }
+            
+            if (CurrentTarget != lastTarget)
+            {
+                CmdTargetPlayerWarn(lastTarget, false);
+                CmdTargetPlayerWarn(CurrentTarget, true);
+            }
+
+            lastTarget = CurrentTarget;
+        }
+        else if (lastTarget!= null)
+        {
+            CmdTargetPlayerWarn(lastTarget, false);
+            lastTarget = null;
+        }
+    }
+    
+    [Command]
+    private void CmdTargetPlayerWarn(GameObject player, bool targetState)
+    {
+        RpcTargetPlayerWarn(player, targetState);
+    }
+
+    [ClientRpc]
+    private void RpcTargetPlayerWarn(GameObject player, bool targetState)
+    {
+        if (player.TryGetComponent(out DirIndicatorHandler handler))
+        {
+            handler.isTargeted = targetState;
         }
     }
 
