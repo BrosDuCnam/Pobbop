@@ -61,6 +61,9 @@ public class Controller : NetworkBehaviour
 
     private float lastBoost = 0;
     private float walkSpeed;
+
+    private RealPlayer player;
+
     
     //Cam
     private Vector2 camAxis;
@@ -74,6 +77,7 @@ public class Controller : NetworkBehaviour
         onCrouch.AddListener(OnCrouch);
         onDirectionAxis.AddListener(OnDirection);
 
+        player = GetComponent<RealPlayer>();
         rb = GetComponent<Rigidbody>();
         walkSpeed = _walkSpeed;
     }
@@ -246,12 +250,11 @@ public class Controller : NetworkBehaviour
     /// Used to slow the player if he charges the ball
     /// </summary>
     /// <param name="state"></param>
-    /// TODO : Reset charge when hitting sprint key
     public void NerfSpeedOnCharge(bool state)
     {
         walkSpeed = state
-            ? walkSpeed * ballChargeSpeedNerf
-            : walkSpeed * 1 / ballChargeSpeedNerf;
+            ? _walkSpeed * ballChargeSpeedNerf
+            : walkSpeed = _walkSpeed;
         run = false;
     }
 
@@ -391,7 +394,11 @@ public class Controller : NetworkBehaviour
     public void OnRun()
     {
         run = true;
-        if (run) runInputTime = Time.time;
+        if (run)
+        {
+            runInputTime = Time.time;
+            player.CancelCharge();
+        }
     }
 
     public void OnJump(bool pressed)

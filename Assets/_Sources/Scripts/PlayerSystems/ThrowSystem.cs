@@ -90,8 +90,14 @@ public class ThrowSystem : NetworkBehaviour
             Throw(force);
         }
     }
-    
-    
+
+    /// <summary>
+    /// Cancel throw and cancel charge
+    /// </summary>
+    public void CancelThrow()
+    {
+        if (IsCharging) IsCharging = false;
+    }
     
     private float GetNormalizedForce(float force)
     {

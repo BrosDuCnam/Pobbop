@@ -113,6 +113,7 @@ public class RealPlayer : BasePlayer
         PlayerSpawnSystem.Respawn(transform, teamNumber);
     }
     
+    
     #region "Inputs"
     
     public void TogglePickupDrop(InputAction.CallbackContext ctx)
