@@ -76,13 +76,14 @@ public class TargetSystem : NetworkBehaviour
         WarnTargetedPlayer();
     }
 
+    /// <summary>
+    /// Trigger the border UI of the targeted player to warn him that he is being targeted
+    /// </summary>
     private void WarnTargetedPlayer()
     {
         //Warn the other player if he is being targeted (active each time the thrower changes target or has a new one)
         if (CurrentTarget != null)
         {
-            Debug.Log(CurrentTarget.name);
-            
             if (lastTarget == null)
             {
                 CmdTargetPlayerWarn(CurrentTarget, true);
@@ -158,5 +159,4 @@ public class TargetSystem : NetworkBehaviour
         }
         return visibleTargets;
     }
-    
 }

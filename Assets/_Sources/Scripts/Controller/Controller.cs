@@ -19,7 +19,7 @@ public class Controller : NetworkBehaviour
     private Vector3 groundNormal = Vector3.up;
     
     //Movement
-    [SerializeField] private float walkSpeed = 5f;
+    [SerializeField] private float _walkSpeed = 5f;
     [SerializeField] private float runSpeed = 8f;
     [SerializeField] private float crouchSpeed = 2.5f;
     [SerializeField] private float groundAcceleration = 20f;
@@ -27,12 +27,14 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float airAcceleration = 5f;
     [SerializeField] private float jumpUpSpeed = 5f;
     [SerializeField] private float maxGroundAngle = 40f;
+    [SerializeField] [Range(1, 2)] private float speedFactToEnterSliding = 1.3f;
+    [SerializeField] [Range(0, 1)] private float verticalSpeedSlideMultiplier = 0.4f;
     [SerializeField] private float slideAccelAngle = 10f; //Defines above what ground angle the player can slide
     [SerializeField] private float slideBoost = 11f;
     [SerializeField] [Tooltip("Used to avoid crouch spam")] private float minSlidePause = 1f;
     [SerializeField] [Range(0, 1)] private float slideDeceleration = 0.1f;
-    //Crouch
     [SerializeField] private float crouchScale = 0.3f;
+    [SerializeField] [Range(0, 1)] private float ballChargeSpeedNerf = 0.3f;
     
     [Header("Camera Settings")]
     [SerializeField] public Camera camera;
@@ -58,6 +60,7 @@ public class Controller : NetworkBehaviour
     private List<float> yVelBuffer = new List<float>();
 
     private float lastBoost = 0;
+    private float walkSpeed;
     
     //Cam
     private Vector2 camAxis;
@@ -72,9 +75,9 @@ public class Controller : NetworkBehaviour
         onDirectionAxis.AddListener(OnDirection);
 
         rb = GetComponent<Rigidbody>();
+        walkSpeed = _walkSpeed;
     }
     
-    /*[ClientCallback]*/ //TODO: Voir avec Seb
     protected void Update()
     {
         if (!crouch && isGrounded && Time.time > lastBoost + minSlidePause)
@@ -82,7 +85,6 @@ public class Controller : NetworkBehaviour
         CalculateCam();
     }
 
-    /*[ClientCallback]*/ //TODO: Voir avec Seb
     private void FixedUpdate()
     {
         dir = Direction();
@@ -152,9 +154,9 @@ public class Controller : NetworkBehaviour
     private void Crouch(Vector3 wishDir, float maxSpeed, float acceleration)
     {
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
-        float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * 0.35f), 1, Mathf.Infinity);
+        float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity);
         //Check speed to know if enter sliding
-        if (speedForSliding > walkSpeed * 1.2f)
+        if (speedForSliding > _walkSpeed * speedFactToEnterSliding)
         {
             //Give speed boost on slide enter
             if (enterSliding && speed < slideBoost &&  Time.time > lastBoost + minSlidePause)
@@ -162,9 +164,13 @@ public class Controller : NetworkBehaviour
                 lastBoost = Time.time;
                 //Add boost based on the flat velocity and the wishdir
                 Vector3 vel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                rb.AddForce(Vector3OnSlope(vel.normalized + wishDir.normalized * 0.5f).normalized * 
-                            Mathf.Clamp((slideBoost - speed), 0, Mathf.Infinity)
-                            , ForceMode.VelocityChange); 
+                Vector3 groundOnSlope = Vector3OnSlope(vel.normalized + wishDir.normalized * 0.5f).normalized;
+                Vector3 slideForce = groundOnSlope * Mathf.Clamp(slideBoost - speed, 0, Mathf.Infinity);
+                //Adapt slide boost speed base on the angle we want to slide along
+                float groundAngle = (Vector3.Angle(Vector3.up, groundOnSlope) - 90) / 75;
+                slideForce *= 1 + groundAngle;
+                Debug.Log(groundAngle);
+                rb.AddForce(slideForce, ForceMode.VelocityChange); 
                 enterSliding = false;
             }
             sliding = true;
@@ -236,6 +242,19 @@ public class Controller : NetworkBehaviour
         rb.AddForce(force, ForceMode.VelocityChange);
     }
 
+    /// <summary>
+    /// Used to slow the player if he charges the ball
+    /// </summary>
+    /// <param name="state"></param>
+    /// TODO : Reset charge when hitting sprint key
+    public void NerfSpeedOnCharge(bool state)
+    {
+        walkSpeed = state
+            ? walkSpeed * ballChargeSpeedNerf
+            : walkSpeed * 1 / ballChargeSpeedNerf;
+        run = false;
+    }
+
     public void CrouchScale()
     {
         if (crouch)
@@ -252,7 +271,11 @@ public class Controller : NetworkBehaviour
 
     #region Maths
 
-    //Calculates the vector forward of the player along the ground
+    /// <summary>
+    /// Calculates the forward vector of the player along the ground
+    /// </summary>
+    /// <param name="forward"></param>
+    /// <returns></returns>
     private Vector3 Vector3OnSlope(Vector3 forward)
     {
         Vector3 side = Vector3.Cross(forward, groundNormal).normalized;

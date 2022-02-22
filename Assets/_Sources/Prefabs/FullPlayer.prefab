@@ -1016,11 +1016,14 @@ MonoBehaviour:
   airAcceleration: 5
   jumpUpSpeed: 5
   maxGroundAngle: 40
+  speedFactToEnterSliding: 1.3
+  verticalSpeedSlideMultiplier: 0.35
   slideAccelAngle: 10
   slideBoost: 11
   minSlidePause: 1
   slideDeceleration: 0.1
   crouchScale: 0.3
+  ballChargeSpeedNerf: 0.3
   camera: {fileID: 4319097413319860161}
   sensX: 0.1
   sensY: 0.1

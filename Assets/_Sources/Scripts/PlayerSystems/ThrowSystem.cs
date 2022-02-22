@@ -65,6 +65,7 @@ public class ThrowSystem : NetworkBehaviour
     {
         if (!IsCharging && basePlayer.IsHoldingObject)
         {
+            basePlayer._controller.NerfSpeedOnCharge(true);
             _startChargeTime = Time.time;
             IsCharging = true;
         }
@@ -77,6 +78,8 @@ public class ThrowSystem : NetworkBehaviour
     {
         if (IsCharging && basePlayer.IsHoldingObject)
         {
+            basePlayer._controller.NerfSpeedOnCharge(false);
+
             if (IsCharging) IsCharging = false;
             
             //Counts the charging time of the ball and converts it to the fore applied
