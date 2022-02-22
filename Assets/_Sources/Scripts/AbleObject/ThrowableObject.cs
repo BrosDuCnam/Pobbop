@@ -116,10 +116,9 @@ public class ThrowableObject : NetworkBehaviour
     {
         if (player.gameObject.TryGetComponent(out DirIndicatorHandler handler))
         {
-            if (setBall) handler.SetIncominngBall(gameObject.transform);
+            if (setBall) handler.SetIncomingBall(gameObject.transform);
             else handler.ResetBall();
         }
-
     }
 
     /// <summary>

@@ -15,13 +15,14 @@ public class DirIndicatorHandler : MonoBehaviour
     [SerializeField] [Range(0,1)] private float displayFactor = 0.1f;
 
     private float ballAngle;
-    private Transform me;
-    [CanBeNull] public Transform incomingBall;
     private float angleX, angleY, sizeX, sizeY, rotation;
+    
+    [CanBeNull] public Transform incomingBall;
+    public bool isTargeted;
+
     
     private void Start()
     {
-        me = gameObject.transform;
         uiMat.SetFloat("BorderSize", 0);
         uiMat.SetFloat("SizeX", 0);
         uiMat.SetFloat("SizeY", 0);
@@ -29,6 +30,18 @@ public class DirIndicatorHandler : MonoBehaviour
 
     private void Update()
     {
+        if (isTargeted && !incomingBall)
+        {
+            uiMat.SetFloat("BorderSize", 0.2f);
+            uiMat.SetColor("BorderColor", Color.blue);
+        }
+        else
+        {
+            uiMat.SetFloat("BorderSize", 0);
+            return;
+        }
+        
+        
         if (incomingBall == null)
         {
             return;
@@ -36,12 +49,13 @@ public class DirIndicatorHandler : MonoBehaviour
         
         ClaculateUiPos();
 
+        uiMat.SetColor("BorderColor", Color.red);
         uiMat.SetFloat("BorderSize", 0.2f);
         uiMat.SetFloat("PosX", angleX);
         uiMat.SetFloat("PosY", angleY);
         uiMat.SetFloat("SizeX", sizeY);
         uiMat.SetFloat("SizeY", sizeX);
-        uiMat.SetFloat("Rotation", rotation);
+        //uiMat.SetFloat("Rotation", rotation);
     }
 
     private void ClaculateUiPos()
@@ -52,7 +66,7 @@ public class DirIndicatorHandler : MonoBehaviour
         float lerpFactX = 1;
         float lerpFactY = 1;
         
-        //Transform variable from [0 ; 1] to [-5 ; 5]
+        //Transform variable from [0 ; 1] to [-5 ; 5] (if on the screen)
         angleX = ballOnScreen.x * 10 - 5;
         angleY = ballOnScreen.y * 10 - 5;
         
@@ -70,6 +84,7 @@ public class DirIndicatorHandler : MonoBehaviour
         //Lots of if to calculate a smooth transition to display the directional indicator 
         if (ballOnScreen.z > 0)
         {
+            //For each sides of the screen
             if (ballOnScreen.x < displayFactor && ballOnScreen.x > 0) 
             { lerpFactX = 1 - ballOnScreen.x * (1 / displayFactor); }
             if (ballOnScreen.x < 1 && ballOnScreen.x > 1 - displayFactor) 
@@ -79,6 +94,7 @@ public class DirIndicatorHandler : MonoBehaviour
             if (ballOnScreen.y < 1 && ballOnScreen.y > 1 - displayFactor) 
             { lerpFactY = 1 - (1 - ballOnScreen.y) * (1 / displayFactor); }
             
+            //For each corner
             if (angleX >= 5 || angleX <= -5 && !(angleY < 5 - displayFactor * 5 && angleY > displayFactor * 5) ||
                 angleY >= 5 || angleY <= -5 && !(angleX < 5 - displayFactor * 5 && angleX > displayFactor * 5))
             {
@@ -146,7 +162,7 @@ public class DirIndicatorHandler : MonoBehaviour
         sizeY = 1;
     }
     
-    public void SetIncominngBall(Transform ball) { incomingBall = ball; }
+    public void SetIncomingBall(Transform ball) { incomingBall = ball; }
 
     public void ResetBall()
     {
