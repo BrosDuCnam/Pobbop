@@ -1016,11 +1016,14 @@ MonoBehaviour:
   airAcceleration: 5
   jumpUpSpeed: 5
   maxGroundAngle: 40
+  speedFactToEnterSliding: 1.3
+  verticalSpeedSlideMultiplier: 0.35
   slideAccelAngle: 10
   slideBoost: 11
   minSlidePause: 1
   slideDeceleration: 0.1
   crouchScale: 0.3
+  ballChargeSpeedNerf: 0.3
   camera: {fileID: 4319097413319860161}
   sensX: 0.1
   sensY: 0.1
@@ -1066,7 +1069,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _targetRange: 99999
-  DEBUG: 1
+  DEBUG: 0
   basePlayer: {fileID: 0}
   _targets:
   - {fileID: 0}
@@ -1329,6 +1332,7 @@ MonoBehaviour:
   lengthSize: 1.66
   displayFactor: 0.1
   incomingBall: {fileID: 0}
+  isTargeted: 0
 --- !u!114 &852052934866384312
 MonoBehaviour:
   m_ObjectHideFlags: 0

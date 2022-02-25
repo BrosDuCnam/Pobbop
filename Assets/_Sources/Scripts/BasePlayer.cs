@@ -70,7 +70,15 @@ public class BasePlayer : NetworkBehaviour
     {
         get => _throwSystem.IsCharging;
     }
-
+    
+    /// <summary>
+    /// Cancel the ball charge if the player is charging
+    /// </summary>
+    /// <example>Use when sprinting</example>>
+    public void CancelCharge()
+    {
+        _throwSystem.CancelThrow();
+    }
 
     protected void Awake()
     {

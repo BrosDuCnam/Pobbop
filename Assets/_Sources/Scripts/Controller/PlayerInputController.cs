@@ -6,10 +6,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputController : Controller
 {
+
+    
     public override void OnStartAuthority()
     {
         enabled = true;
-
         rb = GetComponent<Rigidbody>();
         
         Cursor.lockState = CursorLockMode.Locked;
