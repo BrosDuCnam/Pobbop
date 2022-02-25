@@ -242,6 +242,7 @@ public class Controller : NetworkBehaviour
     /// <param name="force"></param>
     public void Punch(Vector3 force)
     {
+        print("Punch : " + force);
         rb.AddForce(force, ForceMode.VelocityChange);
     }
 

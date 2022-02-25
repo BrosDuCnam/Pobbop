@@ -248,6 +248,12 @@ public class ThrowableObject : NetworkBehaviour
             if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
             {
                 livingObject.TakeDamage(1, _owner); // TODO - change the damage
+
+                //Not working properly
+                /*if (otherObject.TryGetComponent(out BasePlayer otherPlayer))
+                {
+                    CmdPunchOpponent(otherPlayer._controller, _rigidbody.velocity * 4);
+                }*/
                 
                 if (_reboundOnKill)
                 {
@@ -267,6 +273,18 @@ public class ThrowableObject : NetworkBehaviour
                 
             }
         }
+    }
+    
+    [Command(requiresAuthority = false)]
+    private void CmdPunchOpponent(Controller controller, Vector3 force)
+    {
+        RpcPunchOpponent(controller, force);
+    }
+
+    [ClientRpc]
+    private void RpcPunchOpponent(Controller controller, Vector3 force)
+    {
+        controller.Punch(force);
     }
     
 }
