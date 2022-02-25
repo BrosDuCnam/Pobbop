@@ -46,7 +46,6 @@ public class Controller : NetworkBehaviour
     private bool crouch;
     private bool sliding;
     private bool enterSliding = true;
-    public bool additiveCamera = false;
 
     protected UnityEvent<Vector2> onAxis = new UnityEvent<Vector2>();
     protected UnityEvent onRunStart = new UnityEvent();
@@ -340,20 +339,14 @@ public class Controller : NetworkBehaviour
     
     private void CalculateCam()
     {
+        
+        camAxis = new Vector2(camAxis.x * sensX, camAxis.y * sensY);
 
-        if (additiveCamera)
-        {
-            camAxis = new Vector2(camAxis.x * sensX, camAxis.y * sensY);
+        currentLook.x += camAxis.x;
+        currentLook.y = Mathf.Clamp(currentLook.y += camAxis.y, -90, 90);
 
-            currentLook.x += camAxis.x;
-            currentLook.y = Mathf.Clamp(currentLook.y += camAxis.y, -90, 90);
-        }
-        else
-        {
-            currentLook.x = camAxis.x;
-            currentLook.y = Mathf.Clamp(camAxis.y, -90, 90);
-        }
         currentLook.x = currentLook.x % 360;
+        camAxis = Vector2.zero; // Reset axis
     }
 
     #endregion

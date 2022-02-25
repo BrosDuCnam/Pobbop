@@ -177,4 +177,29 @@ public static class Utils
     {
         return RadianToVector2(degree * Mathf.Deg2Rad);
     }
+
+    public static float Map(float oldMax, float oldMin, float newMax, float newMin, float number)
+    {
+        float oldRange = (oldMax - oldMin);
+        float newRange = (newMax - newMin);
+        return (((number - oldMin) * newRange) / oldRange) + newMin;
+    }
+
+    public static float DegreeFormat360To180(float degree)
+    {
+        if (degree > 180)
+        {
+            return Map(360, 180, 0, -180, degree);
+        }
+        return degree;
+    }
+    
+    public static float DegreeFormat180To360(float degree)
+    {
+        if (degree < 0)
+        {
+            return Map(0, -180, 360, 180, degree);
+        }
+        return degree;
+    }
 }
