@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public static class Utils
 {
@@ -168,16 +170,31 @@ public static class Utils
         return Mathf.Atan2(radian.y, radian.x) * Mathf.Rad2Deg;
     }
 
+    
+    /// <summary>
+    /// Radian to vector 2
+    /// </summary>
+    /// <param name="radian">Radian</param>
+    /// <returns>Cos and sin of radian</returns>
     public static Vector2 RadianToVector2(float radian)
     {
         return new Vector2(Mathf.Cos(radian), Mathf.Sin(radian));
     }
-  
+    
     public static Vector2 DegreeToVector2(float degree)
     {
         return RadianToVector2(degree * Mathf.Deg2Rad);
     }
 
+    /// <summary>
+    /// Function to remap a number by minimun and maximum
+    /// </summary>
+    /// <param name="oldMax"></param>
+    /// <param name="oldMin"></param>
+    /// <param name="newMax"></param>
+    /// <param name="newMin"></param>
+    /// <param name="number"></param>
+    /// <returns></returns>
     public static float Map(float oldMax, float oldMin, float newMax, float newMin, float number)
     {
         float oldRange = (oldMax - oldMin);
@@ -185,6 +202,11 @@ public static class Utils
         return (((number - oldMin) * newRange) / oldRange) + newMin;
     }
 
+    /// <summary>
+    /// Function reformat degree to -180/180
+    /// </summary>
+    /// <param name="degree"></param>
+    /// <returns></returns>
     public static float DegreeFormat360To180(float degree)
     {
         if (degree > 180)
@@ -194,6 +216,11 @@ public static class Utils
         return degree;
     }
     
+    /// <summary>
+    /// Function reformat degree to 0/360
+    /// </summary>
+    /// <param name="degree"></param>
+    /// <returns></returns>
     public static float DegreeFormat180To360(float degree)
     {
         if (degree < 0)
@@ -201,5 +228,25 @@ public static class Utils
             return Map(0, -180, 360, 180, degree);
         }
         return degree;
+    }
+    
+    
+    /// <summary>
+    /// Extension of Array to remove element at index
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="index">Index of element to remove</param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T[] RemoveAt<T>(T[] source, int index)
+    {
+        T[] dest = new T[source.Length - 1];
+        if( index > 0 )
+            Array.Copy(source, 0, dest, 0, index);
+
+        if( index < source.Length - 1 )
+            Array.Copy(source, index + 1, dest, index, source.Length - index - 1);
+
+        return dest;
     }
 }
