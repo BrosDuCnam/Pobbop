@@ -65,7 +65,7 @@ public class ThrowSystem : NetworkBehaviour
     {
         if (!IsCharging && basePlayer.IsHoldingObject)
         {
-            basePlayer._controller.NerfSpeedOnCharge(true);
+            basePlayer.controller.NerfSpeedOnCharge(true);
             _startChargeTime = Time.time;
             IsCharging = true;
         }
@@ -78,7 +78,7 @@ public class ThrowSystem : NetworkBehaviour
     {
         if (IsCharging && basePlayer.IsHoldingObject)
         {
-            basePlayer._controller.NerfSpeedOnCharge(false);
+            basePlayer.controller.NerfSpeedOnCharge(false);
 
             if (IsCharging) IsCharging = false;
             

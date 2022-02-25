@@ -1,10 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public static class Utils
 {
+    
+    public static List<GameObject> GetAllVisibleObject(List<GameObject> targets, Camera cam, Func<RaycastHit, bool> condition)
+    {
+        List<GameObject> visibleTargets = new List<GameObject>();
+        foreach (GameObject target in targets)
+        {
+            if (target == null) continue;
+            // Check if target is in field of view of player camera
+            if (Utils.IsVisibleByCamera(target, cam))
+            {
+                // If object obstructs the view of the player, it is not visible
+                RaycastHit[] hits = Physics.RaycastAll(cam.transform.position, target.transform.position - cam.transform.position);
+
+                hits = hits.Where(x => condition.Invoke(x)).ToArray();
+                hits = hits.OrderBy(x => x.distance).ToArray();
+
+                if (hits.Length > 0 && 
+                    (hits[0].collider.gameObject == target || hits[0].transform.root.gameObject == target || hits[0].transform.root.GetComponentsInChildren<Transform>().Contains(target.transform)))
+                {
+                    visibleTargets.Add(target);
+                }
+            }
+        }
+        return visibleTargets;
+    }
+    
     /// <summary>
     /// Function ro know if a gameobject is in the camera view
     /// </summary>
@@ -248,5 +276,20 @@ public static class Utils
             Array.Copy(source, index + 1, dest, index, source.Length - index - 1);
 
         return dest;
+    }
+
+    public static float NavMeshDistance(Vector3 origin, Vector3 destination, int navMesh = NavMesh.AllAreas)
+    {
+        NavMeshPath path = new NavMeshPath();
+        NavMesh.CalculatePath(origin, destination, navMesh, path);
+
+        float result = 0;
+        for (int i = 0; i < path.corners.Length - 1; i++)
+        {
+            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
+            result += Vector3.Distance(path.corners[i], path.corners[i + 1]);
+        }
+
+        return result;
     }
 }

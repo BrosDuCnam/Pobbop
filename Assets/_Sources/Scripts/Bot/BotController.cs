@@ -16,6 +16,13 @@ public class BotController : Controller
 
     public UnityEvent StopLook;
     public UnityEvent StopLocomotion;
+    public bool hasDestination;
+
+    public Vector3? destination
+    {
+        get;
+        private set;
+    }
 
     private new void Awake()
     {
@@ -27,60 +34,12 @@ public class BotController : Controller
     private void Start()
     {
         //LookAt(target.position, () => StopLook.Invoke());
-        GoTo(target, 1);
+        //GoTo(target, 1);
     }
 
     private new void Update()
     {
         base.Update();
-
-
-        /*
-        if (_moveLookDirection)
-        {
-            if (Time.time < (_finalTime + _timeToReach))
-            {
-                float normalizedTime = (Time.time - _finalTime) / _timeToReach;
-                onDirectionAxis.Invoke(Vector2.Lerp(_baseDirection, _finalLookDirection, normalizedTime));
-            }
-            else
-            {
-                onDirectionAxis.Invoke(_finalLookDirection);
-                _moveLookDirection = false;
-                _tempRotationSpeed = _rotationSpeed;
-            }
-        }
-        
-        if (_navMeshPath != null)
-        {
-            //print(Vector3.Distance(_destination, transform.position));
-            //print(_destination);
-            if (Vector3.Distance(_destination, transform.position) < 1f) // If the bot is close enough to the destination
-            {
-                int index = Array.IndexOf(_navMeshPath.corners, _destination);
-                if (index < _navMeshPath.corners.Length - 1)
-                {
-                    _destination = _navMeshPath.corners[index + 1];
-                }
-                else _navMeshPath = null;
-            }
-            Debug.DrawLine(transform.position, _destination, Color.red);
-            
-            Vector3 direction = (_destination - transform.position).normalized;
-            print(direction);
-            Debug.DrawLine(transform.position, transform.position + direction*30, Color.blue);
-            
-            float xAxis = Utils.RadianToDegree(new Vector2(direction.y, direction.x));
-            xAxis %= 360;
-            print(xAxis);
-            if (Math.Abs(_finalLookDirection.x - xAxis) > 1f) // If the bot is not facing the right direction
-            {
-                print(_finalLookDirection);
-                LookAt(new Vector2(xAxis, currentLook.y));
-            }
-            MoveDirection = Vector2.up;
-        }
-        */
     }
 
     #region Look Region
@@ -222,6 +181,8 @@ public class BotController : Controller
 
                 onAxis.Invoke(direction);
 
+                hasDestination = true;
+                destination = destinationFunc.Invoke();
                 yield return new WaitForEndOfFrame();
             }
             else
@@ -233,6 +194,7 @@ public class BotController : Controller
             }
         }
         StopLook.Invoke();
+        hasDestination = false;
         yield return null;
     }
 

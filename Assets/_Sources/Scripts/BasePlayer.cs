@@ -17,9 +17,9 @@ public class BasePlayer : NetworkBehaviour
     [SerializeField] protected PickUpDropSystem _pickUpDropSystem;
     [SerializeField] protected ThrowSystem _throwSystem;
     [SerializeField] protected HealthSystem _healthSystem;
-    [SerializeField] public Controller _controller;
     [SerializeField] protected Rigidbody _rigidbody;
-    
+    [SerializeField] public Controller controller;
+
     public Camera Camera;
 
     [HideInInspector] public int teamNumber = 0;
@@ -86,11 +86,11 @@ public class BasePlayer : NetworkBehaviour
         _pickUpDropSystem = GetComponent<PickUpDropSystem>();
         _throwSystem = GetComponent<ThrowSystem>();
         _healthSystem = GetComponent<HealthSystem>();
-        _controller = GetComponent<Controller>();
+        controller = GetComponent<Controller>();
         _rigidbody = GetComponent<Rigidbody>();
 
         //_targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
         
-        Camera = _controller.camera;
+        Camera = controller.camera;
     }
 }

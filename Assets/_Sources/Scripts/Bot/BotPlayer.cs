@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(BotController))]
 public class BotPlayer : BasePlayer
 {
-    private SBStateInfo _fsmStateInfo = new SBStateInfo();
+    [SerializeField] private SBStateInfo _fsmStateInfo = new SBStateInfo();
     private FSMachine<SBSBase, SBStateInfo> _fsm = new FSMachine<SBSBase, SBStateInfo>();
 
     public bool SeeingDangerousEnemy
