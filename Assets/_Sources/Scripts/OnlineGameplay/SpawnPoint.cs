@@ -14,6 +14,6 @@ public class SpawnPoint : MonoBehaviour
     
     private void AddSpawn()
     {
-        PlayerSpawnSystem.AddSpawnPoint(transform);
+        SpawnSystem.AddSpawnPoint(transform);
     }
 }

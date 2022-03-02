@@ -109,7 +109,7 @@ public class RealPlayer : BasePlayer
         //NetworkManagerLobby.AddPoint(enemyTeam);
         //PlayerSpawnSystem.PlayerRemoveTransform(transform, teamNumber);
         Debug.Log("Eliminated");
-        PlayerSpawnSystem.Respawn(transform, teamNumber);
+        SpawnSystem.Respawn(transform, teamNumber);
     }
     
     

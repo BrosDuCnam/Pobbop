@@ -721,6 +721,7 @@ GameObject:
   - component: {fileID: 290031660797357754}
   - component: {fileID: 852052934866384312}
   - component: {fileID: 4851549814950247118}
+  - component: {fileID: 2473069287776246993}
   m_Layer: 0
   m_Name: FullPlayer
   m_TagString: Player
@@ -770,6 +771,7 @@ MonoBehaviour:
   - {fileID: 8797491869613382537}
   - {fileID: -7195001543482771180}
   - {fileID: 290031660797357754}
+  - {fileID: 2473069287776246993}
   gameObjectsToActivate:
   - {fileID: 7670746751545592647}
   - {fileID: 303592693524014540}
@@ -1027,7 +1029,6 @@ MonoBehaviour:
   camera: {fileID: 4319097413319860161}
   sensX: 0.1
   sensY: 0.1
-  additiveCamera: 1
 --- !u!114 &493625832157985704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1046,8 +1047,8 @@ MonoBehaviour:
   _pickUpDropSystem: {fileID: 0}
   _throwSystem: {fileID: 0}
   _healthSystem: {fileID: 0}
-  _controller: {fileID: 0}
   _rigidbody: {fileID: 0}
+  controller: {fileID: 0}
   Camera: {fileID: 0}
   teamNumber: 0
   _drawChargingCurve: 1
@@ -1291,8 +1292,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41583102031ed0f449ac9f7dad844775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!114 &-7195001543482771180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1384,6 +1383,20 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+--- !u!114 &2473069287776246993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797491869613382536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608d94de944bdcb459cf6115a228601f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &8797491870898878601
 GameObject:
   m_ObjectHideFlags: 0

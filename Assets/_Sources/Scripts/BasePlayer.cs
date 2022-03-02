@@ -22,7 +22,7 @@ public class BasePlayer : NetworkBehaviour
 
     public Camera Camera;
 
-    [HideInInspector] public int teamNumber = 0;
+    [HideInInspector] [SyncVar] public int teamNumber = 0;
     
     /// <summary>
     /// Return true if the player hold an object
