@@ -42,12 +42,12 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float sensY = 0.1f;
     
     //Bools
-    private bool isGrounded = false;
-    private bool run;
-    private bool jump;
-    private bool crouch;
-    private bool sliding;
-    private bool enterSliding = true;
+    protected bool isGrounded = false;
+    protected bool run;
+    protected bool jump;
+    protected bool crouch;
+    protected bool sliding;
+    protected bool enterSliding = true;
 
     protected UnityEvent<Vector2> onAxis = new UnityEvent<Vector2>();
     protected UnityEvent onRunStart = new UnityEvent();
@@ -61,7 +61,7 @@ public class Controller : NetworkBehaviour
     private float lastBoost = 0;
     private float walkSpeed;
 
-    private RealPlayer player;
+    private BasePlayer player;
 
     
     //Cam
@@ -76,7 +76,7 @@ public class Controller : NetworkBehaviour
         onCrouch.AddListener(OnCrouch);
         onDirectionAxis.AddListener(OnDirection);
 
-        player = GetComponent<RealPlayer>();
+        player = GetComponent<BasePlayer>();
         rb = GetComponent<Rigidbody>();
         walkSpeed = _walkSpeed;
     }

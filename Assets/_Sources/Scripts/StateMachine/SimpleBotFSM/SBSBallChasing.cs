@@ -9,7 +9,7 @@ public class SBSBallChasing : FSMState<SBStateInfo>
         //Sort balls by distance
         var balls = infos.ballHistory.OrderBy(entry => Utils.NavMeshDistance(position, entry.Value)).ToList();
 
-        while (balls.Count > 0 && Vector3.Distance(position, balls[0].Value) < 5)
+        while (balls.Count > 0 && Vector3.Distance(position, balls[0].Value) < 1)
         {
             infos.ballHistory.Remove(balls[0].Key);
             balls.RemoveAt(0);

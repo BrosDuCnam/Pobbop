@@ -12,6 +12,9 @@ public class BotController : Controller
     [Tooltip("1 = 360° in one second")]
     [SerializeField] private float _rotationSpeed = 1f;
 
+    private bool _crouch;
+    private bool _lastCrouchInfo;
+    
     public UnityEvent StopLook;
     public UnityEvent StopLocomotion;
     public bool hasDestination;
@@ -26,6 +29,12 @@ public class BotController : Controller
     private new void Update()
     {
         base.Update();
+
+        // If the bot uncrouch make crouch value to false
+        if (!base.crouch && _lastCrouchInfo) _crouch = false;
+        crouch = _crouch;
+        
+        _lastCrouchInfo = base.crouch;
     }
 
     #region Look Region
@@ -49,6 +58,21 @@ public class BotController : Controller
         return new Vector2(xAxis, yAxis);
     }
     
+    public void TimedLookAt(Transform target, float time, Action onFinished = null)
+    {
+        StartCoroutine(SetTimedDirectionCoroutine(() => GetDirection(target.position), _rotationSpeed, onFinished));
+    }
+    
+    public void TimedLookAt(Vector3 target, float time, Action onFinished = null)
+    {
+        StartCoroutine(SetTimedDirectionCoroutine(() => GetDirection(target), _rotationSpeed, onFinished));
+    }
+    
+    public void TimedLookAt(Vector2 direction, float time, Action onFinished = null)
+    {
+        StartCoroutine(SetTimedDirectionCoroutine(() => direction, _rotationSpeed, onFinished));
+    }
+    
     public void LookAt(Transform target, Action onFinished = null)
     {
         StartCoroutine(SetDirectionCoroutine(() => GetDirection(target.position), _rotationSpeed, onFinished));
@@ -67,6 +91,31 @@ public class BotController : Controller
     private void Rotate(Vector2 direction)
     {
         onDirectionAxis.Invoke(direction);
+    }
+
+    private IEnumerator SetTimedDirectionCoroutine(Func<Vector2> directionFunc, float time, Action callback)
+    {
+        if (callback == null) callback = () => { };
+        
+        Vector2 origin = currentLook;
+        origin.x = Utils.DegreeFormat180To360(origin.x);
+        
+        float t = 0;
+        float distance = Vector2.Distance(currentLook, directionFunc.Invoke());
+        float i = (distance / time);
+        bool stopLookAt = false;
+        StopLook.AddListener(() => stopLookAt = true);
+
+        while (t < 1 && !stopLookAt)
+        {
+            Vector2 nextDirection = Vector2.Lerp(origin, directionFunc.Invoke(), t);
+
+            Rotate(nextDirection - currentLook);
+
+            yield return new WaitForEndOfFrame();
+            t += i * Time.deltaTime;
+        }
+        callback.Invoke();
     }
 
     private IEnumerator SetDirectionCoroutine(Func<Vector2> directionFunc, float speed, Action callback)
@@ -178,7 +227,7 @@ public class BotController : Controller
             }
         }
         onAxis.Invoke(Vector2.zero);
-        StopLook.Invoke();
+        //StopLook.Invoke();
         hasDestination = false;
         yield return null;
     }
@@ -201,6 +250,15 @@ public class BotController : Controller
     public void Crouch(float time)
     {
         StartCoroutine(Utils.TimedAction(time, b => onCrouch.Invoke(b)));
+    }
+
+    /// <summary>
+    /// Function to set or not the bot crouch
+    /// </summary>
+    /// <param name="active">true if the bot crouch</param>
+    public void Crouch(bool active)
+    {
+        _crouch = active;
     }
 
     /// <summary>

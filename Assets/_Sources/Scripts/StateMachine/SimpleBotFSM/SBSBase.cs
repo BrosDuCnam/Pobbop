@@ -26,6 +26,36 @@ public class SBSBase : FSMState<SBStateInfo>
             else infos.ballHistory.Add(ball, ball.transform.position);
         }
         
+        if (infos.controller.hasDestination)
+        {
+            infos.controller.Run();
+
+            Vector3 forwardPosition = infos.bot.transform.position + (infos.bot.transform.forward * 2);
+            
+            bool toCrouch = false;/*
+            RaycastHit forwardHit = new RaycastHit();
+            Debug.DrawRay(forwardPosition, Vector3.down);
+            if (Physics.Raycast(forwardPosition, Vector3.down, out forwardHit))
+            {
+                Vector3 angle = Quaternion.FromToRotation(forwardHit.normal, infos.bot.transform.forward).eulerAngles;
+                Debug.Log(angle);
+                if (angle.x < 90 || angle.z < 90) //TODO maybe change 0 by another value
+                {
+                    RaycastHit[] hits = Physics.RaycastAll(infos.bot.transform.position, Vector3.down);
+                    hits = hits.Where(h => h.transform.gameObject == forwardHit.transform.gameObject).ToArray();
+
+                    if (hits.Length > 0)
+                    {
+                        angle = Quaternion.FromToRotation(hits[0].normal, infos.bot.transform.forward).eulerAngles;
+                        if (angle.x < 90 || angle.z < 90) //TODO maybe change 0 by another value
+                        {
+                            toCrouch = true;
+                        }
+                    }
+                }
+            }*/
+            infos.controller.Crouch(toCrouch);
+        }
         
         if (infos.bot.IsHoldingObject)
         {

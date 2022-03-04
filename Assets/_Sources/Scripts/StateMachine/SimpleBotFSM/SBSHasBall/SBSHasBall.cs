@@ -5,7 +5,7 @@ public class SBSHasBall : FSMState<SBStateInfo>
 {
     public override void doState(ref SBStateInfo infos)
     {
-        if (infos.bot.HasTarget && !infos.bot.throwSystem.IsCharging)
+        if (infos.bot.HasTarget)
         {
             addAndActivateSubState<SBSShoot>();
         }
