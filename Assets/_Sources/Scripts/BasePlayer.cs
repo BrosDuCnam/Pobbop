@@ -13,11 +13,11 @@ using UnityEngine.PlayerLoop;
 public class BasePlayer : NetworkBehaviour
 {
     [Header("Components")]
-    [SerializeField] protected TargetSystem _targetSystem;
-    [SerializeField] protected PickUpDropSystem _pickUpDropSystem;
-    [SerializeField] protected ThrowSystem _throwSystem;
-    [SerializeField] protected HealthSystem _healthSystem;
-    [SerializeField] protected Rigidbody _rigidbody;
+    [SerializeField] public TargetSystem targetSystem;
+    [SerializeField] public PickUpDropSystem pickUpDropSystem;
+    [SerializeField] public ThrowSystem throwSystem;
+    [SerializeField] public HealthSystem healthSystem;
+    [SerializeField] public Rigidbody rigidbody;
     [SerializeField] public Controller controller;
 
     public Camera Camera;
@@ -29,9 +29,9 @@ public class BasePlayer : NetworkBehaviour
     /// </summary>
     public bool IsHoldingObject
     {
-        get => _pickUpDropSystem.PickableObject != null;
+        get => pickUpDropSystem.PickableObject != null;
         set {
-            if (!value) _pickUpDropSystem.PickableObject = null;
+            if (!value) pickUpDropSystem.PickableObject = null;
         }
     }
     
@@ -42,8 +42,8 @@ public class BasePlayer : NetworkBehaviour
     {
         get
         {
-            if (_pickUpDropSystem.PickableObject == null) return null;
-            return _pickUpDropSystem.PickableObject.gameObject; 
+            if (pickUpDropSystem.PickableObject == null) return null;
+            return pickUpDropSystem.PickableObject.gameObject; 
         }
     }
     
@@ -52,7 +52,7 @@ public class BasePlayer : NetworkBehaviour
     /// </summary>
     public bool HasTarget
     {
-        get => _targetSystem.CurrentTarget != null;
+        get => targetSystem.CurrentTarget != null;
     }
     
     /// <summary>
@@ -60,7 +60,7 @@ public class BasePlayer : NetworkBehaviour
     /// </summary>
     [CanBeNull] public GameObject Target
     {
-        get => _targetSystem.CurrentTarget.gameObject;
+        get => targetSystem.CurrentTarget.gameObject;
     }
     
     /// <summary>
@@ -68,7 +68,7 @@ public class BasePlayer : NetworkBehaviour
     /// </summary>
     public bool IsCharging
     {
-        get => _throwSystem.IsCharging;
+        get => throwSystem.IsCharging;
     }
     
     /// <summary>
@@ -77,17 +77,17 @@ public class BasePlayer : NetworkBehaviour
     /// <example>Use when sprinting</example>>
     public void CancelCharge()
     {
-        _throwSystem.CancelThrow();
+        throwSystem.CancelThrow();
     }
 
     protected void Awake()
     {
-        _targetSystem = GetComponent<TargetSystem>();
-        _pickUpDropSystem = GetComponent<PickUpDropSystem>();
-        _throwSystem = GetComponent<ThrowSystem>();
-        _healthSystem = GetComponent<HealthSystem>();
+        targetSystem = GetComponent<TargetSystem>();
+        pickUpDropSystem = GetComponent<PickUpDropSystem>();
+        throwSystem = GetComponent<ThrowSystem>();
+        healthSystem = GetComponent<HealthSystem>();
         controller = GetComponent<Controller>();
-        _rigidbody = GetComponent<Rigidbody>();
+        rigidbody = GetComponent<Rigidbody>();
 
         //_targetSystem.Targets = GameObject.FindWithTag("GameController").GetComponent<GameControllerDEBUG>().Targets;
         

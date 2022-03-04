@@ -18,7 +18,12 @@ public class RealPlayer : BasePlayer
         base.Awake();
         
         //_healthSystem.OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
-        _healthSystem.OnHealthChanged.AddListener(() => _pickUpDropSystem.IsStone = true);
+        healthSystem.OnHealthChanged.AddListener(() => pickUpDropSystem.IsStone = true);
+    }
+
+    private void Start() //TODO: use by Camille to debug bot
+    {
+        GameControllerDEBUG.AddPlayer(this);
     }
     
     private void Update()
@@ -30,7 +35,7 @@ public class RealPlayer : BasePlayer
             DrawChargingCurve();
         }
         
-        _chargingSlider.value = _throwSystem.ChargeValue;
+        _chargingSlider.value = throwSystem.ChargeValue;
     }
 
     private void DrawChargingCurve()
@@ -40,10 +45,10 @@ public class RealPlayer : BasePlayer
             _chargingCurveLineRenderer.enabled = true;
             
             // Calculate the multiplier of step distance
-            float multiplier = Mathf.Pow(1.5f, _rigidbody.velocity.magnitude);
-            multiplier += Mathf.Pow(50f, _throwSystem.ChargeValue);
+            float multiplier = Mathf.Pow(1.5f, rigidbody.velocity.magnitude);
+            multiplier += Mathf.Pow(50f, throwSystem.ChargeValue);
 
-            multiplier = Mathf.Clamp(multiplier, _throwSystem.minStepMultiplier, _throwSystem.maxStepMultiplier);
+            multiplier = Mathf.Clamp(multiplier, throwSystem.minStepMultiplier, throwSystem.maxStepMultiplier);
 
             Vector3 stepPosition = (Camera.transform.forward * multiplier) + Camera.transform.position;
 
@@ -117,13 +122,13 @@ public class RealPlayer : BasePlayer
     
     public void TogglePickupDrop(InputAction.CallbackContext ctx)
     {
-        if (ctx.started) _pickUpDropSystem.TogglePickupDrop();
+        if (ctx.started) pickUpDropSystem.TogglePickupDrop();
     }
     
     public void Throw(InputAction.CallbackContext ctx)
     {
-        if (ctx.started) _throwSystem.ChargeThrow();
-        if (ctx.canceled) _throwSystem.ReleaseThrow();
+        if (ctx.started) throwSystem.ChargeThrow();
+        if (ctx.canceled) throwSystem.ReleaseThrow();
     }
     
     #endregion

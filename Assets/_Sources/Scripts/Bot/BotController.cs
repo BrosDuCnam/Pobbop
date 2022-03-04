@@ -9,8 +9,6 @@ using UnityEngine.Events;
 
 public class BotController : Controller
 {
-    [SerializeField] public Transform target;
-    
     [Tooltip("1 = 360° in one second")]
     [SerializeField] private float _rotationSpeed = 1f;
 
@@ -23,19 +21,7 @@ public class BotController : Controller
         get;
         private set;
     }
-
-    private new void Awake()
-    {
-        base.Awake();
-
-        //print(transform.position);
-    }
-
-    private void Start()
-    {
-        //LookAt(target, () => {});
-        //GoTo(target, 0);
-    }
+    
 
     private new void Update()
     {
@@ -62,18 +48,18 @@ public class BotController : Controller
 
         return new Vector2(xAxis, yAxis);
     }
-
-    private void LookAt(Transform target, Action onFinished)
+    
+    public void LookAt(Transform target, Action onFinished = null)
     {
         StartCoroutine(SetDirectionCoroutine(() => GetDirection(target.position), _rotationSpeed, onFinished));
     }
     
-    private void LookAt(Vector3 target, Action onFinished)
+    public void LookAt(Vector3 target, Action onFinished = null)
     {
         StartCoroutine(SetDirectionCoroutine(() => GetDirection(target), _rotationSpeed, onFinished));
     }
     
-    private void LookAt(Vector2 direction, Action onFinished)
+    public void LookAt(Vector2 direction, Action onFinished = null)
     {
         StartCoroutine(SetDirectionCoroutine(() => direction, _rotationSpeed, onFinished));
     }
@@ -85,6 +71,8 @@ public class BotController : Controller
 
     private IEnumerator SetDirectionCoroutine(Func<Vector2> directionFunc, float speed, Action callback)
     {
+        if (callback == null) callback = () => StopLook.Invoke();
+        
         StopLook.Invoke();
         
         Vector2 direction = directionFunc.Invoke();
@@ -203,7 +191,7 @@ public class BotController : Controller
     /// <param name="time">The time to jump</param>
     public void Jump(float time)
     {
-        StartCoroutine(TimedAction(time, b => onJump.Invoke(b)));
+        StartCoroutine(Utils.TimedAction(time, b => onJump.Invoke(b)));
     }
     
     /// <summary>
@@ -212,7 +200,7 @@ public class BotController : Controller
     /// <param name="time">The time to crouch</param>
     public void Crouch(float time)
     {
-        StartCoroutine(TimedAction(time, b => onCrouch.Invoke(b)));
+        StartCoroutine(Utils.TimedAction(time, b => onCrouch.Invoke(b)));
     }
 
     /// <summary>
@@ -221,22 +209,5 @@ public class BotController : Controller
     public void Run()
     {
         onRunStart.Invoke();
-    }
-    
-    /// <summary>
-    /// Coroutine to make the bot a timed action
-    /// </summary>
-    /// <param name="time">The time to callback true</param>
-    /// <param name="callback">The callback to call</param>
-    private IEnumerator TimedAction(float time, Action<bool> callback)
-    {
-        float timer = 0;
-        while (timer < time)
-        {
-            timer += Time.deltaTime;
-            callback(true);
-            yield return new WaitForEndOfFrame();
-        }
-        callback(false);
     }
 }

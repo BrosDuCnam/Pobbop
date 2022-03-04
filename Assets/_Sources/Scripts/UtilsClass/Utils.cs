@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -294,5 +295,22 @@ public static class Utils
         }
 
         return result;
+    }
+    
+    /// <summary>
+    /// Coroutine to make the bot a timed action
+    /// </summary>
+    /// <param name="time">The time to callback true</param>
+    /// <param name="callback">The callback to call</param>
+    public static IEnumerator TimedAction(float time, Action<bool> callback)
+    {
+        float timer = 0;
+        while (timer < time)
+        {
+            timer += Time.deltaTime;
+            callback(true);
+            yield return new WaitForEndOfFrame();
+        }
+        callback(false);
     }
 }

@@ -29,7 +29,7 @@ public class SBSBase : FSMState<SBStateInfo>
         
         if (infos.bot.IsHoldingObject)
         {
-            //TODO: Chasing state
+            addAndActivateSubState<SBSHasBall>();
         }
         else if (infos.ballHistory.Count > 0)
         {

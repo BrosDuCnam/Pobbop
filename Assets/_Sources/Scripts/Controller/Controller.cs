@@ -66,7 +66,7 @@ public class Controller : NetworkBehaviour
     
     //Cam
     private Vector2 camAxis;
-    protected Vector2 currentLook;
+    public Vector2 currentLook;
 
     protected void Awake()
     {

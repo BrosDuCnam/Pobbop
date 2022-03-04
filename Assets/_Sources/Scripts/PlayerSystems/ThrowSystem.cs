@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class ThrowSystem : NetworkBehaviour
 {
     [Header("Components")]
-    [SerializeField] private BasePlayer basePlayer;
+    [SerializeField] private BasePlayer _basePlayer;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private LineRenderer _lineRenderer;
     [SerializeField] private Slider _slider;
@@ -48,13 +48,14 @@ public class ThrowSystem : NetworkBehaviour
     public override void OnStartAuthority()
     {
         enabled = true;
-        basePlayer = GetComponent<BasePlayer>();
+        _basePlayer = GetComponent<BasePlayer>(); //TODO pour seb: Chez le bot ça c'est pas appelé 
         _rigidbody = GetComponent<Rigidbody>();
     }
+    
     private void Start()
     {
-        //_player = GetComponent<Player>();
-        //_rigidbody = GetComponent<Rigidbody>();
+        _basePlayer = GetComponent<BasePlayer>();
+        _rigidbody = GetComponent<Rigidbody>();
         if (_lineRenderer == null) _lineRenderer = GetComponent<LineRenderer>();
     }
 
@@ -63,9 +64,9 @@ public class ThrowSystem : NetworkBehaviour
     /// </summary>
     public void ChargeThrow()
     {
-        if (!IsCharging && basePlayer.IsHoldingObject)
+        if (!IsCharging && _basePlayer.IsHoldingObject)
         {
-            basePlayer.controller.NerfSpeedOnCharge(true);
+            _basePlayer.controller.NerfSpeedOnCharge(true);
             _startChargeTime = Time.time;
             IsCharging = true;
         }
@@ -76,9 +77,9 @@ public class ThrowSystem : NetworkBehaviour
     /// </summary>
     public void ReleaseThrow()
     {
-        if (IsCharging && basePlayer.IsHoldingObject)
+        if (IsCharging && _basePlayer.IsHoldingObject)
         {
-            basePlayer.controller.NerfSpeedOnCharge(false);
+            _basePlayer.controller.NerfSpeedOnCharge(false);
 
             if (IsCharging) IsCharging = false;
             
@@ -110,15 +111,15 @@ public class ThrowSystem : NetworkBehaviour
     /// <param name="force">speed at the begin in meter/s</param>
     public void Throw(float force)
     {
-        if (basePlayer.IsHoldingObject) // If player hold an object
+        if (_basePlayer.IsHoldingObject) // If player hold an object
         {
-            ThrowableObject throwableObject = basePlayer.HoldingObject.GetComponent<ThrowableObject>();
+            ThrowableObject throwableObject = _basePlayer.HoldingObject.GetComponent<ThrowableObject>();
             if (throwableObject == null) return; // If the object is not throwable
             
-            basePlayer.IsHoldingObject = false;
-            if (basePlayer.HasTarget) // If player has a target
+            _basePlayer.IsHoldingObject = false;
+            if (_basePlayer.HasTarget) // If player has a target
             {
-                GameObject target = basePlayer.Target;
+                GameObject target = _basePlayer.Target;
                 //Sets the other player's ui handler to warn him of the incoming ball
                 if (target.TryGetComponent(out DirIndicatorHandler uiHandler))
                 {
@@ -130,17 +131,17 @@ public class ThrowSystem : NetworkBehaviour
                 multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
                 multiplier = Mathf.Clamp(multiplier, minStepMultiplier, maxStepMultiplier);
 
-                Vector3 stepPosition = (basePlayer.Camera.transform.forward * multiplier) + basePlayer.Camera.transform.position;
+                Vector3 stepPosition = (_basePlayer.Camera.transform.forward * multiplier) + _basePlayer.Camera.transform.position;
 
                 //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
                 float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
 
-                throwableObject.Throw(basePlayer.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
+                throwableObject.Throw(_basePlayer.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
             }
             else
             {
-                Vector3 direction = basePlayer.Camera.transform.forward;
-                throwableObject.Throw(basePlayer.gameObject, direction, force); // Throw the object in front of the camera
+                Vector3 direction = _basePlayer.Camera.transform.forward;
+                throwableObject.Throw(_basePlayer.gameObject, direction, force); // Throw the object in front of the camera
             }
         }
     }
