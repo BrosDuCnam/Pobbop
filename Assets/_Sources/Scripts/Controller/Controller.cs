@@ -296,8 +296,6 @@ public class Controller : NetworkBehaviour
     {
         float xAxis = axis.y;
         float yAxis = axis.x;
-        
-        axis = Vector2.zero;
 
         Vector3 direction = new Vector3(yAxis, 0, xAxis);
         return rb.transform.TransformDirection(direction);

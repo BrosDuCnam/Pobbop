@@ -11,8 +11,8 @@ public class SBSBallChasing : FSMState<SBStateInfo>
 
         while (balls.Count > 0 && Vector3.Distance(position, balls[0].Value) < 5)
         {
-            balls.RemoveAt(0);
             infos.ballHistory.Remove(balls[0].Key);
+            balls.RemoveAt(0);
         }
 
         if (balls.Count > 0 && infos.controller.destination != balls[0].Value)

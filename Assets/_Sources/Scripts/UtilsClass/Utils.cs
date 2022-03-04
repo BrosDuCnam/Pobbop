@@ -26,9 +26,12 @@ public static class Utils
                 if (hits.Length > 0 && 
                     (hits[0].collider.gameObject == target || hits[0].transform.root.gameObject == target || hits[0].transform.root.GetComponentsInChildren<Transform>().Contains(target.transform)))
                 {
+                    //Debug.DrawLine(cam.transform.position, target.transform.position, Color.green);
                     visibleTargets.Add(target);
+                    continue;
                 }
             }
+            //Debug.DrawLine(cam.transform.position, target.transform.position, Color.red);
         }
         return visibleTargets;
     }

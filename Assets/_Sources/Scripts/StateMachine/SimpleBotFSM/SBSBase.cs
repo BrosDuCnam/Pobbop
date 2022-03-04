@@ -34,10 +34,12 @@ public class SBSBase : FSMState<SBStateInfo>
         else if (infos.ballHistory.Count > 0)
         {
             addAndActivateSubState<SBSBallChasing>();
+            Debug.Log("Ball chasing");
         }
         else
         {
             addAndActivateSubState<SBSNavigate>();
+            Debug.Log("Random navigation");
         }
     }
 }

@@ -18,7 +18,7 @@ public class BotController : Controller
     public UnityEvent StopLocomotion;
     public bool hasDestination;
 
-    public Vector3? destination
+    public Vector3 destination
     {
         get;
         private set;
@@ -33,8 +33,8 @@ public class BotController : Controller
 
     private void Start()
     {
-        //LookAt(target.position, () => StopLook.Invoke());
-        //GoTo(target, 1);
+        //LookAt(target, () => {});
+        //GoTo(target, 0);
     }
 
     private new void Update()
@@ -153,10 +153,10 @@ public class BotController : Controller
         StopLocomotion.Invoke();
         
         NavMeshPath path = new NavMeshPath();
-        Vector3 destination = destinationFunc.Invoke();
+        destination = destinationFunc.Invoke();
         NavMesh.CalculatePath(transform.position, destination, NavMesh.AllAreas, path);
         List<Vector3> corners = path.corners.ToList();
-        
+
         LookAt(corners[0], (() => {}));
 
         bool stopLocomotion = false;
@@ -164,13 +164,6 @@ public class BotController : Controller
         
         while (corners.Count > 0 && !stopLocomotion)
         {
-            if (Vector3.Distance(destination, destinationFunc.Invoke()) > 1)
-            {
-                destination = destinationFunc.Invoke();
-                NavMesh.CalculatePath(transform.position, destination, NavMesh.AllAreas, path);
-                corners = path.corners.ToList();
-            }
-            
             Vector3 nextDestination = corners[0];
             if (Vector3.Distance(transform.position, nextDestination) > 1f)
             {
@@ -182,8 +175,11 @@ public class BotController : Controller
                 onAxis.Invoke(direction);
 
                 hasDestination = true;
-                destination = destinationFunc.Invoke();
                 yield return new WaitForEndOfFrame();
+                
+                destination = destinationFunc.Invoke();
+                NavMesh.CalculatePath(transform.position, destination, NavMesh.AllAreas, path);
+                corners = path.corners.ToList();
             }
             else
             {
@@ -193,6 +189,7 @@ public class BotController : Controller
                     LookAt(corners[0], (() => {}));
             }
         }
+        onAxis.Invoke(Vector2.zero);
         StopLook.Invoke();
         hasDestination = false;
         yield return null;
