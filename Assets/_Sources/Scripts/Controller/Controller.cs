@@ -35,19 +35,22 @@ public class Controller : NetworkBehaviour
     [SerializeField] [Range(0, 1)] private float slideDeceleration = 0.1f;
     [SerializeField] private float crouchScale = 0.3f;
     [SerializeField] [Range(0, 1)] private float ballChargeSpeedNerf = 0.3f;
+    [SerializeField] private float sprintMaxAngle = 50;
     
     [Header("Camera Settings")]
     [SerializeField] public Camera camera;
     [SerializeField] private float sensX = 0.1f;
     [SerializeField] private float sensY = 0.1f;
-    
+    [SerializeField] protected Animator _animator;
+
     //Bools
-    protected bool isGrounded = false;
+    protected bool isGrounded;
     protected bool run;
     protected bool jump;
     protected bool crouch;
     protected bool sliding;
     protected bool enterSliding = true;
+
 
     protected UnityEvent<Vector2> onAxis = new UnityEvent<Vector2>();
     protected UnityEvent onRunStart = new UnityEvent();
@@ -58,7 +61,7 @@ public class Controller : NetworkBehaviour
     private float runInputTime;
     private List<float> yVelBuffer = new List<float>();
 
-    private float lastBoost = 0;
+    private float lastBoost;
     private float walkSpeed;
 
     private BasePlayer player;
@@ -66,7 +69,13 @@ public class Controller : NetworkBehaviour
     
     //Cam
     private Vector2 camAxis;
-    public Vector2 currentLook;
+
+    protected Vector2 currentLook;
+    
+    //Animator
+    private float velX;
+    private float velY;
+
 
     protected void Awake()
     {
@@ -86,6 +95,7 @@ public class Controller : NetworkBehaviour
         if (!crouch && isGrounded && Time.time > lastBoost + minSlidePause)
             enterSliding = true;
         CalculateCam();
+        UpdateAnimator();
     }
 
     private void FixedUpdate()
@@ -94,14 +104,13 @@ public class Controller : NetworkBehaviour
         
         if (isGrounded)
         {
-
             if (crouch)
-            {
                 Crouch(dir, crouchSpeed, groundAcceleration);
-            }
             else
             {
-                Walk(dir, run ? runSpeed : walkSpeed, groundAcceleration);
+                //Calculates if the player walks or run based on his inputs and direction
+                Walk(dir, run && Vector3.Angle(dir, transform.forward) < sprintMaxAngle ? 
+                    runSpeed : walkSpeed, groundAcceleration);
             }
         }
         else
@@ -234,7 +243,7 @@ public class Controller : NetworkBehaviour
 
     #endregion
 
-    #region Methods
+    #region Public Methods
 
     /// <summary>
     /// Use Punch to add an instant force to the player
@@ -296,6 +305,8 @@ public class Controller : NetworkBehaviour
     {
         float xAxis = axis.y;
         float yAxis = axis.x;
+        
+        //axis = Vector2.zero;
 
         Vector3 direction = new Vector3(yAxis, 0, xAxis);
         return rb.transform.TransformDirection(direction);
@@ -378,6 +389,21 @@ public class Controller : NetworkBehaviour
 
     #endregion
 
+    #region Private Methods
+
+    private void UpdateAnimator()
+    {
+        if (_animator != null)
+        {
+            velX = Vector3.Dot(transform.right, rb.velocity) / runSpeed;
+            velY = Vector3.Dot(transform.forward, rb.velocity) / runSpeed;
+            _animator.SetFloat("velX", velX);
+            _animator.SetFloat("velY", velY);
+        }
+    }
+
+    #endregion
+    
     #region Inputs
     public void Axis(Vector2 axis)
     {
@@ -418,11 +444,10 @@ public class Controller : NetworkBehaviour
     //Debug : Speed infos
     void OnGUI()
     {
-        //GUI.color = Color.red;
-        //GUILayout.Label("speed: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
-        //GUILayout.Label("speedUp: " + rb.velocity.y);
-        //GUILayout.Label("yVle: " + Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * 0.35f), 1, Mathf.Infinity));
-        //GUILayout.Label("axis : " + axis );
-
+        GUI.color = Color.red;
+        GUILayout.Label("speed: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
+        GUILayout.Label("speedUp: " + rb.velocity.y);
+        GUILayout.Label("yVle: " + Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * 0.35f), 1, Mathf.Infinity));
+        GUILayout.Label("axis : " + axis );
     }
 }

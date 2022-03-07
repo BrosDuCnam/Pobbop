@@ -19,7 +19,7 @@ public class BasePlayer : NetworkBehaviour
     [SerializeField] public HealthSystem healthSystem;
     [SerializeField] public Rigidbody rigidbody;
     [SerializeField] public Controller controller;
-
+    
     public Camera Camera;
 
     [HideInInspector] [SyncVar] public int teamNumber = 0;
