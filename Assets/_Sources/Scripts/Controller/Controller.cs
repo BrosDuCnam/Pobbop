@@ -42,12 +42,12 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float sensY = 0.1f;
     
     //Bools
-    protected bool isGrounded = false;
-    protected bool run;
-    protected bool jump;
-    protected bool crouch;
-    protected bool sliding;
-    protected bool enterSliding = true;
+    [field: SerializeField] public bool isGrounded { get; protected set; }
+    [field: SerializeField] public bool run { get; protected set; }
+    [field: SerializeField] public bool jump { get; protected set; }
+    [field: SerializeField] public bool crouch { get; protected set; }
+    [field: SerializeField] public bool sliding { get; protected set; }
+    [field: SerializeField] public bool enterSliding { get; protected set; } = true;
 
     protected UnityEvent<Vector2> onAxis = new UnityEvent<Vector2>();
     protected UnityEvent onRunStart = new UnityEvent();
