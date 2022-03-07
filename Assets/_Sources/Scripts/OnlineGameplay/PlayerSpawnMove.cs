@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class PlayerSpawnMove : NetworkBehaviour
+public class PlayerSpawnMove : MonoBehaviour
 {
     public static event Action<Transform> PlayerSpawned;
 

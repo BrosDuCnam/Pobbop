@@ -14,14 +14,13 @@ public class SpawnSystem : NetworkBehaviour
 
     private static List<List<NetworkConnection>> teamLists;
 
-
     /// <summary>
     /// Ce callback est apellé quand le serveur est crée
     /// </summary>
     public override void OnStartServer()
     {
         base.OnStartServer();
-        NetworkManagerLobby.OnServerReadied += SetNetworkTeamList;
+        NetworkManagerLobby.OnServerReadied += SetTeamList;
     }
 
     public static void AddSpawnPoint(Transform spawnPoint)
@@ -29,7 +28,7 @@ public class SpawnSystem : NetworkBehaviour
         SpawnPointsList.Add(spawnPoint);
     }
 
-    private void SetNetworkTeamList(List<List<Transform>> transformTeamList)
+    private void SetTeamList(List<List<Transform>> transformTeamList)
     {
         teamTransformLists = transformTeamList;
         SetTeamNumber();
@@ -107,15 +106,20 @@ public class SpawnSystem : NetworkBehaviour
         return startSpawnPoints;
     }
 
-    public static void Respawn(Transform player, int teamNumber)
+    public static void Respawn(Transform player)
     {
-        //Transform spawnPoint = PickSpawnPoint(teamNumber);
         System.Random random = new System.Random();
-        Debug.Log("Respawn");
         Transform spawnPoint = SpawnPointsList[random.Next(0, SpawnPointsList.Count)];
         player.position = spawnPoint.position;
         player.rotation = spawnPoint.rotation;
-        //PlayerAddTransform(player, teamNumber);
+    }
+    
+    public static void Respawn(Transform player, int teamNumber)
+    {
+        Transform spawnPoint = PickSpawnPoint(teamNumber);
+        player.position = spawnPoint.position;
+        player.rotation = spawnPoint.rotation;
+        PlayerAddTransform(player, teamNumber);
     }
 
     private static Transform PickSpawnPoint(int teamNumber)

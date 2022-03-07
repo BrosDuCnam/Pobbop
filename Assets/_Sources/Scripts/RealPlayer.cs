@@ -12,7 +12,7 @@ public class RealPlayer : BasePlayer
     [SerializeField] private Slider _chargingSlider;
     [Tooltip("Line renderer of charging curve")]
     [SerializeField] private LineRenderer _chargingCurveLineRenderer;
-
+    
     private new void Awake()
     {
         base.Awake();
@@ -109,12 +109,18 @@ public class RealPlayer : BasePlayer
     
     private void Eliminated()
     {
-        int teamNumber = transform.GetComponent<BasePlayer>().teamNumber;
-        //int enemyTeam = _healthSystem.LastPlayerDamage.GetComponent<BasePlayer>().teamNumber;
-        //NetworkManagerLobby.AddPoint(enemyTeam);
-        //PlayerSpawnSystem.PlayerRemoveTransform(transform, teamNumber);
-        Debug.Log("Eliminated");
-        SpawnSystem.Respawn(transform, teamNumber);
+        int playerTeamNumber = transform.GetComponent<BasePlayer>().teamNumber;
+        if (playerTeamNumber == 0)
+        {
+            SpawnSystem.Respawn(transform);
+        }
+        else
+        {
+            //int enemyTeam = _healthSystem.LastPlayerDamage.GetComponent<BasePlayer>().teamNumber;
+            //NetworkManagerLobby.AddPoint(enemyTeam);
+            SpawnSystem.PlayerRemoveTransform(transform, playerTeamNumber);
+            SpawnSystem.Respawn(transform, playerTeamNumber);
+        }
     }
     
     
