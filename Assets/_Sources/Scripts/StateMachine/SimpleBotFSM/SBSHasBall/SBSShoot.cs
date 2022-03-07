@@ -12,7 +12,7 @@ public class SBSShoot : FSMState<SBStateInfo>
         infos.controller.StopLocomotion.Invoke();
         
         float direction = Random.Range(0, 1) > 0.5f ? 1 : -1;
-        float value = Random.Range(10, 90);
+        float value = Random.Range(10, 180);
 
         float chargeTime = Random.Range(0.5f, 2f);
         infos.bot.throwSystem.ChargeThrow();

@@ -32,28 +32,31 @@ public class SBSBase : FSMState<SBStateInfo>
 
             Vector3 forwardPosition = infos.bot.transform.position + (infos.bot.transform.forward * 2);
             
-            bool toCrouch = false;/*
-            RaycastHit forwardHit = new RaycastHit();
-            Debug.DrawRay(forwardPosition, Vector3.down);
-            if (Physics.Raycast(forwardPosition, Vector3.down, out forwardHit))
+            bool toCrouch = false;
+            
+            if (infos.bot.rigidbody.velocity.magnitude > 7 && Mathf.Abs(infos.controller.currentLook.x - infos.controller.lookDestination.x) < 45)
             {
-                Vector3 angle = Quaternion.FromToRotation(forwardHit.normal, infos.bot.transform.forward).eulerAngles;
-                Debug.Log(angle);
-                if (angle.x < 90 || angle.z < 90) //TODO maybe change 0 by another value
+                RaycastHit forwardHit = new RaycastHit();
+                Debug.DrawRay(infos.bot.transform.position, infos.bot.transform.forward);
+                if (Physics.Raycast(forwardPosition, Vector3.down, out forwardHit))
                 {
-                    RaycastHit[] hits = Physics.RaycastAll(infos.bot.transform.position, Vector3.down);
-                    hits = hits.Where(h => h.transform.gameObject == forwardHit.transform.gameObject).ToArray();
-
-                    if (hits.Length > 0)
+                    float angle = Vector3.Angle(forwardHit.normal, infos.bot.transform.forward);
+                    if (angle < 90)
                     {
-                        angle = Quaternion.FromToRotation(hits[0].normal, infos.bot.transform.forward).eulerAngles;
-                        if (angle.x < 90 || angle.z < 90) //TODO maybe change 0 by another value
+                        RaycastHit[] hits = Physics.RaycastAll(infos.bot.transform.position, Vector3.down);
+                        hits = hits.Where(h => h.transform.gameObject == forwardHit.transform.gameObject).ToArray();
+
+                        if (hits.Length > 0)
                         {
-                            toCrouch = true;
+                            angle = Vector3.Angle(hits[0].normal, infos.bot.transform.forward);
+                            if (angle < 90)
+                            {
+                                toCrouch = true;
+                            }
                         }
                     }
                 }
-            }*/
+            }
             infos.controller.Crouch(toCrouch);
         }
         
@@ -64,12 +67,10 @@ public class SBSBase : FSMState<SBStateInfo>
         else if (infos.ballHistory.Count > 0)
         {
             addAndActivateSubState<SBSBallChasing>();
-            Debug.Log("Ball chasing");
         }
         else
         {
             addAndActivateSubState<SBSNavigate>();
-            Debug.Log("Random navigation");
         }
     }
 }

@@ -17,14 +17,10 @@ public class BotController : Controller
     
     public UnityEvent StopLook;
     public UnityEvent StopLocomotion;
+    public Vector2 lookDestination { get; private set; }
     public bool hasDestination;
-
-    public Vector3 destination
-    {
-        get;
-        private set;
-    }
-    
+    public Vector3 destination { get; private set; }
+    public Vector3 tempDestination { get; private set; }
 
     private new void Update()
     {
@@ -132,6 +128,7 @@ public class BotController : Controller
         while (stopLookAt == false)
         {
             Vector2 destination = directionFunc.Invoke();
+            lookDestination = destination;
             
             if (Utils.DegreeFormat360To180(destination.x) > 90 || Utils.DegreeFormat360To180(destination.x) < -90)
             {
@@ -201,13 +198,15 @@ public class BotController : Controller
         
         while (corners.Count > 0 && !stopLocomotion)
         {
-            Vector3 nextDestination = corners[0];
-            if (Vector3.Distance(transform.position, nextDestination) > 1f)
+            tempDestination = corners[0];
+            if (Vector3.Distance(transform.position, tempDestination) > 1f)
             {
-                Vector3 direction3D = transform.position - nextDestination;
+                Vector3 direction3D = transform.position - tempDestination;
                 Vector2 direction = new Vector2(direction3D.x, direction3D.z).normalized;
+
+                direction = Utils.RadianToVector2(Utils.Vector2ToRadian(direction) - (currentLook.x * Mathf.Deg2Rad));
                 
-                direction = Vector2.Lerp(Vector2.up, direction - Utils.DegreeToVector2(currentLook.x), strafeAccuracy);
+                direction = Vector2.Lerp(Vector2.up, direction, strafeAccuracy);
 
                 onAxis.Invoke(direction);
 
@@ -217,6 +216,7 @@ public class BotController : Controller
                 destination = destinationFunc.Invoke();
                 NavMesh.CalculatePath(transform.position, destination, NavMesh.AllAreas, path);
                 corners = path.corners.ToList();
+                Utils.DebugNavMeshPath(path);
             }
             else
             {

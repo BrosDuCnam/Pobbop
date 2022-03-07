@@ -202,7 +202,11 @@ public static class Utils
         return Mathf.Atan2(radian.y, radian.x) * Mathf.Rad2Deg;
     }
 
-    
+    public static float Vector2ToRadian(Vector2 vector2)
+    {
+        return Mathf.Atan2(vector2.y, vector2.x);
+    }
+
     /// <summary>
     /// Radian to vector 2
     /// </summary>
