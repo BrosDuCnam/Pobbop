@@ -123,6 +123,24 @@ ModelImporter:
   - first:
       74: 465535714382149533
     second: crouch_0
+  - first:
+      74: -806199112408781124
+    second: float_F_0_loop
+  - first:
+      74: 3252897167838811256
+    second: float_F_1_loop
+  - first:
+      74: 7264407999455116424
+    second: float_F_2_loop
+  - first:
+      74: -1384278905020373140
+    second: float_B_0_loop
+  - first:
+      74: -618541793214049227
+    second: float_B_1_loop
+  - first:
+      74: -6143527958699389117
+    second: float_B_2_loop
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -1012,7 +1030,7 @@ ModelImporter:
       takeName: land_F_0
       internalID: 0
       firstFrame: 0
-      lastFrame: 13
+      lastFrame: 9
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1041,7 +1059,7 @@ ModelImporter:
       takeName: land_F_1
       internalID: 0
       firstFrame: 0
-      lastFrame: 13
+      lastFrame: 9
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1070,7 +1088,7 @@ ModelImporter:
       takeName: land_F_2
       internalID: 0
       firstFrame: 0
-      lastFrame: 13
+      lastFrame: 9
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

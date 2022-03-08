@@ -89,7 +89,8 @@ public class Controller : NetworkBehaviour
     private float velX;
     private float velY;
 
-
+    private bool animCrouch;
+    
     protected void Awake()
     {
         onAxis.AddListener(Axis);
@@ -108,7 +109,7 @@ public class Controller : NetworkBehaviour
     {
         CalculateCam();
         UpdateAnimator();
-        Debug.Log("slide nerf : " +slideNerf);
+        Debug.Log("slide nerf : " + slideNerf);
         Debug.Log("enter sliding : " + enterSliding);
         if (Time.time > slideNerf && slideNerf != 0) enterSliding = true;
 
@@ -181,6 +182,7 @@ public class Controller : NetworkBehaviour
 
     private void Crouch(Vector3 wishDir, float maxSpeed, float acceleration)
     {
+        animCrouch = true;
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
         float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity);
         slideNerf = 0;
@@ -249,7 +251,6 @@ public class Controller : NetworkBehaviour
 
         if (lurch)
         {
-            // TODO : Lurch
             float currentVel = rb.velocity.magnitude;
             float yVel = rb.velocity.y;
             Vector3 newVel = Vector3.RotateTowards(rb.velocity.normalized, wishDir.normalized, 
@@ -436,7 +437,9 @@ public class Controller : NetworkBehaviour
             _animator.SetFloat("velX", velX);
             _animator.SetFloat("velY", velY);
             _animator.SetBool("slide", sliding);
-            _animator.SetBool("crouch", !sliding && crouch);
+            _animator.SetBool("crouch", !sliding && animCrouch);
+            _animator.SetBool("jump", jump);
+            _animator.SetBool("isgrounded", isGrounded);
         }
     }
 
@@ -477,7 +480,11 @@ public class Controller : NetworkBehaviour
     public void OnCrouch(bool pressed)
     {
         crouch = pressed;
-        if (!crouch) sliding = false;
+        if (!crouch)
+        {
+            sliding = false;
+            animCrouch = false;
+        }
     }
 
     public void OnDirection(Vector2 axis)
@@ -502,6 +509,7 @@ public class Controller : NetworkBehaviour
             GUILayout.Label("VelY : " + velY, style );
             GUILayout.Label("slide : " + sliding, style );
             GUILayout.Label("crouch : " + (!sliding && crouch), style );
+            GUILayout.Label("jump : " + jump, style );
             
         }
     }

@@ -652,9 +652,9 @@ MonoBehaviour:
   crouchScale: 0.3
   ballChargeSpeedNerf: 0.3
   sprintMaxAngle: 50
-  jumpNerfFactor: 0.5
+  jumpNerfFactor: 0.7
   jumpNerfResetTime: 1.2
-  lurchMaxAngle: 23
+  lurchMaxAngle: 20
   camera: {fileID: 1008197578226024919}
   sensX: 0.1
   sensY: 0.1
@@ -1505,6 +1505,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a63cef42454737c40907849e85b0342d, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a63cef42454737c40907849e85b0342d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: a63cef42454737c40907849e85b0342d, type: 3}
       propertyPath: m_Controller
