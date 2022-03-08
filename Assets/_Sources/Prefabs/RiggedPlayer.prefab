@@ -647,15 +647,25 @@ MonoBehaviour:
   verticalSpeedSlideMultiplier: 0.35
   slideAccelAngle: 10
   slideBoost: 11
-  minSlidePause: 1
+  minSlidePause: 0.5
   slideDeceleration: 0.1
   crouchScale: 0.3
   ballChargeSpeedNerf: 0.3
   sprintMaxAngle: 50
+  jumpNerfFactor: 0.5
+  jumpNerfResetTime: 1.5
+  lurchForce: 1
   camera: {fileID: 1008197578226024919}
   sensX: 0.1
   sensY: 0.1
   _animator: {fileID: 6451385552212860149}
+  <isGrounded>k__BackingField: 0
+  <run>k__BackingField: 0
+  <jump>k__BackingField: 0
+  <crouch>k__BackingField: 0
+  <sliding>k__BackingField: 0
+  <enterSliding>k__BackingField: 1
+  currentLook: {x: 0, y: 0}
 --- !u!114 &3518688419760104894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,11 +680,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _targetSystem: {fileID: 0}
-  _pickUpDropSystem: {fileID: 0}
-  _throwSystem: {fileID: 0}
-  _healthSystem: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  targetSystem: {fileID: 0}
+  pickUpDropSystem: {fileID: 0}
+  throwSystem: {fileID: 0}
+  healthSystem: {fileID: 0}
+  rigidbody: {fileID: 0}
   controller: {fileID: 0}
   Camera: {fileID: 0}
   teamNumber: 0
@@ -739,7 +749,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  basePlayer: {fileID: 0}
+  _basePlayer: {fileID: 0}
   _rigidbody: {fileID: 0}
   _lineRenderer: {fileID: 0}
   _slider: {fileID: 3312182408484959709}
@@ -919,8 +929,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41583102031ed0f449ac9f7dad844775, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!114 &3038639308991702786
 MonoBehaviour:
   m_ObjectHideFlags: 0

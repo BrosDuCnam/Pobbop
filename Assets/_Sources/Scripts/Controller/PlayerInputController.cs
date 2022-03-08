@@ -21,6 +21,7 @@ public class PlayerInputController : Controller
     public void Axis(InputAction.CallbackContext ctx)
     {
         onAxis.Invoke(ctx.ReadValue<Vector2>());
+        if (ctx.started) onLurch.Invoke(true);
     }
 
     public void RunInput(InputAction.CallbackContext ctx)

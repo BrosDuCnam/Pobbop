@@ -31,11 +31,15 @@ public class Controller : NetworkBehaviour
     [SerializeField] [Range(0, 1)] private float verticalSpeedSlideMultiplier = 0.4f;
     [SerializeField] private float slideAccelAngle = 10f; //Defines above what ground angle the player can slide
     [SerializeField] private float slideBoost = 11f;
-    [SerializeField] [Tooltip("Used to avoid crouch spam")] private float minSlidePause = 1f;
+    [SerializeField] [Tooltip("Used to avoid crouch spam")] private float minSlidePause = 0.5f;
     [SerializeField] [Range(0, 1)] private float slideDeceleration = 0.1f;
     [SerializeField] private float crouchScale = 0.3f;
     [SerializeField] [Range(0, 1)] private float ballChargeSpeedNerf = 0.3f;
     [SerializeField] private float sprintMaxAngle = 50;
+    [SerializeField] [Range(0, 1)] private float jumpNerfFactor = 1.5f;
+    [SerializeField] private float jumpNerfResetTime = 0.5f;
+    [SerializeField] private float lurchForce = 1;
+    
     
     [Header("Camera Settings")]
     [SerializeField] public Camera camera;
@@ -58,20 +62,23 @@ public class Controller : NetworkBehaviour
     protected UnityEvent<bool> onJump = new UnityEvent<bool>();
     protected UnityEvent<bool> onCrouch = new UnityEvent<bool>();
     protected UnityEvent<Vector2> onDirectionAxis = new UnityEvent<Vector2>();
+    protected UnityEvent<bool> onLurch = new UnityEvent<bool>();
 
     private float runInputTime;
     private List<float> yVelBuffer = new List<float>();
 
-    private float lastBoost;
     private float walkSpeed;
+    private float lastJump;
+
+    protected bool lurch;
+    private float slideNerf;
 
     private BasePlayer player;
 
-    
     //Cam
     private Vector2 camAxis;
 
-    protected Vector2 currentLook;
+    public Vector2 currentLook;
     
     //Animator
     private float velX;
@@ -85,6 +92,7 @@ public class Controller : NetworkBehaviour
         onJump.AddListener(OnJump);
         onCrouch.AddListener(OnCrouch);
         onDirectionAxis.AddListener(OnDirection);
+        onLurch.AddListener(OnLurch);
 
         player = GetComponent<BasePlayer>();
         rb = GetComponent<Rigidbody>();
@@ -93,10 +101,12 @@ public class Controller : NetworkBehaviour
     
     protected void Update()
     {
-        if (!crouch && isGrounded && Time.time > lastBoost + minSlidePause)
-            enterSliding = true;
         CalculateCam();
         UpdateAnimator();
+        Debug.Log("slide nerf : " +slideNerf);
+        Debug.Log("enter sliding : " + enterSliding);
+        if (Time.time > slideNerf && slideNerf != 0) enterSliding = true;
+
     }
 
     private void FixedUpdate()
@@ -168,13 +178,13 @@ public class Controller : NetworkBehaviour
     {
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
         float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity);
+        slideNerf = 0;
         //Check speed to know if enter sliding
         if (speedForSliding > _walkSpeed * speedFactToEnterSliding)
         {
             //Give speed boost on slide enter
-            if (enterSliding && speed < slideBoost &&  Time.time > lastBoost + minSlidePause)
+            if (enterSliding && speed < slideBoost)
             {
-                lastBoost = Time.time;
                 //Add boost based on the flat velocity and the wishdir
                 Vector3 vel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
                 Vector3 groundOnSlope = Vector3OnSlope(vel.normalized + wishDir.normalized * 0.5f).normalized;
@@ -188,7 +198,6 @@ public class Controller : NetworkBehaviour
             }
             sliding = true;
         }
-            
         else
             Walk(wishDir, maxSpeed, acceleration);
 
@@ -202,7 +211,6 @@ public class Controller : NetworkBehaviour
                 //Debug.Log("decelerate");
             }
             if (jump) Jump();
-
         }
         
         //Reset sliding
@@ -221,7 +229,7 @@ public class Controller : NetworkBehaviour
     /// <param name="wishDir"></param>
     /// <param name="maxSpeed"></param>
     /// <param name="acceleration"></param>
-    private void AirStrafe(Vector3 wishDir , float maxSpeed, float acceleration)
+    private void AirStrafe(Vector3 wishDir, float maxSpeed, float acceleration)
     {
         float projVel = Vector3.Dot(new Vector3(rb.velocity.x, 0f, rb.velocity.z), wishDir);
         float accelVel = acceleration * Time.deltaTime;
@@ -230,15 +238,26 @@ public class Controller : NetworkBehaviour
             accelVel = Mathf.Max(0, maxSpeed - projVel);
         
         rb.AddForce(wishDir.normalized * accelVel, ForceMode.VelocityChange);
+
+        if (lurch)
+        {
+            // TODO : Lurch
+            lurch = false;
+        }
     }
+    
     
     /// <summary>
     /// Jump up
     /// </summary>
     private void Jump()
     {
-        float upForce = Mathf.Clamp(jumpUpSpeed - rb.velocity.y, 0, Mathf.Infinity);
+        //If the player recently jumped, nerf the jump height
+        float upForce = Mathf.Clamp( (Time.time < lastJump + jumpNerfResetTime ?
+                                         jumpUpSpeed * jumpNerfFactor : jumpUpSpeed) 
+                                     - rb.velocity.y, 0, Mathf.Infinity);
         rb.AddForce(new Vector3(0, upForce, 0), ForceMode.VelocityChange);
+        lastJump = Time.time;
     }
 
 
@@ -356,6 +375,9 @@ public class Controller : NetworkBehaviour
                 {
                     isGrounded = true;
                     groundNormal = contact.normal;
+                    
+                    if (slideNerf == 0 && crouch == false)
+                        slideNerf = Time.time + minSlidePause;
                 }
             }
         }
@@ -410,6 +432,11 @@ public class Controller : NetworkBehaviour
     {
         this.axis = axis;
         if (this.axis.magnitude == 0) run = false;
+    }
+
+    public void OnLurch(bool started)
+    {
+        lurch = started;
     }
 
     public void OnRun()
