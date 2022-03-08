@@ -46,7 +46,7 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float sensX = 0.1f;
     [SerializeField] private float sensY = 0.1f;
     [SerializeField] protected Animator _animator;
-
+    
     //Bools
     [field: SerializeField] public bool isGrounded { get; protected set; }
     [field: SerializeField] public bool run { get; protected set; }
@@ -54,6 +54,11 @@ public class Controller : NetworkBehaviour
     [field: SerializeField] public bool crouch { get; protected set; }
     [field: SerializeField] public bool sliding { get; protected set; }
     [field: SerializeField] public bool enterSliding { get; protected set; } = true;
+    
+    [Header("Debug")] 
+    [SerializeField] private bool drawGUI;
+    [SerializeField] private int fontSize;
+
 
 
 
@@ -78,7 +83,7 @@ public class Controller : NetworkBehaviour
     //Cam
     private Vector2 camAxis;
 
-    public Vector2 currentLook;
+    [HideInInspector] public Vector2 currentLook;
     
     //Animator
     private float velX;
@@ -199,7 +204,10 @@ public class Controller : NetworkBehaviour
             sliding = true;
         }
         else
+        {
             Walk(wishDir, maxSpeed, acceleration);
+            sliding = false;
+        }
 
         // Not working : needs fix (doesn't know if going up or down)
         if (sliding)
@@ -423,10 +431,12 @@ public class Controller : NetworkBehaviour
     {
         if (_animator != null)
         {
-            velX = Vector3.Dot(transform.right, rb.velocity) / runSpeed;
-            velY = Vector3.Dot(transform.forward, rb.velocity) / runSpeed;
+            velX = Vector3.Dot(transform.right, rb.velocity) / _walkSpeed;
+            velY = Vector3.Dot(transform.forward, rb.velocity) / _walkSpeed;
             _animator.SetFloat("velX", velX);
             _animator.SetFloat("velY", velY);
+            _animator.SetBool("slide", sliding);
+            _animator.SetBool("crouch", !sliding && crouch);
         }
     }
 
@@ -467,7 +477,7 @@ public class Controller : NetworkBehaviour
     public void OnCrouch(bool pressed)
     {
         crouch = pressed;
-        CrouchScale();
+        if (!crouch) sliding = false;
     }
 
     public void OnDirection(Vector2 axis)
@@ -479,10 +489,20 @@ public class Controller : NetworkBehaviour
     //Debug : Speed infos
     void OnGUI()
     {
-        GUI.color = Color.red;
-        GUILayout.Label("speed: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
-        GUILayout.Label("speedUp: " + rb.velocity.y);
-        GUILayout.Label("yVle: " + Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * 0.35f), 1, Mathf.Infinity));
-        GUILayout.Label("axis : " + axis );
+        if (drawGUI)
+        {
+            GUI.color = Color.red;
+            GUIStyle style = new GUIStyle();
+            style.fontSize = fontSize;
+            GUILayout.Label("speed: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude, style);
+            GUILayout.Label("speedUp: " + rb.velocity.y, style);
+            GUILayout.Label("yVle: " + Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * 0.35f), 1, Mathf.Infinity), style);
+            GUILayout.Label("axis : " + axis, style );
+            GUILayout.Label("VelX : " + velX, style );
+            GUILayout.Label("VelY : " + velY, style );
+            GUILayout.Label("slide : " + sliding, style );
+            GUILayout.Label("crouch : " + (!sliding && crouch), style );
+            
+        }
     }
 }
