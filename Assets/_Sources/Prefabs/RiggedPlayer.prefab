@@ -653,8 +653,8 @@ MonoBehaviour:
   ballChargeSpeedNerf: 0.3
   sprintMaxAngle: 50
   jumpNerfFactor: 0.5
-  jumpNerfResetTime: 1.5
-  lurchForce: 1
+  jumpNerfResetTime: 1.2
+  lurchMaxAngle: 23
   camera: {fileID: 1008197578226024919}
   sensX: 0.1
   sensY: 0.1

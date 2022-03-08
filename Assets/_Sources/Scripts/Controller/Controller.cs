@@ -38,7 +38,7 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float sprintMaxAngle = 50;
     [SerializeField] [Range(0, 1)] private float jumpNerfFactor = 1.5f;
     [SerializeField] private float jumpNerfResetTime = 0.5f;
-    [SerializeField] private float lurchForce = 1;
+    [SerializeField] [Range(0, 180)] private float lurchMaxAngle = 20;
     
     
     [Header("Camera Settings")]
@@ -242,6 +242,11 @@ public class Controller : NetworkBehaviour
         if (lurch)
         {
             // TODO : Lurch
+            float currentVel = rb.velocity.magnitude;
+            float yVel = rb.velocity.y;
+            Vector3 newVel = Vector3.RotateTowards(rb.velocity.normalized, wishDir.normalized, 
+                Mathf.Deg2Rad * lurchMaxAngle, 1) * (currentVel -0.3f);
+            rb.velocity = new Vector3(newVel.x, yVel, newVel.z);
             lurch = false;
         }
     }
@@ -455,6 +460,8 @@ public class Controller : NetworkBehaviour
             jump = pressed;
         if (!pressed)
             jump = false;
+        else
+            lurch = false;
     }
     
     public void OnCrouch(bool pressed)
