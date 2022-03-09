@@ -189,4 +189,5 @@ public class SpawnSystem : NetworkBehaviour
     {
         teamTransformLists[teamNumber - 1].Remove(player);
     }
+
 }
