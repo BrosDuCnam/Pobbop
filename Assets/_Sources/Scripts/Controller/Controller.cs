@@ -90,6 +90,7 @@ public class Controller : NetworkBehaviour
     private float velY;
 
     private bool animCrouch;
+    private bool animJump;
     
     protected void Awake()
     {
@@ -199,7 +200,7 @@ public class Controller : NetworkBehaviour
                 //Adapt slide boost speed base on the angle we want to slide along
                 float groundAngle = (Vector3.Angle(Vector3.up, groundOnSlope) - 90) / 75;
                 slideForce *= 1 + groundAngle;
-                Debug.Log(groundAngle);
+                Debug.Log("ground angle :" + groundAngle);
                 rb.AddForce(slideForce, ForceMode.VelocityChange); 
                 enterSliding = false;
             }
@@ -266,6 +267,7 @@ public class Controller : NetworkBehaviour
     /// </summary>
     private void Jump()
     {
+        animJump = true;
         //If the player recently jumped, nerf the jump height
         float upForce = Mathf.Clamp( (Time.time < lastJump + jumpNerfResetTime ?
                                          jumpUpSpeed * jumpNerfFactor : jumpUpSpeed) 
@@ -392,6 +394,8 @@ public class Controller : NetworkBehaviour
                     
                     if (slideNerf == 0 && crouch == false)
                         slideNerf = Time.time + minSlidePause;
+                    
+                    if (Time.time > lastJump + 0.1f) animJump = false;
                 }
             }
         }
@@ -438,8 +442,8 @@ public class Controller : NetworkBehaviour
             _animator.SetFloat("velY", velY);
             _animator.SetBool("slide", sliding);
             _animator.SetBool("crouch", !sliding && animCrouch);
-            _animator.SetBool("jump", jump);
             _animator.SetBool("isgrounded", isGrounded);
+            _animator.SetBool("jumping", animJump);
         }
     }
 
@@ -509,7 +513,7 @@ public class Controller : NetworkBehaviour
             GUILayout.Label("VelY : " + velY, style );
             GUILayout.Label("slide : " + sliding, style );
             GUILayout.Label("crouch : " + (!sliding && crouch), style );
-            GUILayout.Label("jump : " + jump, style );
+            GUILayout.Label("jump : " + animJump, style );
             
         }
     }
