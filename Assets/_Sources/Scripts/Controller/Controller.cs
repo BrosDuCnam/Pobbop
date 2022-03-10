@@ -21,7 +21,7 @@ public class Controller : NetworkBehaviour
     //Movement
     [SerializeField] private float _walkSpeed = 5f;
     [SerializeField] private float runSpeed = 8f;
-    [SerializeField] private float crouchSpeed = 2.5f;
+    [SerializeField] private float _crouchSpeed = 2.5f;
     [SerializeField] private float groundAcceleration = 20f;
     [SerializeField] private float airSpeed = 3f;
     [SerializeField] private float airAcceleration = 5f;
@@ -29,8 +29,8 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float maxGroundAngle = 40f;
     [SerializeField] [Range(1, 2)] private float speedFactToEnterSliding = 1.3f;
     [SerializeField] [Range(0, 1)] private float verticalSpeedSlideMultiplier = 0.4f;
-    [SerializeField] private float slideAccelAngle = 10f; //Defines above what ground angle the player can slide
-    [SerializeField] private float slideBoost = 11f;
+    [SerializeField] private float slideAccelAngle = 10f; //Defines on what ground angle the player can slide
+    [SerializeField] private float slideBoost = 11f; 
     [SerializeField] [Tooltip("Used to avoid crouch spam")] private float minSlidePause = 0.5f;
     [SerializeField] [Range(0, 1)] private float slideDeceleration = 0.1f;
     [SerializeField] private float crouchScale = 0.3f;
@@ -60,8 +60,6 @@ public class Controller : NetworkBehaviour
     [SerializeField] private int fontSize;
 
 
-
-
     protected UnityEvent<Vector2> onAxis = new UnityEvent<Vector2>();
     protected UnityEvent onRunStart = new UnityEvent();
     protected UnityEvent<bool> onJump = new UnityEvent<bool>();
@@ -69,11 +67,12 @@ public class Controller : NetworkBehaviour
     protected UnityEvent<Vector2> onDirectionAxis = new UnityEvent<Vector2>();
     protected UnityEvent<bool> onLurch = new UnityEvent<bool>();
 
-    private float runInputTime;
     private List<float> yVelBuffer = new List<float>();
 
     private float walkSpeed;
+    private float crouchSpeed;
     private float lastJump;
+    private bool _isThrowing;
 
     protected bool lurch;
     private float slideNerf;
@@ -104,6 +103,7 @@ public class Controller : NetworkBehaviour
         player = GetComponent<BasePlayer>();
         rb = GetComponent<Rigidbody>();
         walkSpeed = _walkSpeed;
+        crouchSpeed = _crouchSpeed;
     }
     
     protected void Update()
@@ -187,6 +187,7 @@ public class Controller : NetworkBehaviour
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
         float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity);
         slideNerf = 0;
+        //TODO : upgrade slide system to unable sliding while walking and enable after jump (code is already below)
         //Check speed to know if enter sliding
         if (speedForSliding > _walkSpeed * speedFactToEnterSliding)
         {
@@ -290,16 +291,29 @@ public class Controller : NetworkBehaviour
         print("Punch : " + force);
         rb.AddForce(force, ForceMode.VelocityChange);
     }
+    
+    public bool IsThrowing
+    {
+        get => _isThrowing;
+        set
+        {
+            _isThrowing = value;
+            NerfSpeedOnCharge(_isThrowing);
+        }
+    }
 
     /// <summary>
     /// Used to slow the player if he charges the ball
     /// </summary>
     /// <param name="state"></param>
-    public void NerfSpeedOnCharge(bool state)
+    private void NerfSpeedOnCharge(bool state)
     {
         walkSpeed = state
             ? _walkSpeed * ballChargeSpeedNerf
             : walkSpeed = _walkSpeed;
+        crouchSpeed = state
+            ? _crouchSpeed * ballChargeSpeedNerf
+            : crouchSpeed = _crouchSpeed;
         run = false;
     }
 
@@ -438,12 +452,16 @@ public class Controller : NetworkBehaviour
         {
             velX = Vector3.Dot(transform.right, rb.velocity) / _walkSpeed;
             velY = Vector3.Dot(transform.forward, rb.velocity) / _walkSpeed;
+            velX = Mathf.Round(velX * 1000) / 1000;
+            velY = Mathf.Round(velY * 1000) / 1000;
+            
             _animator.SetFloat("velX", velX);
             _animator.SetFloat("velY", velY);
             _animator.SetBool("slide", sliding);
             _animator.SetBool("crouch", !sliding && animCrouch);
             _animator.SetBool("isgrounded", isGrounded);
             _animator.SetBool("jumping", animJump);
+            _animator.SetLayerWeight(1, _isThrowing ? 1 : 0);
         }
     }
 
@@ -466,7 +484,6 @@ public class Controller : NetworkBehaviour
         run = true;
         if (run)
         {
-            runInputTime = Time.time;
             player.CancelCharge();
         }
     }

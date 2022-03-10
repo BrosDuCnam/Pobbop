@@ -1,0 +1,275 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PlayerArmMask
+  m_Mask: 00000000000000000000000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_SEModelMesh.003
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_SEModelMesh.004
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_SEModelMesh.009
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_c_helmet_jaw_base
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_c_helmet_jaw_base/def_c_helmet_jaw
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_c_helmet_jaw_base/def_c_helmet_jaw/def_c_helmet_jaw_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_c_helmet_top
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_c_helmet_top/def_c_helmet_mask
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_c_helmet_top/def_c_helmet_mask/def_c_helmet_mask_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_l_helmet_jaw_01
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_l_helmet_jaw_01/def_l_helmet_jaw_02
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_l_helmet_jaw_01/def_l_helmet_jaw_02/def_l_helmet_jaw_03
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_l_helmet_jaw_01/def_l_helmet_jaw_02/def_l_helmet_jaw_03/def_l_helmet_jaw_03_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_l_helmet_jaw_hydraulic_01
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_l_helmet_jaw_hydraulic_01/def_l_helmet_jaw_hydraulic_02
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_l_helmet_jaw_hydraulic_01/def_l_helmet_jaw_hydraulic_02/def_l_helmet_jaw_hydraulic_04
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_l_helmet_jaw_hydraulic_01/def_l_helmet_jaw_hydraulic_02/def_l_helmet_jaw_hydraulic_04/def_l_helmet_jaw_hydraulic_04_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_r_helmet_jaw_01
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_r_helmet_jaw_01/def_r_helmet_jaw_02
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_r_helmet_jaw_01/def_r_helmet_jaw_02/def_r_helmet_jaw_03
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_r_helmet_jaw_01/def_r_helmet_jaw_02/def_r_helmet_jaw_03/def_r_helmet_jaw_03_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_r_helmet_jaw_hydraulic_01
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_r_helmet_jaw_hydraulic_01/def_r_helmet_jaw_hydraulic_02
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_r_helmet_jaw_hydraulic_01/def_r_helmet_jaw_hydraulic_02/def_r_helmet_jaw_hydraulic_04
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_c_helmet/def_r_helmet_jaw_hydraulic_01/def_r_helmet_jaw_hydraulic_02/def_r_helmet_jaw_hydraulic_04/def_r_helmet_jaw_hydraulic_04_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_l_cheekLower
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_l_cheekLower/def_l_cheekLower_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_l_chinSide
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_l_chinSide/def_l_chinSide_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_l_nasolabiaEdge
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_l_nasolabiaEdge/def_l_nasolabiaEdge_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_r_chinSide
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_c_neckA/jx_c_neckB/def_c_neckB/def_r_chinSide/def_r_chinSide_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_forearm
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_forearm/def_l_forearm_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finIndexA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finIndexA/def_l_finIndexB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finIndexA/def_l_finIndexB/def_l_finIndexC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finIndexA/def_l_finIndexB/def_l_finIndexC/def_l_finIndexC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finMidA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finMidA/def_l_finMidB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finMidA/def_l_finMidB/def_l_finMidC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finMidA/def_l_finMidB/def_l_finMidC/def_l_finMidC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal/def_l_finPinkyA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal/def_l_finPinkyA/def_l_finPinkyB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal/def_l_finPinkyA/def_l_finPinkyB/def_l_finPinkyC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal/def_l_finPinkyA/def_l_finPinkyB/def_l_finPinkyC/def_l_finPinkyC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal/def_l_finRingA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal/def_l_finRingA/def_l_finRingB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal/def_l_finRingA/def_l_finRingB/def_l_finRingC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finRingCarpal/def_l_finRingA/def_l_finRingB/def_l_finRingC/def_l_finRingC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finThumbA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finThumbA/def_l_finThumbB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finThumbA/def_l_finThumbB/def_l_finThumbC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/def_l_finThumbA/def_l_finThumbB/def_l_finThumbC/def_l_finThumbC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/ja_l_propHand
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbow/def_l_wrist/ja_l_propHand/ja_l_propHand_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbowB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderMid/def_l_elbowB/def_l_elbowB_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderTwist
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_l_clav/def_l_shoulder/def_l_shoulderTwist/def_l_shoulderTwist_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_forearm
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_forearm/def_r_forearm_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finIndexA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finIndexA/def_r_finIndexB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finIndexA/def_r_finIndexB/def_r_finIndexC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finIndexA/def_r_finIndexB/def_r_finIndexC/def_r_finIndexC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finMidA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finMidA/def_r_finMidB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finMidA/def_r_finMidB/def_r_finMidC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finMidA/def_r_finMidB/def_r_finMidC/def_r_finMidC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal/def_r_finPinkyA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal/def_r_finPinkyA/def_r_finPinkyB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal/def_r_finPinkyA/def_r_finPinkyB/def_r_finPinkyC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal/def_r_finPinkyA/def_r_finPinkyB/def_r_finPinkyC/def_r_finPinkyC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal/def_r_finRingA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal/def_r_finRingA/def_r_finRingB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal/def_r_finRingA/def_r_finRingB/def_r_finRingC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finRingCarpal/def_r_finRingA/def_r_finRingB/def_r_finRingC/def_r_finRingC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finThumbA
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finThumbA/def_r_finThumbB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finThumbA/def_r_finThumbB/def_r_finThumbC
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/def_r_finThumbA/def_r_finThumbB/def_r_finThumbC/def_r_finThumbC_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/ja_r_propHand
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbow/def_r_wrist/ja_r_propHand/ja_r_propHand_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbowB
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderMid/def_r_elbowB/def_r_elbowB_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderTwist
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/def_r_clav/def_r_shoulder/def_r_shoulderTwist/def_r_shoulderTwist_end
+    m_Weight: 1
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/ja_c_propGun
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_c_spineA/def_c_spineB/def_c_spineC/ja_c_propGun/ja_c_propGun_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_l_thigh
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_l_thigh/def_l_knee
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_l_thigh/def_l_knee/def_l_ankle
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_l_thigh/def_l_knee/def_l_ankle/def_l_ball
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_l_thigh/def_l_knee/def_l_ankle/def_l_ball/def_l_ball_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_l_thigh/def_l_kneeB
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_l_thigh/def_l_kneeB/def_l_kneeB_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_r_thigh
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_r_thigh/def_r_knee
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_r_thigh/def_r_knee/def_r_ankle
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_r_thigh/def_r_knee/def_r_ankle/def_r_ball
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_r_thigh/def_r_knee/def_r_ankle/def_r_ball/def_r_ball_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_r_thigh/def_r_kneeB
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/def_c_hip/def_r_thigh/def_r_kneeB/def_r_kneeB_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/jx_c_portal
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/jx_c_portal/jx_c_portal_end
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/jx_c_start
+    m_Weight: 0
+  - m_Path: pilot_light_wraith_cyber_ninja_LOD0_skel/jx_c_delta/jx_c_start/jx_c_start_end
+    m_Weight: 0
