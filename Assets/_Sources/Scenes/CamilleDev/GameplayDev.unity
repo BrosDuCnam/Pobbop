@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 45018101dfce5a74fa3e0233ae6025df, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 2a8037891c8fafc4fa5d97eaa759b0ec, type: 2}
 --- !u!1001 &26100305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2760,7 +2760,6 @@ MonoBehaviour:
   _basePlayer: {fileID: 0}
   _rigidbody: {fileID: 0}
   _lineRenderer: {fileID: 0}
-  _slider: {fileID: 2551508039982921153}
   _minThrowForce: 10
   _maxThrowForce: 35
   _maxChargeTime: 2.5
@@ -3294,7 +3293,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _walkSpeed: 5
   runSpeed: 8
-  crouchSpeed: 2.5
+  _crouchSpeed: 2.5
   groundAcceleration: 20
   airSpeed: 3
   airAcceleration: 5
@@ -3308,15 +3307,22 @@ MonoBehaviour:
   slideDeceleration: 0.1
   crouchScale: 0.3
   ballChargeSpeedNerf: 0.3
+  sprintMaxAngle: 50
+  jumpNerfFactor: 1.5
+  jumpNerfResetTime: 0.5
+  lurchMaxAngle: 20
   camera: {fileID: 243806851813425611}
   sensX: 1
   sensY: 1
+  _animator: {fileID: 0}
   <isGrounded>k__BackingField: 0
   <run>k__BackingField: 0
   <jump>k__BackingField: 0
   <crouch>k__BackingField: 0
   <sliding>k__BackingField: 0
   <enterSliding>k__BackingField: 1
+  drawGUI: 0
+  fontSize: 0
   currentLook: {x: 0, y: 0}
   _rotationSpeed: 180
   StopLook:

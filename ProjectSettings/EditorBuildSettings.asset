@@ -18,6 +18,6 @@ EditorBuildSettings:
     path: Assets/_Sources/Scenes/SebTest/multiplayer test.unity
     guid: cd433914d23bd6c45ac65e38a73f2beb
   - enabled: 0
-    path: Assets/_Sources/Scenes/CamilleDevScene.unity
+    path: Assets/_Sources/Scenes/CamilleDev/GameplayDev.unity
     guid: e12309fb0471d014e9656950f58cd9d9
   m_configObjects: {}
