@@ -11,7 +11,6 @@ public class ThrowSystem : NetworkBehaviour
     [SerializeField] private BasePlayer _basePlayer;
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private LineRenderer _lineRenderer;
-    [SerializeField] private Slider _slider;
 
     [Header("Settings")]
     [SerializeField] private float _minThrowForce = 10f;

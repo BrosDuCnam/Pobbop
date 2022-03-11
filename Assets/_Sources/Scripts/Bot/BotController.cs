@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class BotController : Controller
 {
@@ -172,12 +173,17 @@ public class BotController : Controller
 
     #region Locomotion
 
-    public void GoTo(Vector3 destination, float strafeAccuracy = 0)
+    public void GoTo(GameObject destination, float strafeAccuracy = -1)
+    {
+        StartCoroutine(GoToCoroutine(() => destination.transform.position, strafeAccuracy));
+    }
+    
+    public void GoTo(Vector3 destination, float strafeAccuracy = -1)
     {
         StartCoroutine(GoToCoroutine(() => destination, strafeAccuracy));
     }
 
-    public void GoTo(Transform target, float strafeAccuracy = 0)
+    public void GoTo(Transform target, float strafeAccuracy = -1)
     {
         StartCoroutine(GoToCoroutine(() => target.position, strafeAccuracy));
     }
@@ -186,6 +192,9 @@ public class BotController : Controller
     {
         StopLocomotion.Invoke();
         
+        if (strafeAccuracy == -1) strafeAccuracy = Random.Range(0.3f, 1f);
+        
+
         NavMeshPath path = new NavMeshPath();
         destination = destinationFunc.Invoke();
         NavMesh.CalculatePath(transform.position, destination, NavMesh.AllAreas, path);
@@ -201,10 +210,8 @@ public class BotController : Controller
             tempDestination = corners[0];
             if (Vector3.Distance(transform.position, tempDestination) > 1f)
             {
-                Vector3 direction3D = transform.position - tempDestination;
+                Vector3 direction3D = transform.InverseTransformPoint(tempDestination);
                 Vector2 direction = new Vector2(direction3D.x, direction3D.z).normalized;
-
-                direction = Utils.RadianToVector2(Utils.Vector2ToRadian(direction) - (currentLook.x * Mathf.Deg2Rad));
                 
                 direction = Vector2.Lerp(Vector2.up, direction, strafeAccuracy);
 
