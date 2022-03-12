@@ -22,3 +22,5 @@ Assets/Resources is the folder to put all resources that need to be loaded in ru
 
 ### Added Components :
 - Input System
+- TextMeshPro
+- DOTWeen
