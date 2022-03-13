@@ -25,11 +25,11 @@ namespace UI
             CloseAllSubMenus(true);
         }
         
-        public void CloseAllSubMenus(bool closeAnimation)
+        public void CloseAllSubMenus(bool closeAnimation, GameObject exept = null)
         {
             foreach (var subMenu in subMenus)
             {
-                if (subMenu.activeSelf)
+                if (subMenu.activeSelf && subMenu != exept)
                 {
                     if (closeAnimation)
                         subMenu.transform.DOScale(0, 0.5f).SetEase(Ease.OutExpo)
@@ -52,7 +52,9 @@ namespace UI
         
         public void OpenSubMenu(GameObject subMenu, bool closeAnimation = false)
         {
-            CloseAllSubMenus(closeAnimation);
+            CloseAllSubMenus(closeAnimation, subMenu);
+            if (subMenu.activeSelf) return;
+            
             subMenu.SetActive(true);
             subMenu.transform.localScale = Vector3.zero;
             subMenu.transform.DOScale(1, 0.5f).SetEase(Ease.OutExpo);
@@ -80,6 +82,11 @@ namespace UI
             RotateTo(Direction.Left);
         }
         
+        public void RotateToRight()
+        {
+            RotateTo(Direction.Right);
+        }
+        
         public void RotateToFront()
         {
             RotateTo(Direction.Front);
@@ -87,7 +94,7 @@ namespace UI
         
         public void RotateTo(Direction direction)
         {
-            transform.DOLocalRotate(new Vector3(0, DirectionToAngle(direction), 0), 0.5f).SetEase(Ease.InOutQuad);
+            transform.DOLocalRotate(new Vector3(0, DirectionToAngle(direction), 0), 0.5f).SetEase(Ease.InOutQuint);
         }
         
         #endregion
