@@ -110,8 +110,8 @@ public class Controller : NetworkBehaviour
     {
         CalculateCam();
         UpdateAnimator();
-        Debug.Log("slide nerf : " + slideNerf);
-        Debug.Log("enter sliding : " + enterSliding);
+       // Debug.Log("slide nerf : " + slideNerf);
+       // Debug.Log("enter sliding : " + enterSliding);
         if (Time.time > slideNerf && slideNerf != 0) enterSliding = true;
 
     }

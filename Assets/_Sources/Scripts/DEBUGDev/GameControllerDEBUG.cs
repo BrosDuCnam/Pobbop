@@ -19,9 +19,9 @@ public class GameControllerDEBUG : MonoBehaviour
 
     public static void AddPlayer(BasePlayer player)
     {
-        foreach (BotPlayer bot in Instance._bots)
-        {
-            bot.fsmStateInfo.playerList.Add(player);
-        }
+       foreach (BotPlayer bot in Instance._bots) 
+       {
+           bot.fsmStateInfo.playerList.Add(player);
+       }
     }
 }
