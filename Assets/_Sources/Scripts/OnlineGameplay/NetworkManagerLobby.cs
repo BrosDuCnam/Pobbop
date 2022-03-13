@@ -23,7 +23,7 @@ public class NetworkManagerLobby : NetworkManager
         base.OnStartServer();
 
         OnAllPlayersSpawned += AllPlayerSpawned;
-        PlayerSpawnMove.PlayerSpawned += AddPlayerTransform;
+        PlayerSpawnSystem.PlayerSpawned += AddPlayerTransform;
         
         OnNetworkManagerSpawn?.Invoke();
         GenerateTeamAmount();

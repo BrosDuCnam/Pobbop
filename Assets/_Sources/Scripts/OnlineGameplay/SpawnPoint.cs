@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class SpawnPoint : MonoBehaviour
+public class SpawnPoint : NetworkBehaviour
 {
+    public static event Action<Transform> OnAddSpawnPoint; 
     private void Awake()
     {
         NetworkManagerLobby.OnNetworkManagerSpawn += AddSpawn;
@@ -14,6 +15,7 @@ public class SpawnPoint : MonoBehaviour
     
     private void AddSpawn()
     {
-        SpawnSystem.AddSpawnPoint(transform);
+        //SpawnSystem.instance.AddSpawnPoint(transform);
+        //OnAddSpawnPoint?.Invoke(transform);
     }
 }

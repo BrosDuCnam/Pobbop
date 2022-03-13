@@ -6,13 +6,18 @@ using UnityEngine;
 
 public class SpawnSystem : NetworkBehaviour
 {
-    public static List<Transform> SpawnPointsList = new List<Transform>();
+    public static SpawnSystem instance;
+    
+    [SerializeField] private List<Transform> SpawnPointsList = new List<Transform>();
 
     public Transform playerPrefab;
-
-    private static List<List<Transform>> teamTransformLists;
+    
+    [SyncVar] private List<List<Transform>> teamTransformLists = new List<List<Transform>>();
 
     private static List<List<NetworkConnection>> teamLists;
+
+    public static event Action<List<Transform>> onUpdateSpawnPoints;
+    public static event Action<List<List<Transform>>> onUpdateTeamTransformList; 
 
     /// <summary>
     /// Ce callback est apellé quand le serveur est crée
@@ -21,16 +26,33 @@ public class SpawnSystem : NetworkBehaviour
     {
         base.OnStartServer();
         NetworkManagerLobby.OnServerReadied += SetTeamList;
+        //RealPlayer.OnEliminated += PlayerEliminated;
+
     }
 
-    public static void AddSpawnPoint(Transform spawnPoint)
+    private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    
+    public void AddSpawnPoint(Transform spawnPoint)
+    {
+        print(SpawnPointsList.Count);
         SpawnPointsList.Add(spawnPoint);
     }
 
     private void SetTeamList(List<List<Transform>> transformTeamList)
     {
         teamTransformLists = transformTeamList;
+        onUpdateSpawnPoints?.Invoke(SpawnPointsList);
+        onUpdateTeamTransformList?.Invoke(teamTransformLists);
         SetTeamNumber();
     }
 
@@ -40,7 +62,7 @@ public class SpawnSystem : NetworkBehaviour
         {
             foreach (Transform player in teamTransformLists[i])
             {
-                player.GetComponent<RealPlayer>().teamNumber = i + 1;
+                player.GetComponent<PlayerSpawnSystem>().teamNumber = i + 1;
             }
         }
 
@@ -84,7 +106,7 @@ public class SpawnSystem : NetworkBehaviour
                 NetworkServer.Spawn(playerSpawned.gameObject, conn);
                 playerSpawned.gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
                 teamTransformLists[i].Add(playerSpawned);
-                playerSpawned.GetComponent<BasePlayer>().teamNumber = i + 1;
+               // playerSpawned.GetComponent<BasePlayer>().teamNumber = i + 1;
                 spawnIndex++;
             }
         }
@@ -99,95 +121,22 @@ public class SpawnSystem : NetworkBehaviour
             if (spawn.CompareTag(teamSpawnTag))
             {
                 startSpawnPoints.Add(spawn);
-                ;
             }
         }
 
         return startSpawnPoints;
     }
-
-    public static void Respawn(Transform player)
-    {
-        System.Random random = new System.Random();
-        Transform spawnPoint = SpawnPointsList[random.Next(0, SpawnPointsList.Count)];
-        player.position = spawnPoint.position;
-        player.rotation = spawnPoint.rotation;
-    }
     
-    public static void Respawn(Transform player, int teamNumber)
-    {
-        Transform spawnPoint = PickSpawnPoint(teamNumber);
-        player.position = spawnPoint.position;
-        player.rotation = spawnPoint.rotation;
-        PlayerAddTransform(player, teamNumber);
-    }
-
-    private static Transform PickSpawnPoint(int teamNumber)
-    {
-        List<Transform> allEnemies = GetAllEnemies(teamNumber);
-        List<Transform> allTm8 = GetAllTm8(teamNumber);
-        Transform spawnPoint = null;
-        float dist = 0f;
-        float n = 0f;
-        foreach (Transform spawn in SpawnPointsList)
-        {
-            n = CalculateDist(spawn, allEnemies, allTm8);
-            if (n >= dist)
-            {
-                dist = n;
-                spawnPoint = spawn;
-            }
-        }
-
-        return spawnPoint;
-    }
-
-    private static float CalculateDist(Transform spawnPoint, List<Transform> allEnemies, List<Transform> allTm8)
-    {
-        float distFinal = 0f;
-        foreach (Transform enemie in allEnemies)
-        {
-            distFinal += Vector3.Distance(spawnPoint.position, enemie.position) * 2;
-        }
-
-        foreach (Transform tm8 in allTm8)
-        {
-            distFinal -= Vector3.Distance(spawnPoint.position, tm8.position);
-        }
-
-        return distFinal;
-    }
-
-    private static List<Transform> GetAllEnemies(int teamNumber)
-    {
-        List<Transform> enemies = new List<Transform>();
-        for (int i = 0; i < teamTransformLists.Count; i++)
-        {
-            if (i != teamNumber - 1)
-            {
-                foreach (Transform t in teamTransformLists[i])
-                {
-                    enemies.Add(t);
-                }
-            }
-        }
-
-        return enemies;
-    }
-
-    private static List<Transform> GetAllTm8(int teamNumber)
-    {
-        return teamTransformLists[teamNumber - 1];
-    }
-
-    private static void PlayerAddTransform(Transform player, int teamNumber)
+    public void PlayerAddTransform(Transform player, int teamNumber)
     {
         teamTransformLists[teamNumber - 1].Add(player);
+        onUpdateTeamTransformList?.Invoke(teamTransformLists);
     }
 
-    public static void PlayerRemoveTransform(Transform player, int teamNumber)
+    public void PlayerRemoveTransform(Transform player, int teamNumber)
     {
         teamTransformLists[teamNumber - 1].Remove(player);
+        onUpdateTeamTransformList?.Invoke(teamTransformLists);
     }
 
 }

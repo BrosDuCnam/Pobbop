@@ -12,13 +12,17 @@ public class RealPlayer : BasePlayer
     [SerializeField] private Slider _chargingSlider;
     [Tooltip("Line renderer of charging curve")]
     [SerializeField] private LineRenderer _chargingCurveLineRenderer;
+
+    private PlayerSpawnSystem playerSpawnSystem;
     
     private new void Awake()
     {
         base.Awake();
         
-        //_healthSystem.OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
+        healthSystem.OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
         healthSystem.OnHealthChanged.AddListener(() => pickUpDropSystem.IsStone = true);
+
+        playerSpawnSystem = GetComponent<PlayerSpawnSystem>();
     }
 
     private void Start() //TODO: use by Camille to debug bot
@@ -109,18 +113,7 @@ public class RealPlayer : BasePlayer
     
     private void Eliminated()
     {
-        int playerTeamNumber = transform.GetComponent<BasePlayer>().teamNumber;
-        if (playerTeamNumber == 0)
-        {
-            SpawnSystem.Respawn(transform);
-        }
-        else
-        {
-            //int enemyTeam = _healthSystem.LastPlayerDamage.GetComponent<BasePlayer>().teamNumber;
-            //NetworkManagerLobby.AddPoint(enemyTeam);
-            SpawnSystem.PlayerRemoveTransform(transform, playerTeamNumber);
-            SpawnSystem.Respawn(transform, playerTeamNumber);
-        }
+        playerSpawnSystem.PlayerEliminated();
     }
     
     
