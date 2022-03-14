@@ -722,7 +722,7 @@ GameObject:
   - component: {fileID: 852052934866384312}
   - component: {fileID: 4851549814950247118}
   - component: {fileID: 2473069287776246993}
-  - component: {fileID: 6427819462879325372}
+  - component: {fileID: 203825059484621888}
   m_Layer: 0
   m_Name: FullPlayer
   m_TagString: Player
@@ -773,7 +773,7 @@ MonoBehaviour:
   - {fileID: -7195001543482771180}
   - {fileID: 290031660797357754}
   - {fileID: 2473069287776246993}
-  - {fileID: 6427819462879325372}
+  - {fileID: 203825059484621888}
   gameObjectsToActivate:
   - {fileID: 7670746751545592647}
   - {fileID: 303592693524014540}
@@ -1066,7 +1066,6 @@ MonoBehaviour:
   rigidbody: {fileID: 0}
   controller: {fileID: 0}
   Camera: {fileID: 0}
-  teamNumber: 0
   _drawChargingCurve: 1
   _targetImage: {fileID: 161273702623136940}
   _chargingSlider: {fileID: 2016044968919198667}
@@ -1410,16 +1409,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608d94de944bdcb459cf6115a228601f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6427819462879325372
+  syncMode: 0
+  syncInterval: 0.1
+  teamNumber: 0
+--- !u!114 &203825059484621888
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8797491869613382536}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b6c2da2db9374dada6761b5e35121c8, type: 3}
+  m_Script: {fileID: 11500000, guid: 2847438cb32896d40ad5089e04b490f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actions: {fileID: -944628639613478452, guid: 18c46e395e930d8499bc25aecdffa60d, type: 3}
