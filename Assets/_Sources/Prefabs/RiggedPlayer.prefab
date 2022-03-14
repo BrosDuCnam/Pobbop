@@ -637,7 +637,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _walkSpeed: 5
   runSpeed: 8
-  crouchSpeed: 2.5
+  _crouchSpeed: 2.5
   groundAcceleration: 20
   airSpeed: 3
   airAcceleration: 5
