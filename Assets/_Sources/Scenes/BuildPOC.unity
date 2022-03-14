@@ -1378,7 +1378,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  SpawnPointsList: []
+  SpawnPointsList:
+  - {fileID: 2104856194}
+  - {fileID: 794633373}
+  - {fileID: 784880539}
   playerPrefab: {fileID: 8797491869613382541, guid: 6c4731c7aef3fe44c8f33c50b038b697, type: 3}
 --- !u!114 &518905017
 MonoBehaviour:
