@@ -15,7 +15,7 @@ public class SpawnPoint : NetworkBehaviour
     
     private void AddSpawn()
     {
-        //SpawnSystem.instance.AddSpawnPoint(transform);
+        SpawnSystem.instance.AddSpawnPoint(transform);
         //OnAddSpawnPoint?.Invoke(transform);
     }
 }
