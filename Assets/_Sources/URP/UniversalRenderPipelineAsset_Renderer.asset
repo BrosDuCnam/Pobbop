@@ -15,15 +15,15 @@ MonoBehaviour:
   m_Active: 1
   settings:
     Event: 1000
-    blitMaterial: {fileID: 2100000, guid: 7ef2d01e838e22648926d383a4e989ae, type: 2}
+    blitMaterial: {fileID: 2100000, guid: 124d0e7c25ca0c746af9122eae734f14, type: 2}
     blitMaterialPassIndex: 0
     setInverseViewMatrix: 0
     requireDepthNormals: 0
-    srcType: 0
-    srcTextureId: 
+    srcType: 1
+    srcTextureId: _AfterPostProcessTexture
     srcTextureObject: {fileID: 0}
-    dstType: 0
-    dstTextureId: 
+    dstType: 1
+    dstTextureId: _AfterPostProcessTexture
     dstTextureObject: {fileID: 0}
     overrideGraphicsFormat: 0
     graphicsFormat: 4
