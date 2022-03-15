@@ -25,6 +25,7 @@ public class LobbyBrowser : SteamLobby
     {
         buttons.SetActive(false);
         lobbyList.SetActive(true);
+        content.GetComponent<LobbyListManager>().ClearLobbyUIList();
         base.StartJoinLobby();
     }
 
@@ -49,5 +50,10 @@ public class LobbyBrowser : SteamLobby
         base.OnLobbyEntered(callback);
         buttons.SetActive(false);
         lobbyList.SetActive(false);
+    }
+
+    public void RefreshLobby()
+    {
+        
     }
 }

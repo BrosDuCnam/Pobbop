@@ -22,8 +22,18 @@ public class LobbyListManager : MonoBehaviour
                 lobbyElement.lobbySteamID = (CSteamID) lobbyIDS[i].m_SteamID;
                 lobbyElement.SetLobbyName(lobbyName);
                 lobbyElement.SetPlayerCount(SteamMatchmaking.GetNumLobbyMembers((CSteamID) lobbyIDS[i].m_SteamID).ToString(),
-                    (SteamMatchmaking.GetLobbyMemberLimit((CSteamID) lobbyIDS[i].m_SteamID).ToString()));
+                    SteamMatchmaking.GetLobbyMemberLimit((CSteamID) lobbyIDS[i].m_SteamID).ToString());
             }
         }
     }
+
+    public void ClearLobbyUIList()
+    {
+        //Clear previous list
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+    }
+    
 }

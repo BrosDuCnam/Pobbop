@@ -689,7 +689,6 @@ MonoBehaviour:
   rigidbody: {fileID: 0}
   controller: {fileID: 0}
   Camera: {fileID: 0}
-  teamNumber: 0
   _drawChargingCurve: 1
   _targetImage: {fileID: 3760971874584597178}
   _chargingSlider: {fileID: 3312182408484959709}
@@ -754,7 +753,6 @@ MonoBehaviour:
   _basePlayer: {fileID: 0}
   _rigidbody: {fileID: 0}
   _lineRenderer: {fileID: 0}
-  _slider: {fileID: 3312182408484959709}
   _minThrowForce: 10
   _maxThrowForce: 35
   _maxChargeTime: 2.5
@@ -1036,7 +1034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.01
-  clientAuthority: 0
+  clientAuthority: 1
   animator: {fileID: 1486732123007837926}
 --- !u!1 &5553950938184964713
 GameObject:
