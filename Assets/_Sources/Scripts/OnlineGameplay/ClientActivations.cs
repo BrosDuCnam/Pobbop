@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class ClientActivations : NetworkBehaviour
 {
+    [Header("Behaviour to activate or deactivate if the player is the owner")]
     [SerializeField] private Behaviour[] behavioursToActivate;
     [SerializeField] private GameObject[] gameObjectsToActivate;
+    [SerializeField] private GameObject[] gameObjectsToDectivate;
 
     public override void OnStartAuthority()
     {
@@ -23,6 +25,14 @@ public class ClientActivations : NetworkBehaviour
             foreach (GameObject gameObject in gameObjectsToActivate)
             {
                 gameObject.SetActive(true);
+            }
+        }
+
+        if (gameObjectsToDectivate != null)
+        {
+            foreach (GameObject gameObject in gameObjectsToDectivate)
+            {
+                gameObject.SetActive(false);
             }
         }
     }

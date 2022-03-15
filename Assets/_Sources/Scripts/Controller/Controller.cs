@@ -5,6 +5,7 @@ using Mirror;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using DG.Tweening;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
@@ -81,6 +82,7 @@ public class Controller : NetworkBehaviour
 
     //Cam
     private Vector2 camAxis;
+    private float initialCamY;
 
     [HideInInspector] public Vector2 currentLook;
     
@@ -104,6 +106,7 @@ public class Controller : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         walkSpeed = _walkSpeed;
         crouchSpeed = _crouchSpeed;
+        initialCamY = camera.transform.position.y;
     }
     
     protected void Update()
@@ -183,6 +186,7 @@ public class Controller : NetworkBehaviour
 
     private void Crouch(Vector3 wishDir, float maxSpeed, float acceleration)
     {
+        CamCrouch(true);
         animCrouch = true;
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
         float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity);
@@ -233,6 +237,12 @@ public class Controller : NetworkBehaviour
         }
 
         jump = false;
+    }
+
+    private void CamCrouch(bool state)
+    {
+        if (state) camera.transform.DOLocalMoveY(initialCamY - 0.83f, 0.2f).SetEase(Ease.OutQuart);
+        else camera.transform.DOLocalMoveY(initialCamY, 0.2f).SetEase(Ease.OutQuart);
     }
 
     /// <summary>
@@ -505,6 +515,7 @@ public class Controller : NetworkBehaviour
         {
             sliding = false;
             animCrouch = false;
+            CamCrouch(false);
         }
     }
 
