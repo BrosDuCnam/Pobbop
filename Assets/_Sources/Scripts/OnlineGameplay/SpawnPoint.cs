@@ -6,16 +6,18 @@ using UnityEngine;
 
 public class SpawnPoint : NetworkBehaviour
 {
-    public static event Action<Transform> OnAddSpawnPoint; 
-    private void Awake()
+    public static event Action<Transform> OnAddSpawnPoint;
+
+    public override void OnStartServer()
     {
-        NetworkManagerLobby.OnNetworkManagerSpawn += AddSpawn;
+        base.OnStartServer();
+        
+        OnAddSpawnPoint?.Invoke(transform);
     }
-    
     
     private void AddSpawn()
     {
         //SpawnSystem.instance.AddSpawnPoint(transform);
-        //OnAddSpawnPoint?.Invoke(transform);
+        OnAddSpawnPoint?.Invoke(transform);
     }
 }

@@ -8,9 +8,10 @@ using UnityEngine.Serialization;
 public class PlayerSpawnSystem : NetworkBehaviour
 {
     public static event Action<Transform> PlayerSpawned;
-    
-    [SyncVar] private List<Transform> spawnPointsList = new List<Transform>();
-    [SyncVar] private List<List<Transform>> teamTransformLists = new List<List<Transform>>();
+    public static event Action GetSpawnPoints;
+
+    [SerializeField] [SyncVar] private List<Transform> spawnPointsList;
+    [SyncVar] private List<List<Transform>> teamTransformLists;
 
     [SyncVar] [HideInInspector] public int teamNumber = 0;
 
@@ -22,6 +23,11 @@ public class PlayerSpawnSystem : NetworkBehaviour
         PlayerSpawned?.Invoke(transform);
     }
 
+    private void Start()
+    {
+        GetSpawnPoints?.Invoke();
+    }
+    
     private void UpdateSpawnPoints(List<Transform> spawnList)
     {
         spawnPointsList = spawnList;
@@ -40,7 +46,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
         }
         else
         {
-            SpawnSystem.instance.PlayerRemoveTransform(transform, teamNumber); 
+            //SpawnSystem.instance.PlayerRemoveTransform(transform, teamNumber); 
             Respawn(transform, teamNumber);
         }
     }
@@ -58,7 +64,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
         Transform spawnPoint = PickSpawnPoint(teamNumber);
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
-        SpawnSystem.instance.PlayerAddTransform(player, teamNumber);
+        //SpawnSystem.instance.PlayerAddTransform(player, teamNumber);
     }
 
     private Transform PickSpawnPoint(int teamNumber)

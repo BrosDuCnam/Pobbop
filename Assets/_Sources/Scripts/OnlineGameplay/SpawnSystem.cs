@@ -6,18 +6,17 @@ using UnityEngine;
 
 public class SpawnSystem : NetworkBehaviour
 {
-    public static SpawnSystem instance;
-    
     [SerializeField] private List<Transform> SpawnPointsList = new List<Transform>();
 
-    public Transform playerPrefab;
+    private Transform playerPrefab;
     
     [SyncVar] private List<List<Transform>> teamTransformLists = new List<List<Transform>>();
 
     private static List<List<NetworkConnection>> teamLists;
 
     public static event Action<List<Transform>> onUpdateSpawnPoints;
-    public static event Action<List<List<Transform>>> onUpdateTeamTransformList; 
+    public static event Action<List<List<Transform>>> onUpdateTeamTransformList;
+    
 
     /// <summary>
     /// Ce callback est apellé quand le serveur est crée
@@ -26,20 +25,19 @@ public class SpawnSystem : NetworkBehaviour
     {
         base.OnStartServer();
         NetworkManagerLobby.OnServerReadied += SetTeamList;
+        PlayerSpawnSystem.GetSpawnPoints += GetSpawnPointList;
         //RealPlayer.OnEliminated += PlayerEliminated;
 
     }
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
+        SpawnPoint.OnAddSpawnPoint += AddSpawnPoint;
+    }
+
+    public void GetSpawnPointList()
+    {
+        onUpdateSpawnPoints?.Invoke(SpawnPointsList);
     }
     
     public void AddSpawnPoint(Transform spawnPoint)
