@@ -90,8 +90,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - BorderSize: 0
-    - PosX: -5
-    - PosY: 5
+    - PosX: -0.7932171
+    - PosY: -3.5682955
     - Rotation: 0
     - SizeX: 0
     - SizeY: 0
@@ -123,7 +123,7 @@ Material:
     - _ZWrite: 1
     - ballAngle: 0
     m_Colors:
-    - BorderColor: {r: 1, g: 0, b: 0, a: 1}
+    - BorderColor: {r: 0, g: 0, b: 1, a: 1}
     - Vector2_57f3923b6b8d4ce8af86a87ef35ab309: {r: 16, g: 9, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
