@@ -241,8 +241,7 @@ public class Controller : NetworkBehaviour
 
     private void CamCrouch(bool state)
     {
-        if (state) camera.transform.DOLocalMoveY(initialCamY - 0.83f, 0.2f).SetEase(Ease.OutQuart);
-        else camera.transform.DOLocalMoveY(initialCamY, 0.2f).SetEase(Ease.OutQuart);
+
     }
 
     /// <summary>
