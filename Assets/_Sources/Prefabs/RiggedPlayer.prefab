@@ -651,7 +651,7 @@ MonoBehaviour:
   speedFactToEnterSliding: 1.3
   verticalSpeedSlideMultiplier: 0.35
   slideAccelAngle: 10
-  slideBoost: 11
+  slideBoost: 12
   minSlidePause: 0.5
   slideDeceleration: 0.1
   crouchScale: 0.3
@@ -664,6 +664,8 @@ MonoBehaviour:
   sensX: 0.1
   sensY: 0.1
   _animator: {fileID: 1486732123007837926}
+  camCrouchOffset: 0.8
+  camCrouchSpeed: 7
   <isGrounded>k__BackingField: 0
   <run>k__BackingField: 0
   <jump>k__BackingField: 0

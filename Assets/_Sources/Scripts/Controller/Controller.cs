@@ -47,6 +47,8 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float sensX = 0.1f;
     [SerializeField] private float sensY = 0.1f;
     [SerializeField] protected Animator _animator;
+    [SerializeField] private float camCrouchOffset = 0.8f;
+    [SerializeField] private float camCrouchSpeed = 5;
     
     //Bools
     [field: SerializeField] public bool isGrounded { get; protected set; }
@@ -74,6 +76,7 @@ public class Controller : NetworkBehaviour
     private float crouchSpeed;
     private float lastJump;
     private bool _isThrowing;
+    private bool camCrouch;
 
     protected bool lurch;
     private float slideNerf;
@@ -82,7 +85,8 @@ public class Controller : NetworkBehaviour
 
     //Cam
     private Vector2 camAxis;
-    private float initialCamY;
+    private float camInitialLocalY;
+    
 
     [HideInInspector] public Vector2 currentLook;
     
@@ -106,13 +110,14 @@ public class Controller : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         walkSpeed = _walkSpeed;
         crouchSpeed = _crouchSpeed;
-        initialCamY = camera.transform.position.y;
+        camInitialLocalY = camera.transform.localPosition.y;
     }
     
     protected void Update()
     {
         CalculateCam();
         UpdateAnimator();
+        CamCrouch();
        // Debug.Log("slide nerf : " + slideNerf);
        // Debug.Log("enter sliding : " + enterSliding);
         if (Time.time > slideNerf && slideNerf != 0) enterSliding = true;
@@ -186,7 +191,6 @@ public class Controller : NetworkBehaviour
 
     private void Crouch(Vector3 wishDir, float maxSpeed, float acceleration)
     {
-        CamCrouch(true);
         animCrouch = true;
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
         float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity);
@@ -239,9 +243,22 @@ public class Controller : NetworkBehaviour
         jump = false;
     }
 
-    private void CamCrouch(bool state)
+    private void CamCrouch()
     {
-
+        if (animCrouch)
+        {
+            if (camera.transform.localPosition.y > camInitialLocalY - camCrouchOffset)
+            {
+                camera.transform.position += Vector3.down * camCrouchSpeed * Time.deltaTime;
+            }
+        }
+        else
+        {
+            if (camera.transform.localPosition.y < camInitialLocalY)
+            {
+                camera.transform.position -= Vector3.down * camCrouchSpeed * Time.deltaTime;
+            }
+        }
     }
 
     /// <summary>
@@ -514,7 +531,6 @@ public class Controller : NetworkBehaviour
         {
             sliding = false;
             animCrouch = false;
-            CamCrouch(false);
         }
     }
 
