@@ -14,8 +14,8 @@ public class SpawnSystem : NetworkBehaviour
 
     private static List<List<NetworkConnection>> teamLists;
 
-    public static event Action<List<Transform>> onUpdateSpawnPoints;
-    public static event Action<List<List<Transform>>> onUpdateTeamTransformList;
+    public static event Action<List<Transform>> OnUpdateSpawnPoints;
+    public static event Action<List<List<Transform>>> OnUpdateTeamTransformList;
     
 
     /// <summary>
@@ -26,8 +26,8 @@ public class SpawnSystem : NetworkBehaviour
         base.OnStartServer();
         NetworkManagerLobby.OnServerReadied += SetTeamList;
         PlayerSpawnSystem.GetSpawnPoints += GetSpawnPointList;
-        //RealPlayer.OnEliminated += PlayerEliminated;
-
+        PlayerSpawnSystem.OnAddPlayerTransform += PlayerAddTransform;
+        PlayerSpawnSystem.OnRemovePlayerTransform += PlayerRemoveTransform;
     }
 
     private void Awake()
@@ -35,22 +35,21 @@ public class SpawnSystem : NetworkBehaviour
         SpawnPoint.OnAddSpawnPoint += AddSpawnPoint;
     }
 
-    public void GetSpawnPointList()
+    private void GetSpawnPointList()
     {
-        onUpdateSpawnPoints?.Invoke(SpawnPointsList);
+        OnUpdateSpawnPoints?.Invoke(SpawnPointsList);
     }
     
-    public void AddSpawnPoint(Transform spawnPoint)
+    private void AddSpawnPoint(Transform spawnPoint)
     {
-        print(SpawnPointsList.Count);
         SpawnPointsList.Add(spawnPoint);
     }
 
     private void SetTeamList(List<List<Transform>> transformTeamList)
     {
         teamTransformLists = transformTeamList;
-        onUpdateSpawnPoints?.Invoke(SpawnPointsList);
-        onUpdateTeamTransformList?.Invoke(teamTransformLists);
+        OnUpdateSpawnPoints?.Invoke(SpawnPointsList);
+        OnUpdateTeamTransformList?.Invoke(teamTransformLists);
         SetTeamNumber();
     }
 
@@ -128,13 +127,13 @@ public class SpawnSystem : NetworkBehaviour
     public void PlayerAddTransform(Transform player, int teamNumber)
     {
         teamTransformLists[teamNumber - 1].Add(player);
-        onUpdateTeamTransformList?.Invoke(teamTransformLists);
+        OnUpdateTeamTransformList?.Invoke(teamTransformLists);
     }
 
     public void PlayerRemoveTransform(Transform player, int teamNumber)
     {
         teamTransformLists[teamNumber - 1].Remove(player);
-        onUpdateTeamTransformList?.Invoke(teamTransformLists);
+        OnUpdateTeamTransformList?.Invoke(teamTransformLists);
     }
 
 }

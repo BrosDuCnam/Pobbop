@@ -9,16 +9,18 @@ public class PlayerSpawnSystem : NetworkBehaviour
 {
     public static event Action<Transform> PlayerSpawned;
     public static event Action GetSpawnPoints;
+    public static event Action<Transform, int> OnAddPlayerTransform;
+    public static event Action<Transform, int> OnRemovePlayerTransform;
 
     [SerializeField] [SyncVar] private List<Transform> spawnPointsList;
     [SyncVar] private List<List<Transform>> teamTransformLists;
 
-    [SyncVar] [HideInInspector] public int teamNumber = 0;
+    [SyncVar] public int teamNumber = 0;
 
     private void Awake()
     {
-        SpawnSystem.onUpdateSpawnPoints += UpdateSpawnPoints;
-        SpawnSystem.onUpdateTeamTransformList += UpdateTransformTeam;
+        SpawnSystem.OnUpdateSpawnPoints += UpdateSpawnPoints;
+        SpawnSystem.OnUpdateTeamTransformList += UpdateTransformTeam;
         
         PlayerSpawned?.Invoke(transform);
     }
@@ -42,16 +44,16 @@ public class PlayerSpawnSystem : NetworkBehaviour
     {
         if (teamNumber == 0)
         {
-           Respawn(transform);
+           RandomRespawn();
         }
         else
         {
-            //SpawnSystem.instance.PlayerRemoveTransform(transform, teamNumber); 
-            Respawn(transform, teamNumber);
+            OnRemovePlayerTransform?.Invoke(transform, teamNumber);
+            Respawn();
         }
     }
     
-    private void Respawn(Transform player)
+    private void RandomRespawn()
     {
         System.Random random = new System.Random();
         Transform spawnPoint = spawnPointsList[random.Next(0, spawnPointsList.Count)];
@@ -59,18 +61,18 @@ public class PlayerSpawnSystem : NetworkBehaviour
         transform.rotation = spawnPoint.rotation;
     }
     
-    private void Respawn(Transform player, int teamNumber)
+    private void Respawn()
     {
-        Transform spawnPoint = PickSpawnPoint(teamNumber);
+        Transform spawnPoint = PickSpawnPoint();
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
-        //SpawnSystem.instance.PlayerAddTransform(player, teamNumber);
+        OnAddPlayerTransform?.Invoke(transform, teamNumber);
     }
 
-    private Transform PickSpawnPoint(int teamNumber)
+    private Transform PickSpawnPoint()
     {
-        List<Transform> allEnemies = GetAllEnemies(teamNumber);
-        List<Transform> allTm8 = GetAllTm8(teamNumber);
+        List<Transform> allEnemies = GetAllEnemies();
+        List<Transform> allTm8 = GetAllTm8();
         print("enemies" + allEnemies.Count);
         print("tm8" + allTm8.Count);
         Transform spawnPoint = null;
@@ -104,7 +106,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
         return distFinal;
     }
 
-    private List<Transform> GetAllEnemies(int teamNumber)
+    private List<Transform> GetAllEnemies()
     {
         List<Transform> enemies = new List<Transform>();
         for (int i = 0; i < teamTransformLists.Count; i++)
@@ -121,7 +123,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
         return enemies;
     }
 
-    private List<Transform> GetAllTm8(int teamNumber)
+    private List<Transform> GetAllTm8()
     {
         return teamTransformLists[teamNumber - 1];
     }
