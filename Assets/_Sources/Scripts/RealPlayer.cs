@@ -27,7 +27,7 @@ public class RealPlayer : BasePlayer
 
     private void Start() //TODO: use by Camille to debug bot
     {
-        GameControllerDEBUG.AddPlayer(this);
+        GameControllerDEBUG.AddPlayer(this); // May cause lag
     }
     
     private void Update()
