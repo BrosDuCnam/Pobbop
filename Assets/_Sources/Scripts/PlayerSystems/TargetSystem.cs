@@ -72,8 +72,9 @@ public class TargetSystem : NetworkBehaviour
                 }
             }
         }
-
-        WarnTargetedPlayer();
+        
+        if (basePlayer.HoldingObject)
+            WarnTargetedPlayer();
     }
 
     /// <summary>
