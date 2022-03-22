@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
+using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
@@ -49,6 +50,7 @@ public class Controller : NetworkBehaviour
     [SerializeField] protected Animator _animator;
     [SerializeField] private float camCrouchOffset = 0.8f;
     [SerializeField] private float camCrouchSpeed = 5;
+    
     
     //Bools
     [field: SerializeField] public bool isGrounded { get; protected set; }
@@ -162,7 +164,7 @@ public class Controller : NetworkBehaviour
         {
             Jump();
         }
-        
+
         // Calcucates the speed to apply to the given direction
         wishDir = wishDir.normalized;
         Vector3 speed = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -269,6 +271,7 @@ public class Controller : NetworkBehaviour
     /// <param name="acceleration"></param>
     private void AirStrafe(Vector3 wishDir, float maxSpeed, float acceleration)
     {
+        
         float projVel = Vector3.Dot(new Vector3(rb.velocity.x, 0f, rb.velocity.z), wishDir);
         float accelVel = acceleration * Time.deltaTime;
 
