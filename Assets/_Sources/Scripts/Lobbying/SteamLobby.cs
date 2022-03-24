@@ -30,7 +30,7 @@ public class SteamLobby : MonoBehaviour
     {
         if (!SteamManager.Initialized)
         {
-            Debug.Log("Can't access to steam networks");
+            Debug.Log("Can't access to steam networks, steam may be offline");
             return;
         }
         MakeInstance();
@@ -42,7 +42,6 @@ public class SteamLobby : MonoBehaviour
         lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
         lobbyListRetrieved = Callback<LobbyMatchList_t>.Create(OnLobbyListRetrieved);
         lobbyDataUpdated = Callback<LobbyDataUpdate_t>.Create(OnGetLobbyInfo);
-
     }
 
     protected void HostLobby(ELobbyType lobbyType, int maxPlayers)
@@ -113,6 +112,8 @@ public class SteamLobby : MonoBehaviour
         SteamMatchmaking.JoinLobby(lobbyId);
     }
     
+    
+
     void MakeInstance()
     {
         if (instance == null)

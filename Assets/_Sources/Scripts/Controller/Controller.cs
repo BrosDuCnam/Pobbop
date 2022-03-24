@@ -41,6 +41,7 @@ public class Controller : NetworkBehaviour
     [SerializeField] [Range(0, 1)] private float jumpNerfFactor = 1.5f;
     [SerializeField] private float jumpNerfResetTime = 0.5f;
     [SerializeField] [Range(0, 180)] private float lurchMaxAngle = 20;
+    [SerializeField] [Range(0, 1)] private float crouchColliderHeightMultiplier = 0.3f;
     
     
     [Header("Camera Settings")]
@@ -88,8 +89,11 @@ public class Controller : NetworkBehaviour
     //Cam
     private Vector2 camAxis;
     private float camInitialLocalY;
-    
 
+    private CapsuleCollider collider;
+    private float initialColHeight;
+    private Vector3 initialColCenter;
+    
     [HideInInspector] public Vector2 currentLook;
     
     //Animator
@@ -113,6 +117,9 @@ public class Controller : NetworkBehaviour
         walkSpeed = _walkSpeed;
         crouchSpeed = _crouchSpeed;
         camInitialLocalY = camera.transform.localPosition.y;
+        collider = gameObject.GetComponent<CapsuleCollider>();
+        initialColHeight = collider.height;
+        initialColCenter = collider.center;
     }
     
     protected void Update()
@@ -222,15 +229,14 @@ public class Controller : NetworkBehaviour
             Walk(wishDir, maxSpeed, acceleration);
             sliding = false;
         }
-
-        // Not working : needs fix (doesn't know if going up or down)
+        
         if (sliding)
         {
             //Slow down
             if (Vector3.Angle(Vector3.up, groundNormal) < slideAccelAngle)
             {
                 rb.velocity -= Vector3.Lerp(Vector3.zero, rb.velocity, Time.fixedDeltaTime * slideDeceleration); 
-                //Debug.Log("decelerate");
+                rb.AddForce(wishDir.normalized * 1, ForceMode.Acceleration);
             }
             if (jump) Jump();
         }
@@ -252,6 +258,8 @@ public class Controller : NetworkBehaviour
             if (camera.transform.localPosition.y > camInitialLocalY - camCrouchOffset)
             {
                 camera.transform.position += Vector3.down * camCrouchSpeed * Time.deltaTime;
+                collider.height = initialColHeight * crouchColliderHeightMultiplier;
+                collider.center = new Vector3(initialColCenter.x, initialColCenter.y * crouchColliderHeightMultiplier, initialColCenter.z);
             }
         }
         else
@@ -259,6 +267,8 @@ public class Controller : NetworkBehaviour
             if (camera.transform.localPosition.y < camInitialLocalY)
             {
                 camera.transform.position -= Vector3.down * camCrouchSpeed * Time.deltaTime;
+                collider.height = initialColHeight;
+                collider.center = initialColCenter;
             }
         }
     }

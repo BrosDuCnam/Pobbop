@@ -73,7 +73,7 @@ public class TargetSystem : NetworkBehaviour
             }
         }
         
-        if (basePlayer.HoldingObject)
+        if (basePlayer.IsCharging)
             WarnTargetedPlayer();
     }
 

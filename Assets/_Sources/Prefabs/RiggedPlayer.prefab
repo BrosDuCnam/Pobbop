@@ -467,9 +467,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.24607974
-  m_Height: 1.6751974
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.79322255, z: -0.0655424}
+  m_Center: {x: 0, y: 1, z: -0.0655424}
 --- !u!54 &5484164245318665624
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -662,6 +662,7 @@ MonoBehaviour:
   jumpNerfFactor: 0.65
   jumpNerfResetTime: 1.2
   lurchMaxAngle: 20
+  crouchColliderHeightMultiplier: 0.4
   camera: {fileID: 1008197578226024919}
   sensX: 0.1
   sensY: 0.1
@@ -973,9 +974,9 @@ MonoBehaviour:
   uiMat: {fileID: 2100000, guid: 124d0e7c25ca0c746af9122eae734f14, type: 2}
   cam: {fileID: 1008197578226024919}
   minSize: 7
-  sizeFact: 1.2
-  lengthSize: 1.66
-  displayFactor: 0.1
+  sizeFact: 1
+  lengthSize: 1.1
+  displayFactor: 0.13
   incomingBall: {fileID: 0}
   isTargeted: 0
 --- !u!114 &4458084024684211118

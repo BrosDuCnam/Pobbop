@@ -57,6 +57,10 @@ public class DirIndicatorHandler : MonoBehaviour
         //uiMat.SetFloat("Rotation", rotation);
     }
 
+    private bool corner;
+    float lerpFactX_D;
+    float lerpFactY_D;
+
     private void ClaculateUiPos()
     {
         Vector3 ballPos = incomingBall.position;
@@ -93,13 +97,22 @@ public class DirIndicatorHandler : MonoBehaviour
             if (ballOnScreen.y < 1 && ballOnScreen.y > 1 - displayFactor) 
             { lerpFactY = 1 - (1 - ballOnScreen.y) * (1 / displayFactor); }
             
+
             //For each corner
-            if (angleX >= 5 || angleX <= -5 && !(angleY < 5 - displayFactor * 5 && angleY > displayFactor * 5) ||
-                angleY >= 5 || angleY <= -5 && !(angleX < 5 - displayFactor * 5 && angleX > displayFactor * 5))
+            if ((lerpFactX != 1 && lerpFactY != 1) || 
+                (ballOnScreen.x >= 1 || ballOnScreen.x <= -1) && (ballOnScreen.y >= 1 || ballOnScreen.y <= -1))
             {
                 lerpFactX = 1;
                 lerpFactY = 1;
+                corner = true;
             }
+            else
+            {
+                corner = false;
+            }
+
+            lerpFactX_D = lerpFactX;
+            lerpFactY_D = lerpFactY;
         }
 
         if (ballOnScreen.z > 0)
@@ -121,12 +134,14 @@ public class DirIndicatorHandler : MonoBehaviour
         angleX = Mathf.Clamp(angleX, -5, 5);
         angleY = Mathf.Clamp(angleY, -5, 5);
 
+        //rotation for further graphics implementation
         rotation = Vector2.Angle(Vector2.up, new Vector2(angleX, angleY));
         if (Vector2.Angle(Vector2.right, new Vector2(angleX, angleY)) < 90)
             rotation = 360 - rotation;
+        
         sizeX = (minSize - Mathf.Abs(angleX * lengthSize)) * sizeFact * lerpFactX;
         sizeY = (minSize - Mathf.Abs(angleY * lengthSize)) * sizeFact * lerpFactY;
-        
+
     }
 
     private void newTest()
@@ -179,5 +194,7 @@ public class DirIndicatorHandler : MonoBehaviour
         guiStyle.fontSize = 30;
         GUILayout.Space(50);
         GUILayout.Label("x :" + angleX + " y : " + angleY, guiStyle);
+        GUILayout.Label("lerpFactx :" + lerpFactX_D + " lerpFactY : " + lerpFactY_D, guiStyle);
+        GUILayout.Label("corner :" + corner, guiStyle);
     }*/
 }
