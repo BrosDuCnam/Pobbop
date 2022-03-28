@@ -52,7 +52,12 @@ public class PlayerSpawnSystem : NetworkBehaviour
             Respawn();
         }
     }
-    
+
+    public override void OnStopAuthority()
+    {
+        print("stop " + transform);
+        base.OnStopAuthority();
+    }
     private void RandomRespawn()
     {
         System.Random random = new System.Random();

@@ -24,10 +24,11 @@ public class SpawnSystem : NetworkBehaviour
     public override void OnStartServer()
     {
         base.OnStartServer();
-        NetworkManagerLobby.OnServerReadied += SetTeamList;
+        NetworkManagerLobby.OnServerReadied += OnTeamsCreate;
         PlayerSpawnSystem.GetSpawnPoints += GetSpawnPointList;
         PlayerSpawnSystem.OnAddPlayerTransform += PlayerAddTransform;
         PlayerSpawnSystem.OnRemovePlayerTransform += PlayerRemoveTransform;
+        NetworkManagerLobby.OnUpdateTeamList += SetTeamList;
     }
 
     private void Awake()
@@ -45,12 +46,16 @@ public class SpawnSystem : NetworkBehaviour
         SpawnPointsList.Add(spawnPoint);
     }
 
+    private void OnTeamsCreate(List<List<Transform>> transformTeamList)
+    {
+        SetTeamList(transformTeamList);
+        SetTeamNumber();
+    }
+    
     private void SetTeamList(List<List<Transform>> transformTeamList)
     {
         teamTransformLists = transformTeamList;
-        OnUpdateSpawnPoints?.Invoke(SpawnPointsList);
         OnUpdateTeamTransformList?.Invoke(teamTransformLists);
-        SetTeamNumber();
     }
 
     private void SetTeamNumber()

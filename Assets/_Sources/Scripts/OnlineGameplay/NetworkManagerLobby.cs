@@ -8,8 +8,8 @@ public class NetworkManagerLobby : NetworkManager
     private System.Random random = new System.Random();
    
     public static event Action<List<List<Transform>>> OnServerReadied;
-    public static event Action OnNetworkManagerSpawn;
     private static event Action OnAllPlayersSpawned;
+    public static event Action<List<List<Transform>>> OnUpdateTeamList; 
 
     private List<NetworkConnection> playerList = new List<NetworkConnection>(); 
     private List<Transform> playerTransformList = new List<Transform>();
@@ -24,8 +24,7 @@ public class NetworkManagerLobby : NetworkManager
 
         OnAllPlayersSpawned += AllPlayerSpawned;
         PlayerSpawnSystem.PlayerSpawned += AddPlayerTransform;
-        
-        OnNetworkManagerSpawn?.Invoke();
+
         GenerateTeamAmount();
     }
 
@@ -39,6 +38,28 @@ public class NetworkManagerLobby : NetworkManager
         base.OnServerReady(conn);
         playerList.Add(conn);
     }
+    
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        base.OnServerDisconnect(conn);
+
+        print("disconnect");
+        playerList.Remove(conn);
+        for (int i = 0; i < teamLists.Count; i++)
+        {
+            foreach (Transform player in teamLists[i])
+            {
+                if (player.GetComponent<NetworkIdentity>().connectionToServer == conn)
+                {
+                    print(player);
+                    playerTransformList.Remove(player);
+                    teamLists[i].Remove(player);
+                    OnlineGameManager.RemoveTarget(player.gameObject);
+                    OnUpdateTeamList?.Invoke(teamLists);
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Cette fonction ajoute tous les joueurs du lobby dans des équipes aléatoirement
@@ -49,14 +70,15 @@ public class NetworkManagerLobby : NetworkManager
         int n = nbPlayers / nbTeams;
         List<Transform> removeList = new List<Transform>(playerTransformList);
         Transform player;
-        
-        for (int i = 0; i < playerList.Count; i++)
+
+        for (int i = 0; i < playerTransformList.Count; i++)
         {
             if (i % n == 0 && i != 0)
             {
                 teamNumber++;
             }
-            player = removeList[random.Next(0, removeList.Count - 1)];
+            int randomNb = random.Next(0, removeList.Count - 1);
+            player = removeList[randomNb];
             removeList.Remove(player);
             teamLists[teamNumber].Add(player);
         }
