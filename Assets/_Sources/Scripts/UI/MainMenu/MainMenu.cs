@@ -41,18 +41,25 @@ namespace UI
         
         public void OpenSubMenuAnimated(GameObject submenu)
         {
-            OpenSubMenu(submenu, true);
+            OpenSubMenu(submenu, true, true);
         }
         
         public void OpenSubMenu(GameObject submenu)
         {
-            OpenSubMenu(submenu, false);
+            OpenSubMenu(submenu, true, false);
+        }
+        
+        public void OpenSubMenuNoClose(GameObject submenu)
+        {
+            OpenSubMenu(submenu, false, true);
         }
 
         
-        public void OpenSubMenu(GameObject subMenu, bool closeAnimation = false)
+        public void OpenSubMenu(GameObject subMenu, bool closeOpenMenus, bool closeAnimation = false)
         {
-            CloseAllSubMenus(closeAnimation, subMenu);
+            if (closeOpenMenus)
+                CloseAllSubMenus(closeAnimation, subMenu);
+            
             if (subMenu.activeSelf) return;
             
             subMenu.SetActive(true);

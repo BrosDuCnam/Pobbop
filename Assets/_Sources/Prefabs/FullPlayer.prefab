@@ -694,6 +694,36 @@ Transform:
   m_Father: {fileID: 8797491869613382541}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8650421032748488439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6795277398538056933}
+  m_Layer: 0
+  m_Name: Targetter
+  m_TagString: Targetter
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6795277398538056933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8650421032748488439}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8797491869613382541}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8797491869613382536
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,6 +776,7 @@ Transform:
   - {fileID: 211056201565274657}
   - {fileID: 6394602264038289338}
   - {fileID: 6394368403785570069}
+  - {fileID: 6795277398538056933}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -777,6 +808,7 @@ MonoBehaviour:
   gameObjectsToActivate:
   - {fileID: 7670746751545592647}
   - {fileID: 303592693524014540}
+  gameObjectsToDectivate: []
 --- !u!33 &8797491869613382540
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1032,10 +1064,13 @@ MonoBehaviour:
   jumpNerfFactor: 1.5
   jumpNerfResetTime: 0.5
   lurchMaxAngle: 20
+  crouchColliderHeightMultiplier: 0.3
   camera: {fileID: 4319097413319860161}
   sensX: 0.1
   sensY: 0.1
   _animator: {fileID: 0}
+  camCrouchOffset: 0.8
+  camCrouchSpeed: 5
   <isGrounded>k__BackingField: 0
   <run>k__BackingField: 0
   <jump>k__BackingField: 0
@@ -1411,6 +1446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  spawnPointsList: []
   teamNumber: 0
 --- !u!114 &203825059484621888
 MonoBehaviour:

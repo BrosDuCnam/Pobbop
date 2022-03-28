@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Version
   m_EditorClassIdentifier: 
   major: 0
-  minor: 0
+  minor: 1
   patch: 0

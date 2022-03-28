@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: UITheme
   m_EditorClassIdentifier: 
   color: {r: 0, g: 0.6666667, b: 1, a: 1}
-  font: {fileID: 0}
+  font: {fileID: 11400000, guid: c1c684fa67192e046985df80d03cfc2b, type: 2}
   textColor: {r: 1, g: 1, b: 1, a: 1}
   outlineSize: 0
