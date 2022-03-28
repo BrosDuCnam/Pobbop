@@ -517,7 +517,6 @@ public class Controller : NetworkBehaviour
             _PovAnimator.SetFloat("speed", rb.velocity.magnitude);
             _PovAnimator.SetFloat("normalizedSpeed",  rb.velocity.magnitude / runSpeed);
             _PovAnimator.SetLayerWeight(2, _isThrowing ? 1 : 0);
-
         }
     }
 
