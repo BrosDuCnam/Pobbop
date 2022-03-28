@@ -48,7 +48,8 @@ public class Controller : NetworkBehaviour
     [SerializeField] public Camera camera;
     [SerializeField] private float sensX = 0.1f;
     [SerializeField] private float sensY = 0.1f;
-    [SerializeField] protected Animator _animator;
+    [SerializeField] protected Animator _TpsAnimator;
+    [SerializeField] protected Animator _PovAnimator;
     [SerializeField] private float camCrouchOffset = 0.8f;
     [SerializeField] private float camCrouchSpeed = 5;
     
@@ -125,7 +126,8 @@ public class Controller : NetworkBehaviour
     protected void Update()
     {
         CalculateCam();
-        UpdateAnimator();
+        UpdateTPSAnimator();
+        UpdatePOVAnimator();
         CamCrouch();
        // Debug.Log("slide nerf : " + slideNerf);
        // Debug.Log("enter sliding : " + enterSliding);
@@ -485,22 +487,36 @@ public class Controller : NetworkBehaviour
 
     #region Private Methods
 
-    private void UpdateAnimator()
+    private void UpdateTPSAnimator()
     {
-        if (_animator != null)
+        if (_TpsAnimator != null)
         {
             velX = Vector3.Dot(transform.right, rb.velocity) / _walkSpeed;
             velY = Vector3.Dot(transform.forward, rb.velocity) / _walkSpeed;
             velX = Mathf.Round(velX * 1000) / 1000;
             velY = Mathf.Round(velY * 1000) / 1000;
             
-            _animator.SetFloat("velX", velX);
-            _animator.SetFloat("velY", velY);
-            _animator.SetBool("slide", sliding);
-            _animator.SetBool("crouch", !sliding && animCrouch);
-            _animator.SetBool("isgrounded", isGrounded);
-            _animator.SetBool("jumping", animJump);
-            _animator.SetLayerWeight(1, _isThrowing ? 1 : 0);
+            _TpsAnimator.SetFloat("velX", velX);
+            _TpsAnimator.SetFloat("velY", velY);
+            _TpsAnimator.SetBool("slide", sliding);
+            _TpsAnimator.SetBool("crouch", !sliding && animCrouch);
+            _TpsAnimator.SetBool("isgrounded", isGrounded);
+            _TpsAnimator.SetBool("jumping", animJump);
+            _TpsAnimator.SetLayerWeight(1, _isThrowing ? 1 : 0);
+        }
+    }    
+    private void UpdatePOVAnimator()
+    {
+        if (_TpsAnimator != null)
+        {
+            _PovAnimator.SetBool("sprint", !sliding && rb.velocity.magnitude > walkSpeed);
+            _PovAnimator.SetBool("throwing", _isThrowing);
+            _PovAnimator.SetBool("grounded", isGrounded);
+            _PovAnimator.SetBool("sliding", sliding);
+            _PovAnimator.SetLayerWeight(1, player.IsHoldingObject ? 1 : 0);
+            _PovAnimator.SetFloat("speed", rb.velocity.magnitude);
+            _PovAnimator.SetFloat("normalizedSpeed",  rb.velocity.magnitude / runSpeed);
+            _PovAnimator.SetLayerWeight(2, _isThrowing ? 1 : 0);
         }
     }
 
