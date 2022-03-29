@@ -21,6 +21,7 @@ public class Controller : NetworkBehaviour
     private Vector3 groundNormal = Vector3.up;
     
     //Movement
+    [Header("Movement")]
     [SerializeField] private float _walkSpeed = 5f;
     [SerializeField] private float runSpeed = 8f;
     [SerializeField] private float _crouchSpeed = 2.5f;
@@ -48,8 +49,8 @@ public class Controller : NetworkBehaviour
     [SerializeField] public Camera camera;
     [SerializeField] private float sensX = 0.1f;
     [SerializeField] private float sensY = 0.1f;
-    [SerializeField] protected Animator _TpsAnimator;
-    [SerializeField] protected Animator _PovAnimator;
+    public Animator _TpsAnimator;
+    public Animator _PovAnimator;
     [SerializeField] private float camCrouchOffset = 0.8f;
     [SerializeField] private float camCrouchSpeed = 5;
     
@@ -81,6 +82,7 @@ public class Controller : NetworkBehaviour
     private float lastJump;
     private bool _isThrowing;
     private bool camCrouch;
+    private bool cancelThrow;
 
     protected bool lurch;
     private float slideNerf;
@@ -333,6 +335,7 @@ public class Controller : NetworkBehaviour
         rb.AddForce(force, ForceMode.VelocityChange);
     }
     
+    
     public bool IsThrowing
     {
         get => _isThrowing;
@@ -369,6 +372,7 @@ public class Controller : NetworkBehaviour
             gameObject.transform.localScale = new Vector3(1, 1, 1);
         }
     }
+
 
     #endregion
 
@@ -510,13 +514,15 @@ public class Controller : NetworkBehaviour
         if (_TpsAnimator != null)
         {
             _PovAnimator.SetBool("sprint", !sliding && rb.velocity.magnitude > walkSpeed);
-            _PovAnimator.SetBool("throwing", _isThrowing);
             _PovAnimator.SetBool("grounded", isGrounded);
             _PovAnimator.SetBool("sliding", sliding);
             _PovAnimator.SetLayerWeight(1, player.IsHoldingObject ? 1 : 0);
             _PovAnimator.SetFloat("speed", rb.velocity.magnitude);
             _PovAnimator.SetFloat("normalizedSpeed",  rb.velocity.magnitude / runSpeed);
-            _PovAnimator.SetLayerWeight(2, _isThrowing ? 1 : 0);
+            _PovAnimator.SetLayerWeight(2, player.IsCharging ? 1 : 0);
+            _PovAnimator.SetBool("charging", player.IsCharging);
+            _PovAnimator.SetBool("cancelThrow", cancelThrow);
+            cancelThrow = false;
         }
     }
 
@@ -540,6 +546,7 @@ public class Controller : NetworkBehaviour
         if (run)
         {
             player.CancelCharge();
+            cancelThrow = true;
         }
     }
 
@@ -586,6 +593,8 @@ public class Controller : NetworkBehaviour
             GUILayout.Label("slide : " + sliding, style );
             GUILayout.Label("crouch : " + (!sliding && crouch), style );
             GUILayout.Label("jump : " + animJump, style );
+            GUILayout.Label("Cancel Throw : " + cancelThrow, style );
+            GUILayout.Label("Charging : " + player.IsCharging, style );
             
         }
     }

@@ -77,7 +77,19 @@ public class PickUpDropSystem : NetworkBehaviour
         _pickupTriggerHandler.OnTriggerStayEvent.AddListener(OnColliderStay);
         CapsuleCollider sphereCollider = (CapsuleCollider) _pickupTriggerHandler.collider;
         sphereCollider.radius = _pickUpDistance;
+        OnPickUp.AddListener(ChangeBallLayer);
     }
+
+    private void ChangeBallLayer()
+    {
+        if (_pickableObject == null) return;
+        _pickableObject.gameObject.layer = _pickableObject.IsPicked ? 
+            LayerMask.NameToLayer("Always On Top") : 
+            LayerMask.NameToLayer("Default");
+    }
+    
+    
+
 
     private void Update()
     {

@@ -78,9 +78,12 @@ public class ThrowSystem : NetworkBehaviour
     {
         if (IsCharging && _basePlayer.IsHoldingObject)
         {
+            //For animator
             _basePlayer.controller.IsThrowing = false;
 
             if (IsCharging) IsCharging = false;
+            
+            _basePlayer.HoldingObject.layer = LayerMask.NameToLayer("Default");
             
             //Counts the charging time of the ball and converts it to the fore applied
             float chargeTime = Mathf.Clamp(Time.time - _startChargeTime, 0, _maxChargeTime);
