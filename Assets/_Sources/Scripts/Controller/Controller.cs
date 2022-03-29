@@ -155,10 +155,10 @@ public class Controller : NetworkBehaviour
         else
         {
             AirStrafe(dir, airSpeed, airAcceleration);
-            //Register vertical velocity to adapt the slide when finishing a jump (or fall)
-            RegisterFloatBuffer(yVelBuffer, rb.velocity.y, 3);
         }
         RotateCam();
+        //Register vertical velocity to adapt the slide when finishing a jump (or fall)
+        RegisterFloatBuffer(yVelBuffer, rb.velocity.y, 3);
     }
     
 
@@ -207,8 +207,8 @@ public class Controller : NetworkBehaviour
         animCrouch = true;
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
         float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity);
-        slideNerf = 0;
-        //TODO : upgrade slide system to unable sliding while walking and enable after jump (code is already below)
+        print(Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity));
+        slideNerf = 0;  //Reset the slide nerf
         //Check speed to know if enter sliding
         if (speedForSliding > _walkSpeed * speedFactToEnterSliding)
         {
@@ -222,7 +222,6 @@ public class Controller : NetworkBehaviour
                 //Adapt slide boost speed base on the angle we want to slide along
                 float groundAngle = (Vector3.Angle(Vector3.up, groundOnSlope) - 90) / 75;
                 slideForce *= 1 + groundAngle;
-                Debug.Log("ground angle :" + groundAngle);
                 rb.AddForce(slideForce, ForceMode.VelocityChange); 
                 enterSliding = false;
             }
@@ -517,8 +516,8 @@ public class Controller : NetworkBehaviour
             _PovAnimator.SetBool("grounded", isGrounded);
             _PovAnimator.SetBool("sliding", sliding);
             _PovAnimator.SetLayerWeight(1, player.IsHoldingObject ? 1 : 0);
-            _PovAnimator.SetFloat("speed", rb.velocity.magnitude);
-            _PovAnimator.SetFloat("normalizedSpeed",  rb.velocity.magnitude / runSpeed);
+            _PovAnimator.SetFloat("speed", sliding ? 0 : rb.velocity.magnitude);
+            _PovAnimator.SetFloat("normalizedSpeed",  sliding ? 0 : rb.velocity.magnitude / runSpeed);
             _PovAnimator.SetLayerWeight(2, player.IsCharging ? 1 : 0);
             _PovAnimator.SetBool("charging", player.IsCharging);
             _PovAnimator.SetBool("cancelThrow", cancelThrow);
