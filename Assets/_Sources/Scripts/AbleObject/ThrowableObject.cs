@@ -157,12 +157,12 @@ public class ThrowableObject : NetworkBehaviour
         float time = 0;
         float distance = Utils.BezierCurveDistance(origin, step, target.position, 10);
         float i = 1 / (distance / speed);
+        float lastDeltaTime = 0;
 
         Vector3 direction = (target.position - step);
         Vector3 lastPos = origin;
         while (time < 1 && ThrowState != ThrowState.Idle && !_stopThrow)
         {
-            Vector3 pos = transform.position;
             Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
             ApplyMovePosition(nextPos);
@@ -172,6 +172,8 @@ public class ThrowableObject : NetworkBehaviour
             time += (i * (curve.Evaluate(time * 3))) * Time.deltaTime; // TODO - Hacky fix for curve
             
             direction = nextPos - lastPos;
+            direction /= lastDeltaTime;
+            lastDeltaTime = Time.deltaTime;
             lastPos = nextPos;            
 
             yield return null;
@@ -192,8 +194,7 @@ public class ThrowableObject : NetworkBehaviour
     //[Command]
     private void ApplyThrowForce(Vector3 direction)
     {
-        _rigidbody.AddForce(direction * 100, ForceMode.VelocityChange);
-        Debug.DrawRay(_rigidbody.position, direction * 100, Color.red, 15);
+        _rigidbody.velocity = direction;
     }
 
     //fonction appelé dans la coroutine
