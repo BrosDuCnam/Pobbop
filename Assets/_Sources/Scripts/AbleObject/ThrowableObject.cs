@@ -57,7 +57,6 @@ public class ThrowableObject : NetworkBehaviour
     private void Update()
     {
         _poolPositions.Enqueue(transform.position);
-
         //print(ThrowState);
     }
 
@@ -161,12 +160,11 @@ public class ThrowableObject : NetworkBehaviour
 
         Vector3 direction = (target.position - step);
         Vector3 lastPos = origin;
-        
         while (time < 1 && ThrowState != ThrowState.Idle && !_stopThrow)
         {
+            Vector3 pos = transform.position;
             Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
-            
             ApplyMovePosition(nextPos);
             ApplyTorque(torqueDirection, time);
 
@@ -174,10 +172,10 @@ public class ThrowableObject : NetworkBehaviour
             time += (i * (curve.Evaluate(time * 3))) * Time.deltaTime; // TODO - Hacky fix for curve
             
             direction = nextPos - lastPos;
+            lastPos = nextPos;            
 
             yield return null;
         }
-        
         CmdWarnPlayer(target, false);
         
         Owner = null;
@@ -194,7 +192,8 @@ public class ThrowableObject : NetworkBehaviour
     //[Command]
     private void ApplyThrowForce(Vector3 direction)
     {
-        _rigidbody.AddForce(direction*50, ForceMode.Acceleration);
+        _rigidbody.AddForce(direction * 100, ForceMode.VelocityChange);
+        Debug.DrawRay(_rigidbody.position, direction * 100, Color.red, 15);
     }
 
     //fonction appelé dans la coroutine

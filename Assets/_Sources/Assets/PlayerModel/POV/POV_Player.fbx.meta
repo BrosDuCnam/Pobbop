@@ -203,7 +203,7 @@ ModelImporter:
       name: toss_side
       takeName: toss_side
       internalID: 0
-      firstFrame: 4
+      firstFrame: 3.6
       lastFrame: 17
       wrapMode: 0
       orientationOffsetY: 0
@@ -223,21 +223,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.14641745
-        functionName: EndThrow
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0
-        functionName: EndThrow
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

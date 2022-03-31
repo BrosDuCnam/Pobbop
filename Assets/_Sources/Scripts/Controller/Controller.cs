@@ -546,6 +546,7 @@ public class Controller : NetworkBehaviour
         {
             player.CancelCharge();
             cancelThrow = true;
+            walkSpeed = _walkSpeed;
         }
     }
 
@@ -594,7 +595,6 @@ public class Controller : NetworkBehaviour
             GUILayout.Label("jump : " + animJump, style );
             GUILayout.Label("Cancel Throw : " + cancelThrow, style );
             GUILayout.Label("Charging : " + player.IsCharging, style );
-            
         }
     }
 }
