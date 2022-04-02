@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -13,9 +14,10 @@ public class RealPlayer : BasePlayer
     [SerializeField] private Slider _chargingSlider;
     [Tooltip("Line renderer of charging curve")]
     [SerializeField] private LineRenderer _chargingCurveLineRenderer;
-
-    private PlayerSpawnSystem playerSpawnSystem;
     
+    
+    private PlayerSpawnSystem playerSpawnSystem;
+
     private new void Awake()
     {
         base.Awake();
@@ -130,6 +132,26 @@ public class RealPlayer : BasePlayer
     private void Eliminated()
     {
         playerSpawnSystem.PlayerEliminated();
+    }
+
+    public void ChangeName(string _name)
+    {
+        CmdChangeName(_name, gameObject);
+    }
+
+    [Command (requiresAuthority = false)]
+    private void CmdChangeName(string name, GameObject player)
+    {
+        print("cmdChangeName");
+        RpcChangeName(name, player);
+    }
+
+    [ClientRpc]
+    private void RpcChangeName(string name, GameObject player)
+    {
+        player.name = name;
+        print("name changed to " + name);
+
     }
     
     
