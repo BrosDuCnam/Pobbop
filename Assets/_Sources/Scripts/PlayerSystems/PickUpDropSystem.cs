@@ -62,8 +62,7 @@ public class PickUpDropSystem : NetworkBehaviour
         ball.GetComponent<NetworkIdentity>().RemoveClientAuthority();
         ball.GetComponent<NetworkIdentity>()
             .AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
-        print("changed authority");
-
+        //print("changed authority");
     }
     
     
@@ -133,14 +132,14 @@ public class PickUpDropSystem : NetworkBehaviour
     private void OnColliderStay(Collider other)
     {
         if (PickableObject != null) return; // If the player has an object in hand
-        
+        //print("AAAAAAAAAA");
         // If the object is not pickable
         PickableObject pickableObject = other.GetComponent<PickableObject>();
         if ((pickableObject == null) || pickableObject == PickableObject || !pickableObject.IsPickable) return;
-        
+        Debug.Log("BBBBBBBBBBBB", other.gameObject);
         ThrowableObject throwableObject = other.GetComponent<ThrowableObject>();
         if (throwableObject != null && throwableObject.ThrowState != ThrowState.Idle) return; //TODO - change condition 
-        
+        Debug.Log("CCCCCCCCCCCCCC - "+throwableObject.ThrowState, other.gameObject);
         if (_pickupMode == PickupMode.Auto)
         {
             PickableObject = pickableObject;
@@ -149,7 +148,6 @@ public class PickUpDropSystem : NetworkBehaviour
         {
             if (Utils.IsVisibleByCamera(pickableObject.gameObject, basePlayer.Camera))
             {
-                Debug.Log(throwableObject.ThrowState, throwableObject);
                 PickableObject = pickableObject;
             }
         }
