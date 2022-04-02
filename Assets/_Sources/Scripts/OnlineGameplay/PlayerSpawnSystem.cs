@@ -94,6 +94,8 @@ public class PlayerSpawnSystem : NetworkBehaviour
     {
         List<Transform> allEnemies = GetAllEnemies();
         List<Transform> allTm8 = GetAllTm8();
+        print("nb enemies " + allEnemies.Count);
+        print("nb tm8s" + allTm8.Count);
         Transform spawnPoint = null;
         float dist = 0f;
         float n = 0f;
