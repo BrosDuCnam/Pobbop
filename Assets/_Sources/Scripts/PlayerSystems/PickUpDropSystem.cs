@@ -57,7 +57,7 @@ public class PickUpDropSystem : NetworkBehaviour
         }
     }
 
-    [Command]
+    [Command (requiresAuthority = false)]
     private void CmdAssignAuthority(GameObject ball)
     {
         ball.GetComponent<NetworkIdentity>().RemoveClientAuthority();

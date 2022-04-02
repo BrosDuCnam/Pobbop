@@ -106,7 +106,7 @@ public class TargetSystem : NetworkBehaviour
         }
     }
     
-    [Command]
+    [Command (requiresAuthority = false)]
     private void CmdTargetPlayerWarn(GameObject player, bool targetState)
     {
         RpcTargetPlayerWarn(player, targetState);

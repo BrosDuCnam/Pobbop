@@ -105,7 +105,7 @@ public class ThrowableObject : NetworkBehaviour
         StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1), state));
     }
 
-    [Command]
+    [Command (requiresAuthority = false)]
     private void CmdWarnPlayer(Transform player, bool setBall)
     {
         WarnPlayer(player, setBall);
@@ -296,7 +296,7 @@ public class ThrowableObject : NetworkBehaviour
         controller.Punch(force);
     }
     
-    [Command]
+    [Command (requiresAuthority = false)]
     private void CmdChangeThrowState(ThrowState state)
     {
         RpcChangeThrowState(state);
