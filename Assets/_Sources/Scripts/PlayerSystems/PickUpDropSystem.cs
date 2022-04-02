@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using JetBrains.Annotations;
@@ -144,11 +145,13 @@ public class PickUpDropSystem : NetworkBehaviour
         {
             if (throwableObject.Owner == gameObject) return;
             
-            HealthSystem healthSystem = basePlayer.healthSystem;
-            Debug.Log("hit", healthSystem.gameObject);
-            IsStone = true;
-            healthSystem.TakeDamage(1, throwableObject.Owner); // TODO - change the damage
-
+            throwableObject.StopThrow(() =>
+            {
+                HealthSystem healthSystem = basePlayer.healthSystem;
+                Debug.Log("hit", healthSystem.gameObject);
+                IsStone = true;
+                healthSystem.TakeDamage(1, throwableObject.Owner); // TODO - change the damage
+            });
             return;
         }
         Debug.Log("CCCCCCCCCCCCCC - "+throwableObject.ThrowState, other.gameObject);
@@ -164,6 +167,7 @@ public class PickUpDropSystem : NetworkBehaviour
             }
         }
     }
+    
 
     /*
     private void OnTriggerEnter(Collider other)

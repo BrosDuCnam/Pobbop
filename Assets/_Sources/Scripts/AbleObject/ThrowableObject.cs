@@ -61,7 +61,18 @@ public class ThrowableObject : NetworkBehaviour
         //print(ThrowState);
     }
 
-
+    public void StopThrow(Action callback)
+    {
+        StartCoroutine(StopThorwCoroutine(callback));
+    }
+    
+    private IEnumerator StopThorwCoroutine(Action callback)
+    {
+        _stopThrow = true;
+        while (ThrowState != ThrowState.Idle) yield return null;
+        callback();
+    }
+    
     /// <summary>
     /// Function to throw the object.
     /// </summary>
