@@ -70,6 +70,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
     private void Respawn()
     {
         Transform spawnPoint = PickSpawnPoint();
+        print("Picked spawn " + spawnPoint);
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
         OnAddPlayerTransform?.Invoke(transform, teamNumber);
@@ -91,14 +92,13 @@ public class PlayerSpawnSystem : NetworkBehaviour
     {
         List<Transform> allEnemies = GetAllEnemies();
         List<Transform> allTm8 = GetAllTm8();
-        print("enemies" + allEnemies.Count);
-        print("tm8" + allTm8.Count);
         Transform spawnPoint = null;
         float dist = 0f;
         float n = 0f;
         foreach (Transform spawn in spawnPointsList)
         {
             n = CalculateDist(spawn, allEnemies, allTm8);
+            print("distance point " + n);
             if (n >= dist)
             {
                 dist = n;
@@ -113,11 +113,13 @@ public class PlayerSpawnSystem : NetworkBehaviour
         float distFinal = 0f;
         foreach (Transform enemie in allEnemies)
         {
+            print("enemie " + enemie);
             distFinal += Vector3.Distance(spawnPoint.position, enemie.position) * 2;
         }
 
         foreach (Transform tm8 in allTm8)
         {
+            print("tm8 " + tm8);
             distFinal -= Vector3.Distance(spawnPoint.position, tm8.position);
         }
 
@@ -126,6 +128,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
 
     private List<Transform> GetAllEnemies()
     {
+        print("Getting enemies");
         List<Transform> enemies = new List<Transform>();
         for (int i = 0; i < teamTransformLists.Count; i++)
         {
@@ -143,6 +146,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
 
     private List<Transform> GetAllTm8()
     {
+        print("getting tm8s");
         return teamTransformLists[teamNumber - 1];
     }
 }
