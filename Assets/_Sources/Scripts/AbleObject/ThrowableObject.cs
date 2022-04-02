@@ -15,7 +15,7 @@ public class ThrowableObject : NetworkBehaviour
     [SerializeField] private int _poolSize = 10;
     [SerializeField] private bool _reboundOnKill;
     
-    [SyncVar] private ThrowState _throwState = ThrowState.Idle;
+    private ThrowState _throwState = ThrowState.Idle;
     private Rigidbody _rigidbody;
     [CanBeNull] private GameObject _owner;
     LimitedQueue<Vector3> _poolPositions;
@@ -33,6 +33,7 @@ public class ThrowableObject : NetworkBehaviour
         set
         {
             if (_throwState == value) return;
+            CmdChangeThrowState(value);
             _throwState = value;
             OnStateChanged.Invoke();
         }
@@ -293,7 +294,18 @@ public class ThrowableObject : NetworkBehaviour
     {
         controller.Punch(force);
     }
-
+    
+    [Command]
+    private void CmdChangeThrowState(ThrowState state)
+    {
+        CmdChangeThrowState(state);
+    }
+    [ClientRpc]
+    private void RpcChangeThrowState(ThrowState state)
+    {
+        _throwState = state;
+    }
+    
     private void OnGUI()
     {
         GUIStyle style = new GUIStyle();
