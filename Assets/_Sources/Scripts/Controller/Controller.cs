@@ -207,7 +207,6 @@ public class Controller : NetworkBehaviour
         animCrouch = true;
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
         float speedForSliding = speed * Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity);
-        print(Mathf.Clamp(Mathf.Abs(GetFloatBuffValue(yVelBuffer) * verticalSpeedSlideMultiplier), 1, Mathf.Infinity));
         slideNerf = 0;  //Reset the slide nerf
         //Check speed to know if enter sliding
         if (speedForSliding > _walkSpeed * speedFactToEnterSliding)

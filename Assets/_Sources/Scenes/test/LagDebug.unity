@@ -807,6 +807,18 @@ PrefabInstance:
       propertyPath: nbPlayers
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4312244644458090683, guid: 869c98976c705834c8d0b84a725706af, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4312244644458090683, guid: 869c98976c705834c8d0b84a725706af, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4312244644458090683, guid: 869c98976c705834c8d0b84a725706af, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4312244644937903349, guid: 869c98976c705834c8d0b84a725706af, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
