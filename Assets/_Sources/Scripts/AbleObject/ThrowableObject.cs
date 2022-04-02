@@ -22,7 +22,7 @@ public class ThrowableObject : NetworkBehaviour
 
     public UnityEvent OnStateChanged;
     
-    private bool _stopThrow;
+    [SyncVar] private bool _stopThrow;
 
     /// <summary>
     /// Returns true if the object is currently being thrown.
