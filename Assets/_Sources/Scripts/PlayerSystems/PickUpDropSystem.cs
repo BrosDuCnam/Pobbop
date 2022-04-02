@@ -101,6 +101,7 @@ public class PickUpDropSystem : NetworkBehaviour
         }
 
         if (_timeToStone > 0) _timeToStone -= Time.deltaTime;
+        Debug.Log(IsStone, this);
     }
 
     /// <summary>
@@ -160,6 +161,7 @@ public class PickUpDropSystem : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (IsStone) return;
         if (PickableObject != null) return; // If the player has an object in hand
         
         // If the object is not pickable
