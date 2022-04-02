@@ -27,6 +27,11 @@ public class NetworkManagerLobby : NetworkManager
 
         GenerateTeamAmount();
     }
+    
+    public override void OnServerAddPlayer(NetworkConnection conn)
+    {
+        base.OnServerAddPlayer(conn);
+    }
 
 
     /// <summary>

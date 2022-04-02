@@ -511,7 +511,6 @@ public class Controller : NetworkBehaviour
     {
         if (_TpsAnimator != null)
         {
-            _PovAnimator.SetBool("sprint", !sliding && rb.velocity.magnitude > walkSpeed);
             _PovAnimator.SetBool("grounded", isGrounded);
             _PovAnimator.SetBool("sliding", sliding);
             _PovAnimator.SetLayerWeight(1, player.IsHoldingObject ? 1 : 0);
