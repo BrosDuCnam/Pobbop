@@ -145,6 +145,8 @@ public class ThrowSystem : NetworkBehaviour
             {
                 Vector3 direction = _basePlayer.Camera.transform.forward;
                 throwableObject.Throw(_basePlayer.gameObject, direction, force); // Throw the object in front of the camera
+
+                _basePlayer.pickUpDropSystem.IsStone = true;
             }
         }
     }
