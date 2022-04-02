@@ -32,11 +32,13 @@ public class PlayerSpawnSystem : NetworkBehaviour
     
     private void UpdateSpawnPoints(List<Transform> spawnList)
     {
+        print("update spawn list");
         spawnPointsList = spawnList;
     }
 
     private void UpdateTransformTeam(List<List<Transform>> teamList)
     {
+        print("transform lists");
         teamTransformLists = teamList;
     }
     

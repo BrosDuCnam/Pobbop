@@ -129,14 +129,16 @@ public class SpawnSystem : NetworkBehaviour
         return startSpawnPoints;
     }
     
-    public void PlayerAddTransform(Transform player, int teamNumber)
+    private void PlayerAddTransform(Transform player, int teamNumber)
     {
+        print("add player " + player + " team " + teamNumber);
         teamTransformLists[teamNumber - 1].Add(player);
         OnUpdateTeamTransformList?.Invoke(teamTransformLists);
     }
 
-    public void PlayerRemoveTransform(Transform player, int teamNumber)
+    private void PlayerRemoveTransform(Transform player, int teamNumber)
     {
+        print("remove player " + player + " team " + teamNumber);
         teamTransformLists[teamNumber - 1].Remove(player);
         OnUpdateTeamTransformList?.Invoke(teamTransformLists);
     }
