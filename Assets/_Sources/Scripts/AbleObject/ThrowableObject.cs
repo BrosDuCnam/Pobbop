@@ -17,7 +17,7 @@ public class ThrowableObject : NetworkBehaviour
     
     private ThrowState _throwState = ThrowState.Idle;
     private Rigidbody _rigidbody;
-    [CanBeNull] private GameObject _owner;
+    [CanBeNull] [SyncVar] private GameObject _owner;
     LimitedQueue<Vector3> _poolPositions;
 
     public UnityEvent OnStateChanged;
@@ -230,6 +230,8 @@ public class ThrowableObject : NetworkBehaviour
     /// <param name="other">The collision</param>
     private IEnumerator OnCollisionEnterCoroutine(Collision other)
     {
+        if (ThrowState == ThrowState.Idle) yield break;
+        
         GameObject owner = Owner;
         GameObject otherObject = other.gameObject;
         if (ThrowState != ThrowState.Idle)

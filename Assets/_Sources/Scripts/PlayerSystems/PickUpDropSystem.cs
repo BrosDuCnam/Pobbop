@@ -212,7 +212,7 @@ public class PickUpDropSystem : NetworkBehaviour
                 
                 // If the player is not in Manual mode or if the closest object is thrown (To catch the thrown object)
                 ThrowableObject throwableObject = closestPickableObject.GetComponent<ThrowableObject>();
-                if (_pickupMode == PickupMode.Manual && (throwableObject != null && throwableObject.ThrowState == ThrowState.Idle)) return;
+                if (_pickupMode != PickupMode.Manual && (throwableObject != null && throwableObject.ThrowState == ThrowState.Idle)) return;
                 
                 PickableObject = closestPickableObject;
                 PickableObject.PickUp();
