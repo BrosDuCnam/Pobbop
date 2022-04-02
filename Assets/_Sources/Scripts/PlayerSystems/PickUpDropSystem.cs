@@ -93,8 +93,9 @@ public class PickUpDropSystem : NetworkBehaviour
     {
         if (PickableObject != null)
         {
+            if (PickableObject.hasAuthority) PickableObject.transform.position = _pickUpPoint.position;
+
             //PickableObject.GetComponent<Rigidbody>().MovePosition(_pickUpPoint.position);
-            PickableObject.transform.position = _pickUpPoint.position;
             //PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
         }
 
@@ -145,11 +146,11 @@ public class PickUpDropSystem : NetworkBehaviour
         {
             if (throwableObject.Owner == gameObject) return;
             
+            IsStone = true;
             throwableObject.StopThrow(() =>
             {
                 HealthSystem healthSystem = basePlayer.healthSystem;
                 Debug.Log("hit", healthSystem.gameObject);
-                IsStone = true;
                 healthSystem.TakeDamage(1, throwableObject.Owner); // TODO - change the damage
             });
             return;
