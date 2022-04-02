@@ -40,7 +40,7 @@ public class NetworkManagerLobby : NetworkManager
 
         // instantiating a "Player" prefab gives it the name "Player(clone)"
         // => appending the connectionId is WAY more useful for debugging!
-        player.name = name;
+        CmdChangeName(player, name);
         print("changed name to " + player.name);
         NetworkServer.AddPlayerForConnection(conn, player);
     }
@@ -153,4 +153,16 @@ public class NetworkManagerLobby : NetworkManager
         GenerateTeams();
         OnServerReadied?.Invoke(teamLists);
     }
-}
+    
+    [Command]
+    private void CmdChangeName(GameObject player, string name)
+    {
+        RpcChangeName(player, name);
+    }
+    
+    [ClientRpc]
+    private void RpcChangeName(GameObject player, string name)
+    {
+        player.name = name;
+    }
+}   
