@@ -236,17 +236,18 @@ public class ThrowableObject : NetworkBehaviour
         {
             BasePlayer basePlayerParent = otherObject.GetComponentInParent<BasePlayer>();
             // If the player is the owner of the object
-            if (Owner != null && (otherObject == Owner || (basePlayerParent != null && basePlayerParent.gameObject == Owner))) yield return null;
+            if (Owner != null && (otherObject == Owner || (basePlayerParent != null && basePlayerParent.gameObject == Owner))) yield break;
             else
             {
                 if (ThrowState == ThrowState.FreeThrow) ThrowState = ThrowState.Idle;
                 else _stopThrow = true;
             }
         }
-
-        //while (ThrowState != ThrowState.Idle) yield return null; // Wait for the end of the throw
-
         HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
+        if (livingObject == null) yield break;
+
+        while (ThrowState != ThrowState.Idle) yield return null; // Wait for the end of the throw
+
         if (livingObject != null)
         {
             if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
@@ -298,7 +299,7 @@ public class ThrowableObject : NetworkBehaviour
     [Command]
     private void CmdChangeThrowState(ThrowState state)
     {
-        CmdChangeThrowState(state);
+        RpcChangeThrowState(state);
     }
     [ClientRpc]
     private void RpcChangeThrowState(ThrowState state)
