@@ -243,8 +243,8 @@ public class ThrowableObject : NetworkBehaviour
         {
             otherObject.GetComponent<PickUpDropSystem>().IsStone = true;
         }
-        
-        
+
+        StartCoroutine(ApplyCollision(owner, livingObject));
     }
 
     /// <summary>
