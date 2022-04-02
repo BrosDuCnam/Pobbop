@@ -154,15 +154,4 @@ public class NetworkManagerLobby : NetworkManager
         OnServerReadied?.Invoke(teamLists);
     }
     
-    [Command]
-    private void CmdChangeName(GameObject player, string name)
-    {
-        RpcChangeName(player, name);
-    }
-    
-    [ClientRpc]
-    private void RpcChangeName(GameObject player, string name)
-    {
-        player.name = name;
-    }
 }   
