@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -56,7 +57,14 @@ public class RealPlayer : BasePlayer
 
             Vector3 stepPosition = (Camera.transform.forward * multiplier) + Camera.transform.position;
 
-            Vector3[] positions = Utils.GetBezierCurvePositions(HoldingObject.transform.position, stepPosition, Target.transform.position, 30);
+
+            Transform targetPointTransform = Target.transform;
+            if (Target.transform.FindObjectsWithTag("Targetter").Count > 0)
+            {
+                targetPointTransform = Target.transform.FindObjectsWithTag("Targetter").First().transform;
+            }
+            
+            Vector3[] positions = Utils.GetBezierCurvePositions(HoldingObject.transform.position, stepPosition, targetPointTransform.position, 30);
             _chargingCurveLineRenderer.positionCount = positions.Length+1;
             _chargingCurveLineRenderer.SetPositions(positions);
             _chargingCurveLineRenderer.SetPosition(_chargingCurveLineRenderer.positionCount-1, Target.transform.position);
@@ -66,13 +74,21 @@ public class RealPlayer : BasePlayer
             _chargingCurveLineRenderer.enabled = false;
         }
     }
-        
+            
     private void UpdateTargetUI()
     {
         if (HasTarget)
         {
             Vector2 canvasSize = _targetImage.GetComponent<RectTransform>().sizeDelta;
-            Vector3 targetPosition = Camera.WorldToScreenPoint(Target.transform.position);
+            
+            Transform targetPointTransform = Target.transform;
+            if (Target.transform.FindObjectsWithTag("Targetter").Count > 0)
+            {
+                targetPointTransform = Target.transform.FindObjectsWithTag("Targetter").First().transform;
+            }
+            
+            
+            Vector3 targetPosition = Camera.WorldToScreenPoint(targetPointTransform.position);
 
             // TODO - Correct bug that the target image is not on edge of screen when player lokk behind the target
             Vector3 targetPositionInCanvas = new Vector2(targetPosition.x / canvasSize.x * 100,

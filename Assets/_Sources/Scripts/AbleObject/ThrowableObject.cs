@@ -133,7 +133,7 @@ public class ThrowableObject : NetworkBehaviour
     private IEnumerator ThrowEnumerator(GameObject player, Vector3 step, Transform target, float speed, float accuracy,
         AnimationCurve curve, ThrowState state = ThrowState.Thrown)
     {
-        ThrowState = ThrowState.Thrown;ThrowState = state;
+        ThrowState = state;
 
         Owner = player;
 
@@ -163,7 +163,10 @@ public class ThrowableObject : NetworkBehaviour
         Vector3 lastPos = origin;
         while (time < 1 && ThrowState != ThrowState.Idle && !_stopThrow)
         {
-            Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
+            Transform targetTransform = target;
+            if (target.transform.FindObjectsWithTag("Targetter").Count > 0) targetTransform = target.transform.FindObjectsWithTag("Targetter")[0].transform;
+            
+            Vector3 targetPos = Vector3.Lerp(originTargetPosition, targetTransform.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
             ApplyMovePosition(nextPos);
             ApplyTorque(torqueDirection, time);

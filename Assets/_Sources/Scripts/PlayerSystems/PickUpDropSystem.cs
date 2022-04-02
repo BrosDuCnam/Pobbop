@@ -43,9 +43,6 @@ public class PickUpDropSystem : NetworkBehaviour
         get => _pickableObject;
         set
         {
-            print("set pickable object");
-            
-            
             if(_pickableObject == value) return;
 
             if (_pickableObject != null) _pickableObject.IsPicked = false;
@@ -101,7 +98,6 @@ public class PickUpDropSystem : NetworkBehaviour
         }
 
         if (_timeToStone > 0) _timeToStone -= Time.deltaTime;
-        Debug.Log(IsStone, this);
     }
 
     /// <summary>

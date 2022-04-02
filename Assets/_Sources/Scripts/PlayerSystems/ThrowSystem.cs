@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Mirror;
 //using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -137,7 +138,7 @@ public class ThrowSystem : NetworkBehaviour
 
                 //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
                 float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
-
+                
                 throwableObject.Throw(_basePlayer.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
             }
             else
