@@ -1068,7 +1068,8 @@ MonoBehaviour:
   camera: {fileID: 4319097413319860161}
   sensX: 0.1
   sensY: 0.1
-  _animator: {fileID: 0}
+  _TpsAnimator: {fileID: 0}
+  _PovAnimator: {fileID: 0}
   camCrouchOffset: 0.8
   camCrouchSpeed: 5
   <isGrounded>k__BackingField: 0
@@ -1138,12 +1139,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _pickUpDistance: 1.5
+  _pickUpDistance: 3
   _pickupMode: 1
   _pickupTriggerHandler: {fileID: 4690314380442766159}
   _pickUpPoint: {fileID: 8067262303577883277}
   _pickableObject: {fileID: 0}
-  _stoneTime: 5
+  _stoneTime: 1.5
   basePlayer: {fileID: 0}
   OnPickUp:
     m_PersistentCalls:

@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class NetworkManagerLobby : NetworkManager
 {
     private System.Random random = new System.Random();
-   
-    public string name;
+
+    public string playerName;
     
     public static event Action<List<List<Transform>>> OnServerReadied;
     private static event Action OnAllPlayersSpawned;
@@ -40,9 +41,8 @@ public class NetworkManagerLobby : NetworkManager
 
         // instantiating a "Player" prefab gives it the name "Player(clone)"
         // => appending the connectionId is WAY more useful for debugging!
-        player.name = name;
-        print("changed name to " + player.name);
         NetworkServer.AddPlayerForConnection(conn, player);
+        player.GetComponent<RealPlayer>().ChangeName(playerName);
     }
     
     
@@ -153,4 +153,5 @@ public class NetworkManagerLobby : NetworkManager
         GenerateTeams();
         OnServerReadied?.Invoke(teamLists);
     }
-}
+    
+}   

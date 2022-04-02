@@ -250,7 +250,7 @@ public class ThrowableObject : NetworkBehaviour
         {
             if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
             {
-                Debug.Log("hit", otherObject);
+                Debug.Log("hit", other.gameObject);
                 livingObject.TakeDamage(1, _owner); // TODO - change the damage
 
                 if (otherObject.GetComponent<PickUpDropSystem>() != null)
