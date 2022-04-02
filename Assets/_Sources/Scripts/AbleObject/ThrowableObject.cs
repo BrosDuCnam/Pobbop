@@ -221,16 +221,7 @@ public class ThrowableObject : NetworkBehaviour
     /// <param name="other">The collision</param>
     private void OnCollisionEnter(Collision other)
     {
-        StartCoroutine(OnCollisionEnterCoroutine(other));
-    }
-
-    /// <summary>
-    /// Coroutine to stop the throw path.
-    /// </summary>
-    /// <param name="other">The collision</param>
-    private IEnumerator OnCollisionEnterCoroutine(Collision other)
-    {
-        if (ThrowState == ThrowState.Idle) yield break;
+        if (ThrowState == ThrowState.Idle) return;
         
         GameObject owner = Owner;
         GameObject otherObject = other.gameObject;
@@ -238,7 +229,8 @@ public class ThrowableObject : NetworkBehaviour
         {
             BasePlayer basePlayerParent = otherObject.GetComponentInParent<BasePlayer>();
             // If the player is the owner of the object
-            if (Owner != null && (otherObject == Owner || (basePlayerParent != null && basePlayerParent.gameObject == Owner))) yield break;
+            if (Owner != null && (otherObject == Owner ||
+                                  (basePlayerParent != null && basePlayerParent.gameObject == Owner))) return;
             else
             {
                 if (ThrowState == ThrowState.FreeThrow) ThrowState = ThrowState.Idle;
@@ -246,18 +238,29 @@ public class ThrowableObject : NetworkBehaviour
             }
         }
         HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
-        if (livingObject == null) yield break;
+        if (livingObject == null) return;
         if (otherObject.GetComponent<PickUpDropSystem>() != null)
+        {
             otherObject.GetComponent<PickUpDropSystem>().IsStone = true;
+        }
+        
+        
+    }
 
+    /// <summary>
+    /// Coroutine to stop the throw path.
+    /// </summary>
+    /// <param name="other">The collision</param>
+    private IEnumerator ApplyCollision(GameObject owner, HealthSystem receiverHealthSystem)
+    {
         while (ThrowState != ThrowState.Idle) yield return null; // Wait for the end of the throw
 
-        if (livingObject != null)
+        if (receiverHealthSystem != null)
         {
             if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
             {
-                Debug.Log("hit", other.gameObject);
-                livingObject.TakeDamage(1, _owner); // TODO - change the damage
+                Debug.Log("hit", receiverHealthSystem.gameObject);
+                receiverHealthSystem.TakeDamage(1, _owner); // TODO - change the damage
 
                 //Not working properly
                 /*if (otherObject.TryGetComponent(out BasePlayer otherPlayer))
