@@ -819,12 +819,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _pickUpDistance: 1.5
+  _pickUpDistance: 2
   _pickupMode: 1
   _pickupTriggerHandler: {fileID: 8582183557091153241}
   _pickUpPoint: {fileID: 2993412299723579490}
   _pickableObject: {fileID: 0}
-  _stoneTime: 5
+  _stoneTime: 1.5
   basePlayer: {fileID: 0}
   OnPickUp:
     m_PersistentCalls:
