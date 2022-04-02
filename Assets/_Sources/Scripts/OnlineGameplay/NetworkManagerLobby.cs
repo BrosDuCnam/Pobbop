@@ -7,6 +7,8 @@ public class NetworkManagerLobby : NetworkManager
 {
     private System.Random random = new System.Random();
    
+    public string name;
+    
     public static event Action<List<List<Transform>>> OnServerReadied;
     private static event Action OnAllPlayersSpawned;
     public static event Action<List<List<Transform>>> OnUpdateTeamList; 
@@ -30,9 +32,20 @@ public class NetworkManagerLobby : NetworkManager
     
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        base.OnServerAddPlayer(conn);
-    }
+        //base.OnServerAddPlayer(conn);
+        Transform startPos = GetStartPosition();
+        GameObject player = startPos != null
+            ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+            : Instantiate(playerPrefab);
 
+        // instantiating a "Player" prefab gives it the name "Player(clone)"
+        // => appending the connectionId is WAY more useful for debugging!
+        player.name = name;
+        print("changed name to " + player.name);
+        NetworkServer.AddPlayerForConnection(conn, player);
+    }
+    
+    
 
     /// <summary>
     /// Ce callback est appellé à chaque fois qu'un joueur ce connecte au serveur

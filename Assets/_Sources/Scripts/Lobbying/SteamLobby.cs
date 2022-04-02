@@ -13,7 +13,7 @@ public class SteamLobby : MonoBehaviour
     
     public static SteamLobby instance;
 
-    protected NetworkManager networkManager;
+    protected NetworkManagerLobby networkManager;
     protected const string HostAdressKey = "HostAdress";
     protected string lobbyName = "Default name";
     
@@ -35,7 +35,7 @@ public class SteamLobby : MonoBehaviour
         }
         MakeInstance();
         
-        networkManager = GetComponent<NetworkManager>();
+        networkManager = GetComponent<NetworkManagerLobby>();
 
         lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
@@ -86,6 +86,8 @@ public class SteamLobby : MonoBehaviour
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey,
             SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyJoinable(new CSteamID(callback.m_ulSteamIDLobby), true);
+        
+        networkManager.name = SteamFriends.GetPersonaName();
     }
 
     protected void SetLobbyName(string _lobbyName)
@@ -102,6 +104,8 @@ public class SteamLobby : MonoBehaviour
     {
         if (NetworkServer.active) {return;}
 
+        networkManager.name = SteamFriends.GetPersonaName();
+        
         string hostAdress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey);
         networkManager.networkAddress = hostAdress;
         networkManager.StartClient();
