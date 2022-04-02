@@ -293,7 +293,13 @@ public class ThrowableObject : NetworkBehaviour
     {
         controller.Punch(force);
     }
-    
+
+    private void OnGUI()
+    {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 50;
+        GUILayout.Label("ThrowState: " + ThrowState);
+    }
 }
 
 /// <summary>

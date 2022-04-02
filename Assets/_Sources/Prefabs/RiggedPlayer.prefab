@@ -758,7 +758,7 @@ MonoBehaviour:
   <crouch>k__BackingField: 0
   <sliding>k__BackingField: 0
   <enterSliding>k__BackingField: 1
-  drawGUI: 1
+  drawGUI: 0
   fontSize: 40
   currentLook: {x: 0, y: 0}
 --- !u!114 &3518688419760104894

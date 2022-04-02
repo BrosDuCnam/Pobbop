@@ -105,7 +105,7 @@ public class SteamLobby : MonoBehaviour
         if (NetworkServer.active) {return;}
 
         networkManager.playerName = SteamFriends.GetPersonaName();
-        
+
         string hostAdress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey);
         networkManager.networkAddress = hostAdress;
         networkManager.StartClient();

@@ -14,10 +14,11 @@ public class RealPlayer : BasePlayer
     [SerializeField] private Slider _chargingSlider;
     [Tooltip("Line renderer of charging curve")]
     [SerializeField] private LineRenderer _chargingCurveLineRenderer;
-    
-    
+
     private PlayerSpawnSystem playerSpawnSystem;
 
+    private string _name; 
+    
     private new void Awake()
     {
         base.Awake();
@@ -134,9 +135,10 @@ public class RealPlayer : BasePlayer
         playerSpawnSystem.PlayerEliminated();
     }
 
-    public void ChangeName(string _name)
+    public void ChangeName(string name)
     {
-        CmdChangeName(_name, gameObject);
+        _name = name;
+        CmdChangeName(name, gameObject);
     }
 
     [Command (requiresAuthority = false)]

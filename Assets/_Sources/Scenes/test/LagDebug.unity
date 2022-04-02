@@ -810,7 +810,7 @@ PrefabInstance:
     - target: {fileID: 4312244644056172843, guid: 869c98976c705834c8d0b84a725706af, type: 3}
       propertyPath: playerPrefab
       value: 
-      objectReference: {fileID: 8797491869613382536, guid: 6c4731c7aef3fe44c8f33c50b038b697, type: 3}
+      objectReference: {fileID: 5484164245318665630, guid: a3d76f4593941aa4d8dd8cf163d26999, type: 3}
     - target: {fileID: 4312244644458090683, guid: 869c98976c705834c8d0b84a725706af, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
