@@ -237,14 +237,7 @@ public class ThrowableObject : NetworkBehaviour
                 else _stopThrow = true;
             }
         }
-        HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
-        if (livingObject == null) return;
-        if (otherObject.GetComponent<PickUpDropSystem>() != null)
-        {
-            otherObject.GetComponent<PickUpDropSystem>().IsStone = true;
-        }
-
-        StartCoroutine(ApplyCollision(owner, livingObject));
+        //StartCoroutine(ApplyCollision(owner, livingObject));
     }
 
     /// <summary>

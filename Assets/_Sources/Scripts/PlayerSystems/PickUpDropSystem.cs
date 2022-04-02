@@ -140,7 +140,15 @@ public class PickUpDropSystem : NetworkBehaviour
         if ((pickableObject == null) || pickableObject == PickableObject || !pickableObject.IsPickable) return;
         Debug.Log("BBBBBBBBBBBB", other.gameObject);
         ThrowableObject throwableObject = other.GetComponent<ThrowableObject>();
-        if (throwableObject != null && throwableObject.ThrowState != ThrowState.Idle) return; //TODO - change condition 
+        if (throwableObject != null && throwableObject.ThrowState != ThrowState.Idle)
+        {
+            HealthSystem healthSystem = basePlayer.healthSystem;
+            Debug.Log("hit", healthSystem.gameObject);
+            IsStone = true;
+            healthSystem.TakeDamage(1, throwableObject.Owner); // TODO - change the damage
+
+            return;
+        }
         Debug.Log("CCCCCCCCCCCCCC - "+throwableObject.ThrowState, other.gameObject);
         if (_pickupMode == PickupMode.Auto)
         {
