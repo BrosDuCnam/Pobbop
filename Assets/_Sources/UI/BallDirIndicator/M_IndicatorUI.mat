@@ -89,9 +89,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - BorderSize: 0
-    - PosX: -0.00000029802322
-    - PosY: -0.5000609
+    - BorderSize: 0.2
+    - PosX: -2.146094
+    - PosY: 2.0504224
     - Rotation: 0
     - SizeX: 0
     - SizeY: 0
