@@ -50,8 +50,9 @@ public class PlayerSpawnSystem : NetworkBehaviour
         }
         else
         {
-            OnRemovePlayerTransform?.Invoke(transform, teamNumber);
-            Respawn();
+            RandomRespawn();
+            //OnRemovePlayerTransform?.Invoke(transform, teamNumber);
+            //Respawn();
         }
     }
 
