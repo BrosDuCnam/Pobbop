@@ -926,22 +926,6 @@ MonoBehaviour:
   playerName: 
   nbPlayers: 3
   nbTeams: 3
---- !u!114 &4312244645127933986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4312244645127933987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e8d6047e37646246a7109102729f5de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  filterLobbies: 1
-  buttons: {fileID: 0}
-  lobbyList: {fileID: 0}
-  content: {fileID: 0}
 --- !u!1 &4312244645127933987
 GameObject:
   m_ObjectHideFlags: 0
@@ -953,7 +937,6 @@ GameObject:
   - component: {fileID: 4312244645127933984}
   - component: {fileID: 4312244645127933990}
   - component: {fileID: 4312244645127933991}
-  - component: {fileID: 4312244645127933986}
   - component: {fileID: 4312244645127933985}
   m_Layer: 0
   m_Name: SteamJoin
