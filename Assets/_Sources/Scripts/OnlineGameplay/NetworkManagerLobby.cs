@@ -43,6 +43,11 @@ public class NetworkManagerLobby : NetworkManager
     {
         base.OnServerDisconnect(conn);
 
+        DisconectPlayer(conn);
+    }
+
+    private void DisconectPlayer(NetworkConnection conn)
+    {
         print("disconnect");
         playerList.Remove(conn);
         for (int i = 0; i < teamLists.Count; i++)
@@ -59,6 +64,13 @@ public class NetworkManagerLobby : NetworkManager
                 }
             }
         }
+    }
+
+    public override void OnStopHost()
+    {
+        base.OnStopHost();
+        
+        NetworkServer.DisconnectAll();
     }
 
     /// <summary>
