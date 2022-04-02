@@ -15,14 +15,14 @@ public class ThrowableObject : NetworkBehaviour
     [SerializeField] private int _poolSize = 10;
     [SerializeField] private bool _reboundOnKill;
     
-    private ThrowState _throwState = ThrowState.Idle;
+    [SyncVar] private ThrowState _throwState = ThrowState.Idle;
     private Rigidbody _rigidbody;
     [CanBeNull] private GameObject _owner;
     LimitedQueue<Vector3> _poolPositions;
 
     public UnityEvent OnStateChanged;
     
-    [SyncVar] private bool _stopThrow;
+    private bool _stopThrow;
 
     /// <summary>
     /// Returns true if the object is currently being thrown.
