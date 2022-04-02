@@ -247,6 +247,8 @@ public class ThrowableObject : NetworkBehaviour
         }
         HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
         if (livingObject == null) yield break;
+        if (otherObject.GetComponent<PickUpDropSystem>() != null)
+            otherObject.GetComponent<PickUpDropSystem>().IsStone = true;
 
         while (ThrowState != ThrowState.Idle) yield return null; // Wait for the end of the throw
 
@@ -256,9 +258,6 @@ public class ThrowableObject : NetworkBehaviour
             {
                 Debug.Log("hit", other.gameObject);
                 livingObject.TakeDamage(1, _owner); // TODO - change the damage
-
-                if (otherObject.GetComponent<PickUpDropSystem>() != null)
-                    otherObject.GetComponent<PickUpDropSystem>().IsStone = true;
 
                 //Not working properly
                 /*if (otherObject.TryGetComponent(out BasePlayer otherPlayer))

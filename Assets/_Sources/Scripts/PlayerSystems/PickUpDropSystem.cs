@@ -22,7 +22,7 @@ public class PickUpDropSystem : NetworkBehaviour
     [Header("Needed Components")]
     [SerializeField] private BasePlayer basePlayer;
     
-    private float _timeToStone = 0;
+    [SerializeField] private float _timeToStone = 0;
 
     public bool IsStone
     {
