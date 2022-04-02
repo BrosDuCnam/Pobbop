@@ -142,6 +142,8 @@ public class PickUpDropSystem : NetworkBehaviour
         ThrowableObject throwableObject = other.GetComponent<ThrowableObject>();
         if (throwableObject != null && throwableObject.ThrowState != ThrowState.Idle)
         {
+            if (throwableObject.Owner == gameObject) return;
+            
             HealthSystem healthSystem = basePlayer.healthSystem;
             Debug.Log("hit", healthSystem.gameObject);
             IsStone = true;
