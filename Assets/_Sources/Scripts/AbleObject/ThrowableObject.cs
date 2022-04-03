@@ -276,16 +276,12 @@ public class ThrowableObject : NetworkBehaviour
         }
     }
     
-    [Command(requiresAuthority = false)]
-    private void CmdPunchOpponent(Controller controller, Vector3 force)
+    
+    private void OnGUI()
     {
-        RpcPunchOpponent(controller, force);
-    }
-
-    [ClientRpc]
-    private void RpcPunchOpponent(Controller controller, Vector3 force)
-    {
-        controller.Punch(force);
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 50;
+        GUILayout.Label("ThrowState: " + ThrowState);
     }
     
 }

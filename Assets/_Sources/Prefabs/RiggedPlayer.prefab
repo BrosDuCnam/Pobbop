@@ -561,6 +561,7 @@ MonoBehaviour:
   - {fileID: 5484164245318665631}
   - {fileID: 3038639308991702786}
   - {fileID: 3606033307099082924}
+  - {fileID: 1494287561852803647}
   gameObjectsToActivate:
   - {fileID: 6664946926644106577}
   - {fileID: 3619699616637287386}
@@ -1166,7 +1167,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5484164245318665630}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 608d94de944bdcb459cf6115a228601f, type: 3}
   m_Name: 
