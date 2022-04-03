@@ -60,15 +60,18 @@ public class RealPlayer : BasePlayer
 
             multiplier = Mathf.Clamp(multiplier, throwSystem.minStepMultiplier, throwSystem.maxStepMultiplier);
 
-            Vector3 stepPosition = (Camera.transform.forward * multiplier) + Camera.transform.position;
-
-
             Transform targetPointTransform = Target.transform;
             if (Target.transform.FindObjectsWithTag("Targetter").Count > 0)
             {
                 targetPointTransform = Target.transform.FindObjectsWithTag("Targetter").First().transform;
             }
             
+            // Calculate the step distance
+            float distance = Vector3.Distance(HoldingObject.transform.position, targetPointTransform.position) * multiplier;
+            multiplier = 1 / multiplier * distance;
+            
+            Vector3 stepPosition = (Camera.transform.forward * multiplier) + Camera.transform.position;
+
             Vector3[] positions = Utils.GetBezierCurvePositions(HoldingObject.transform.position, stepPosition, targetPointTransform.position, 30);
             _chargingCurveLineRenderer.positionCount = positions.Length+1;
             _chargingCurveLineRenderer.SetPositions(positions);
