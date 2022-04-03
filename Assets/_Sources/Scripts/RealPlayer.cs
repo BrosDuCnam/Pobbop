@@ -2,7 +2,6 @@
 using System.Linq;
 using Mirror;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -26,7 +25,7 @@ public class RealPlayer : BasePlayer
         
         healthSystem.OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
         healthSystem.OnHealthChanged.AddListener(() => pickUpDropSystem.IsStone = true);
-        
+
         playerSpawnSystem = GetComponent<PlayerSpawnSystem>();
     }
 
@@ -35,7 +34,6 @@ public class RealPlayer : BasePlayer
         GameControllerDEBUG.AddPlayer(this); // May cause lag
     }
     
-
     private void Update()
     {
         UpdateTargetUI();
@@ -60,19 +58,15 @@ public class RealPlayer : BasePlayer
 
             multiplier = Mathf.Clamp(multiplier, throwSystem.minStepMultiplier, throwSystem.maxStepMultiplier);
 
+            Vector3 stepPosition = (Camera.transform.forward * multiplier) + Camera.transform.position;
+
+
             Transform targetPointTransform = Target.transform;
             if (Target.transform.FindObjectsWithTag("Targetter").Count > 0)
             {
                 targetPointTransform = Target.transform.FindObjectsWithTag("Targetter").First().transform;
             }
             
-            // Calculate the step distance
-            float distance = Vector3.Distance(HoldingObject.transform.position, targetPointTransform.position);
-            multiplier = Utils.Map(throwSystem.maxStepMultiplier, throwSystem.minStepMultiplier, 1, 0, multiplier);
-            multiplier = distance * multiplier*5;
-            
-            Vector3 stepPosition = (Camera.transform.forward * multiplier) + Camera.transform.position;
-
             Vector3[] positions = Utils.GetBezierCurvePositions(HoldingObject.transform.position, stepPosition, targetPointTransform.position, 30);
             _chargingCurveLineRenderer.positionCount = positions.Length+1;
             _chargingCurveLineRenderer.SetPositions(positions);
@@ -91,11 +85,6 @@ public class RealPlayer : BasePlayer
             Vector2 canvasSize = _targetImage.GetComponent<RectTransform>().sizeDelta;
             
             Transform targetPointTransform = Target.transform;
-            if (Target.transform.FindObjectsWithTag("Targetter").Count > 0)
-            {
-                targetPointTransform = Target.transform.FindObjectsWithTag("Targetter").First().transform;
-            }
-            
             
             Vector3 targetPosition = Camera.WorldToScreenPoint(targetPointTransform.position);
 

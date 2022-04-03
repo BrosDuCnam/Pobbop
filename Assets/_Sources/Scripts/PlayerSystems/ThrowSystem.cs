@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using Mirror;
 //using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -23,8 +21,6 @@ public class ThrowSystem : NetworkBehaviour
     [SerializeField] public float minStepMultiplier = 2f;
     [SerializeField] public float maxStepMultiplier = 30f;
     [SerializeField] private bool _drawCurve = true;
-    
-    public UnityEvent OnThrow;
     
     private float _startChargeTime;
     private bool _isCharging;
@@ -121,7 +117,7 @@ public class ThrowSystem : NetworkBehaviour
         {
             ThrowableObject throwableObject = _basePlayer.HoldingObject.GetComponent<ThrowableObject>();
             if (throwableObject == null) return; // If the object is not throwable
-
+            
             _basePlayer.IsHoldingObject = false;
             if (_basePlayer.HasTarget) // If player has a target
             {
@@ -137,23 +133,17 @@ public class ThrowSystem : NetworkBehaviour
                 multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
                 multiplier = Mathf.Clamp(multiplier, minStepMultiplier, maxStepMultiplier);
 
-                float distance = Vector3.Distance(_basePlayer.transform.position, throwableObject.transform.position);
-                multiplier = Utils.Map(maxStepMultiplier, minStepMultiplier, 1, 0, multiplier);
-                multiplier = distance * multiplier * 5;
-                
                 Vector3 stepPosition = (_basePlayer.Camera.transform.forward * multiplier) + _basePlayer.Camera.transform.position;
 
                 //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
                 float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
-                
+
                 throwableObject.Throw(_basePlayer.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
             }
             else
             {
                 Vector3 direction = _basePlayer.Camera.transform.forward;
                 throwableObject.Throw(_basePlayer.gameObject, direction, force); // Throw the object in front of the camera
-
-                _basePlayer.pickUpDropSystem.IsStone = true;
             }
         }
     }
