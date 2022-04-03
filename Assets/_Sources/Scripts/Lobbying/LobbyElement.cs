@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Steamworks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LobbyElement : MonoBehaviour
 {
-    [SerializeField] private Text lobbyName;
-    [SerializeField] private Text lobbyPlayerCount;
+    [SerializeField] private TextMeshProUGUI lobbyName;
+    [SerializeField] private TextMeshProUGUI lobbyPlayerCount;
 
     public CSteamID lobbySteamID;
 

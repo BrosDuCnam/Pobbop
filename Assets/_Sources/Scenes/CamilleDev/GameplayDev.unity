@@ -2814,6 +2814,9 @@ MonoBehaviour:
   minStepMultiplier: 2
   maxStepMultiplier: 30
   _drawCurve: 1
+  OnThrow:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1809065273684129314
 GameObject:
   m_ObjectHideFlags: 0
@@ -3240,7 +3243,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4793044972622906754}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dde9414c573d42b2a5d1a37830612d13, type: 3}
   m_Name: 
@@ -3254,7 +3257,6 @@ MonoBehaviour:
   rigidbody: {fileID: 0}
   controller: {fileID: 0}
   Camera: {fileID: 0}
-  teamNumber: 0
   fsmStateInfo:
     PeriodUpdate: 0
     bot: {fileID: 0}
@@ -3311,10 +3313,14 @@ MonoBehaviour:
   jumpNerfFactor: 1.5
   jumpNerfResetTime: 0.5
   lurchMaxAngle: 20
+  crouchColliderHeightMultiplier: 0.3
   camera: {fileID: 243806851813425611}
   sensX: 1
   sensY: 1
-  _animator: {fileID: 0}
+  _TpsAnimator: {fileID: 0}
+  _PovAnimator: {fileID: 0}
+  camCrouchOffset: 0.8
+  camCrouchSpeed: 5
   <isGrounded>k__BackingField: 0
   <run>k__BackingField: 0
   <jump>k__BackingField: 0
@@ -3526,7 +3532,11 @@ MonoBehaviour:
   _pickableObject: {fileID: 0}
   _stoneTime: 5
   basePlayer: {fileID: 0}
+  _timeToStone: 0
   OnPickUp:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDrop:
     m_PersistentCalls:
       m_Calls: []
 --- !u!136 &5762887391949869697
@@ -3828,6 +3838,7 @@ MonoBehaviour:
   gameObjectsToActivate:
   - {fileID: 5972158742228309325}
   - {fileID: 4369682198098312134}
+  gameObjectsToDectivate: []
 --- !u!223 &8914445220155782612
 Canvas:
   m_ObjectHideFlags: 0
