@@ -105,7 +105,7 @@ public class ThrowableObject : NetworkBehaviour
         StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1), state));
     }
 
-    [Command]
+    [Command (requiresAuthority = false)]
     private void CmdWarnPlayer(Transform player, bool setBall)
     {
         //WarnPlayer(player, setBall);
