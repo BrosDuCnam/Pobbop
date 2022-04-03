@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Mirror;
 //using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -122,6 +123,12 @@ public class ThrowSystem : NetworkBehaviour
             if (_basePlayer.HasTarget) // If player has a target
             {
                 GameObject target = _basePlayer.Target;
+                
+                Transform targetPointTransform = target.transform;
+                if (targetPointTransform.transform.FindObjectsWithTag("Targetter").Count > 0)
+                {
+                    targetPointTransform = targetPointTransform.transform.FindObjectsWithTag("Targetter").First().transform;
+                }
                 //Sets the other player's ui handler to warn him of the incoming ball
                 if (target.TryGetComponent(out DirIndicatorHandler uiHandler))
                 {
@@ -138,7 +145,7 @@ public class ThrowSystem : NetworkBehaviour
                 //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
                 float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
 
-                throwableObject.Throw(_basePlayer.gameObject, stepPosition, target.transform, force, accuracy, _speedCurve); // Throw the object
+                throwableObject.Throw(_basePlayer.gameObject, stepPosition, targetPointTransform, force, accuracy, _speedCurve); // Throw the object
             }
             else
             {

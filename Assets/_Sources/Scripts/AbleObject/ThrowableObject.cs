@@ -239,10 +239,10 @@ public class ThrowableObject : NetworkBehaviour
                 else _stopThrow = true;
             }
         }
+        HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
 
         while (ThrowState != ThrowState.Idle) yield return null; // Wait for the end of the throw
 
-        HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
         if (livingObject != null)
         {
             if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity

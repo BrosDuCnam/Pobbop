@@ -85,6 +85,11 @@ public class RealPlayer : BasePlayer
             Vector2 canvasSize = _targetImage.GetComponent<RectTransform>().sizeDelta;
             
             Transform targetPointTransform = Target.transform;
+            if (Target.transform.FindObjectsWithTag("Targetter").Count > 0)
+            {
+                targetPointTransform = Target.transform.FindObjectsWithTag("Targetter").First().transform;
+            }
+            
             
             Vector3 targetPosition = Camera.WorldToScreenPoint(targetPointTransform.position);
 
