@@ -35,8 +35,8 @@ public class PickUpDropSystem : NetworkBehaviour
         }
     }
     
-    public UnityEvent OnPickUp;
-    public UnityEvent OnDrop;
+    public UnityEvent OnPickUp = new UnityEvent();
+    public UnityEvent OnDrop = new UnityEvent();
 
     /// <summary>
     /// Return the current PickableObject in hand, null if there is none
@@ -48,14 +48,23 @@ public class PickUpDropSystem : NetworkBehaviour
         {
             if(_pickableObject == value) return;
 
-            if (_pickableObject != null) _pickableObject.IsPicked = false;
+            if (_pickableObject != null && value == null)
+            {
+                OnDrop.Invoke();
+
+                print("Drop");
+                _pickableObject.IsPicked = false;
+            }
+            else if (_pickableObject == null && value != null)
+            {
+                OnPickUp.Invoke();
+                CmdAssignAuthority(value.gameObject);
+                
+                print("PickUp");
+                value.IsPicked = true;
+            }
+
             _pickableObject = value;
-            
-            if (_pickableObject != null) _pickableObject.IsPicked = true;
-            OnPickUp.Invoke();
-            
-            if (PickableObject != null)
-                CmdAssignAuthority(PickableObject.gameObject);
         }
     }
 
@@ -142,7 +151,7 @@ public class PickUpDropSystem : NetworkBehaviour
         // If the object is not pickable>
         PickableObject pickableObject = other.GetComponent<PickableObject>();
         if ((pickableObject == null) || pickableObject == PickableObject || !pickableObject.IsPickable) return;
-        Debug.Log("BBBBBBBBBBBB", other.gameObject);
+        //Debug.Log("BBBBBBBBBBBB", other.gameObject);
         ThrowableObject throwableObject = other.GetComponent<ThrowableObject>();
         if (throwableObject != null && throwableObject.ThrowState != ThrowState.Idle)
         {
@@ -157,7 +166,7 @@ public class PickUpDropSystem : NetworkBehaviour
             });
             return;
         }
-        Debug.Log("CCCCCCCCCCCCCC - "+throwableObject.ThrowState, other.gameObject);
+        //Debug.Log("CCCCCCCCCCCCCC - "+throwableObject.ThrowState, other.gameObject);
         if (_pickupMode == PickupMode.Auto)
         {
             PickableObject = pickableObject;

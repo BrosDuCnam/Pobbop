@@ -78,6 +78,18 @@ public class BasePlayer : NetworkBehaviour
         throwSystem.CancelThrow();
     }
 
+    [Command]
+    public void AssignAuthority(GameObject obj)
+    {
+        obj.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
+    }
+
+    [Command]
+    public void RemoveAuthority(GameObject obj)
+    {
+        obj.GetComponent<NetworkIdentity>().RemoveClientAuthority();
+    }
+    
     protected void Awake()
     {
         targetSystem = GetComponent<TargetSystem>();

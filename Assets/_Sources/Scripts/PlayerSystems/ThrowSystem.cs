@@ -121,9 +121,7 @@ public class ThrowSystem : NetworkBehaviour
         {
             ThrowableObject throwableObject = _basePlayer.HoldingObject.GetComponent<ThrowableObject>();
             if (throwableObject == null) return; // If the object is not throwable
-            
-            OnThrow.Invoke();
-            
+
             _basePlayer.IsHoldingObject = false;
             if (_basePlayer.HasTarget) // If player has a target
             {

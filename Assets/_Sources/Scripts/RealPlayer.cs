@@ -26,43 +26,15 @@ public class RealPlayer : BasePlayer
         
         healthSystem.OnHealthZero.AddListener(Eliminated); // On définit la fonction éliminer sur l'event OnHealthZero
         healthSystem.OnHealthChanged.AddListener(() => pickUpDropSystem.IsStone = true);
-
+        
         playerSpawnSystem = GetComponent<PlayerSpawnSystem>();
     }
 
     private void Start() //TODO: use by Camille to debug bot
     {
         GameControllerDEBUG.AddPlayer(this); // May cause lag
-        
-        pickUpDropSystem.OnPickUp.AddListener(() => HoldingStateChange(true));
-        pickUpDropSystem.OnDrop.AddListener(() => HoldingStateChange(false));
-        throwSystem.OnThrow.AddListener(() => HoldingStateChange(false));
-        
     }
-
-    [Command]
-    private void AssignAuthority(GameObject obj)
-    {
-        obj.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
-    }
-
-    [Command]
-    private void RemoveAuthority(GameObject obj)
-    {
-        obj.GetComponent<NetworkIdentity>().RemoveClientAuthority();
-    }
-
-    public void HoldingStateChange(bool isHolding)
-    {
-        if (isHolding)
-        {
-            AssignAuthority(HoldingObject);
-        }
-        else
-        {
-            RemoveAuthority(HoldingObject);
-        }
-    }
+    
 
     private void Update()
     {
