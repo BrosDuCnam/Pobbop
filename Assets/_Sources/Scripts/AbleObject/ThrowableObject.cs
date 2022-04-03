@@ -107,7 +107,7 @@ public class ThrowableObject : NetworkBehaviour
     [Command]
     private void CmdWarnPlayer(Transform player, bool setBall)
     {
-        WarnPlayer(player, setBall);
+        //WarnPlayer(player, setBall);
     }
 
     [ClientRpc]
@@ -190,6 +190,18 @@ public class ThrowableObject : NetworkBehaviour
         //GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
     }
     
+    public void BallCooldown(float cooldown)
+    {
+        PickableObject obj = GetComponent<PickableObject>();
+        if (obj != null) StartCoroutine(BallCooldownEnumerator(cooldown, obj));
+    }
+    private IEnumerator BallCooldownEnumerator(float cooldown, PickableObject obj)
+    {
+        obj.IsPickable = false;
+        yield return new WaitForSeconds(cooldown);
+        obj.IsPickable = true;
+    }
+
     //fonction appelé dans la coroutine
     //[Command]
     private void ApplyThrowForce(Vector3 direction)
@@ -237,6 +249,7 @@ public class ThrowableObject : NetworkBehaviour
             {
                 if (ThrowState == ThrowState.FreeThrow) ThrowState = ThrowState.Idle;
                 else _stopThrow = true;
+                BallCooldown(2);
             }
         }
         HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
