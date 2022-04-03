@@ -35,6 +35,7 @@ public class ThrowableObject : NetworkBehaviour
             if (_throwState == value) return;
             _throwState = value;
             OnStateChanged.Invoke();
+            CmdChangeThrowState(value);
         }
     }
     
@@ -231,6 +232,18 @@ public class ThrowableObject : NetworkBehaviour
     {
         StartCoroutine(OnCollisionEnterCoroutine(other));
     }
+    
+    [Command (requiresAuthority = false)]
+    private void CmdChangeThrowState(ThrowState state)
+    {
+        RpcChangeThrowState(state);
+    }
+    [ClientRpc]
+    private void RpcChangeThrowState(ThrowState state)
+    {
+        _throwState = state;
+    }
+    
 
     /// <summary>
     /// Coroutine to stop the throw path.
