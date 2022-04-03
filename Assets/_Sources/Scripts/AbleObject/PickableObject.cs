@@ -31,15 +31,23 @@ public class PickableObject : NetworkBehaviour
             _isPicked = value;
             //print(value);
             OnStateChanged.Invoke();
+            
+            IsPickable = !value;
         }
     }
+
+    private bool _isPickable = true;
 
     /// <summary>
     /// Returns true if object can be picked
     /// </summary>
     public bool IsPickable
     {
-        get => !_isPicked;
+        get => _isPickable;
+        set
+        {
+            _isPickable = value;
+        }
     }
 
     private void Start()
