@@ -137,6 +137,10 @@ public class ThrowSystem : NetworkBehaviour
                 multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
                 multiplier = Mathf.Clamp(multiplier, minStepMultiplier, maxStepMultiplier);
 
+                float distance = Vector3.Distance(_basePlayer.transform.position, throwableObject.transform.position);
+                multiplier = Utils.Map(maxStepMultiplier, minStepMultiplier, 1, 0, multiplier);
+                multiplier = distance * multiplier * 5;
+                
                 Vector3 stepPosition = (_basePlayer.Camera.transform.forward * multiplier) + _basePlayer.Camera.transform.position;
 
                 //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way

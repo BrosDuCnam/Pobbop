@@ -67,8 +67,9 @@ public class RealPlayer : BasePlayer
             }
             
             // Calculate the step distance
-            float distance = Vector3.Distance(HoldingObject.transform.position, targetPointTransform.position) * multiplier;
-            multiplier = 1 / multiplier * distance;
+            float distance = Vector3.Distance(HoldingObject.transform.position, targetPointTransform.position);
+            multiplier = Utils.Map(throwSystem.maxStepMultiplier, throwSystem.minStepMultiplier, 1, 0, multiplier);
+            multiplier = distance * multiplier*5;
             
             Vector3 stepPosition = (Camera.transform.forward * multiplier) + Camera.transform.position;
 
