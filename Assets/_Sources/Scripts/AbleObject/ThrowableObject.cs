@@ -280,7 +280,7 @@ public class ThrowableObject : NetworkBehaviour
 
         while (ThrowState != ThrowState.Idle) yield return null; // Wait for the end of the throw
 
-        if (livingObject != null && !otherObject.GetComponent<RealPlayer>().HasAuthority())
+        if (livingObject != null /*&& !otherObject.GetComponent<RealPlayer>().HasAuthority()*/)
         {
             if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 5f) // TODO - maybe change the miminum velocity
             {
@@ -314,12 +314,12 @@ public class ThrowableObject : NetworkBehaviour
     }
     
     
-    private void OnGUI()
+    /*private void OnGUI()
     {
         GUIStyle style = new GUIStyle();
         style.fontSize = 50;
         GUILayout.Label("ThrowState: " + ThrowState);
-    }
+    }*/
     
 }
 
