@@ -271,7 +271,7 @@ public class ThrowableObject : NetworkBehaviour
 
         if (livingObject != null)
         {
-            if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
+            if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 5f) // TODO - maybe change the miminum velocity
             {
                 print("hit");
                 livingObject.TakeDamage(1, _owner); // TODO - change the damage
