@@ -44,6 +44,7 @@ public class ThrowableObject : NetworkBehaviour
         get => _owner;
         private set
         {
+            CmdChangeOwner(value);
             _owner = value;
         }
     }
@@ -244,7 +245,17 @@ public class ThrowableObject : NetworkBehaviour
         _throwState = state;
     }
     
-
+    [Command (requiresAuthority = false)]
+    private void CmdChangeOwner(GameObject owner)
+    {
+        RpcChangeOwner(owner);
+    }
+    [ClientRpc]
+    private void RpcChangeOwner(GameObject owner)
+    {
+        _owner = owner;
+    }
+    
     /// <summary>
     /// Coroutine to stop the throw path.
     /// </summary>
