@@ -90,18 +90,18 @@ public class PickableObject : NetworkBehaviour
     [ClientRpc]
     private void RpcChangeIsPicked(bool value)
     {
-        IsPicked = value;
+        _isPicked = value;
     }
     
     [Command (requiresAuthority = false)]
     private void CmdChangeIsPickAble(bool value)
     {
-        RpcChangeIsPicked(value);
+        RpcChangeIsPickable(value);
     }
     [ClientRpc]
     private void RpcChangeIsPickable(bool value)
     {
-        IsPickable = value;
+        _isPickable = value;
     }
     
     private void OnGUI()
