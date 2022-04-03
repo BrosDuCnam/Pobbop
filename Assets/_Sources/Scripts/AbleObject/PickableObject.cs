@@ -26,6 +26,7 @@ public class PickableObject : NetworkBehaviour
         set
         {
             if (_isPicked == value) return;
+            CmdChangeIsPicked(value);
             if (value) PickUp();
             else Drop();
             _isPicked = value;
@@ -78,6 +79,17 @@ public class PickableObject : NetworkBehaviour
         _isPicked = false;
         if (_collider != null) _collider.enabled = true;
         if (_rigidbody != null) _rigidbody.isKinematic = false;
+    }
+    
+    [Command (requiresAuthority = false)]
+    private void CmdChangeIsPicked(bool value)
+    {
+        RpcChangeIsPicked(value);
+    }
+    [ClientRpc]
+    private void RpcChangeIsPicked(bool value)
+    {
+        IsPicked = value;
     }
     
     private void OnGUI()
