@@ -248,7 +248,7 @@ public class ThrowableObject : NetworkBehaviour
     [Command (requiresAuthority = false)]
     private void CmdChangeOwner(GameObject owner)
     {
-        RpcChangeThrowState(owner);
+        RpcChangeOwner(owner);
     }
     [ClientRpc]
     private void RpcChangeOwner(GameObject owner)
