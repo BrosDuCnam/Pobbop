@@ -17,7 +17,7 @@ public class ThrowableObject : NetworkBehaviour
     
     private ThrowState _throwState = ThrowState.Idle;
     private Rigidbody _rigidbody;
-    [CanBeNull] [SyncVar] private GameObject _owner;
+    [CanBeNull] private GameObject _owner;
     LimitedQueue<Vector3> _poolPositions;
 
     public UnityEvent OnStateChanged;
@@ -33,7 +33,6 @@ public class ThrowableObject : NetworkBehaviour
         set
         {
             if (_throwState == value) return;
-            CmdChangeThrowState(value);
             _throwState = value;
             OnStateChanged.Invoke();
         }
@@ -61,18 +60,7 @@ public class ThrowableObject : NetworkBehaviour
         //print(ThrowState);
     }
 
-    public void StopThrow(Action callback)
-    {
-        StartCoroutine(StopThorwCoroutine(callback));
-    }
-    
-    private IEnumerator StopThorwCoroutine(Action callback)
-    {
-        _stopThrow = true;
-        while (ThrowState != ThrowState.Idle) yield return null;
-        callback();
-    }
-    
+
     /// <summary>
     /// Function to throw the object.
     /// </summary>
@@ -116,7 +104,7 @@ public class ThrowableObject : NetworkBehaviour
         StartCoroutine(ThrowEnumerator(player, step, target, speed, accuracy, AnimationCurve.Linear(0, 1, 1, 1), state));
     }
 
-    [Command (requiresAuthority = false)]
+    [Command]
     private void CmdWarnPlayer(Transform player, bool setBall)
     {
         WarnPlayer(player, setBall);
@@ -145,7 +133,7 @@ public class ThrowableObject : NetworkBehaviour
     private IEnumerator ThrowEnumerator(GameObject player, Vector3 step, Transform target, float speed, float accuracy,
         AnimationCurve curve, ThrowState state = ThrowState.Thrown)
     {
-        ThrowState = state;
+        ThrowState = ThrowState.Thrown;ThrowState = state;
 
         Owner = player;
 
@@ -175,10 +163,7 @@ public class ThrowableObject : NetworkBehaviour
         Vector3 lastPos = origin;
         while (time < 1 && ThrowState != ThrowState.Idle && !_stopThrow)
         {
-            Transform targetTransform = target;
-            if (target.transform.FindObjectsWithTag("Targetter").Count > 0) targetTransform = target.transform.FindObjectsWithTag("Targetter")[0].transform;
-            
-            Vector3 targetPos = Vector3.Lerp(originTargetPosition, targetTransform.position, accuracy);
+            Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
             ApplyMovePosition(nextPos);
             ApplyTorque(torqueDirection, time);
@@ -232,39 +217,38 @@ public class ThrowableObject : NetworkBehaviour
     /// <param name="other">The collision</param>
     private void OnCollisionEnter(Collision other)
     {
-        if (ThrowState == ThrowState.Idle) return;
-        
-        GameObject owner = Owner;
-        GameObject otherObject = other.gameObject;
-        if (ThrowState != ThrowState.Idle)
-        {
-            BasePlayer basePlayerParent = otherObject.GetComponentInParent<BasePlayer>();
-            // If the player is the owner of the object
-            if (Owner != null && (otherObject == Owner ||
-                                  (basePlayerParent != null && basePlayerParent.gameObject == Owner))) return;
-            else
-            {
-                if (ThrowState == ThrowState.FreeThrow) ThrowState = ThrowState.Idle;
-                else _stopThrow = true;
-            }
-        }
-        //StartCoroutine(ApplyCollision(owner, livingObject));
+        StartCoroutine(OnCollisionEnterCoroutine(other));
     }
 
     /// <summary>
     /// Coroutine to stop the throw path.
     /// </summary>
     /// <param name="other">The collision</param>
-    private IEnumerator ApplyCollision(GameObject owner, HealthSystem receiverHealthSystem)
+    private IEnumerator OnCollisionEnterCoroutine(Collision other)
     {
+        GameObject owner = Owner;
+        GameObject otherObject = other.gameObject;
+        if (ThrowState != ThrowState.Idle)
+        {
+            BasePlayer basePlayerParent = otherObject.GetComponentInParent<BasePlayer>();
+            // If the player is the owner of the object
+            if (Owner != null && (otherObject == Owner || (basePlayerParent != null && basePlayerParent.gameObject == Owner))) yield return null;
+            else
+            {
+                if (ThrowState == ThrowState.FreeThrow) ThrowState = ThrowState.Idle;
+                else _stopThrow = true;
+            }
+        }
+
         while (ThrowState != ThrowState.Idle) yield return null; // Wait for the end of the throw
 
-        if (receiverHealthSystem != null)
+        HealthSystem livingObject = otherObject.GetComponent<HealthSystem>();
+        if (livingObject != null)
         {
             if (ThrowState != ThrowState.Idle || _rigidbody.velocity.magnitude > 2f) // TODO - maybe change the miminum velocity
             {
-                Debug.Log("hit", receiverHealthSystem.gameObject);
-                receiverHealthSystem.TakeDamage(1, _owner); // TODO - change the damage
+                print("hit");
+                livingObject.TakeDamage(1, _owner); // TODO - change the damage
 
                 //Not working properly
                 /*if (otherObject.TryGetComponent(out BasePlayer otherPlayer))
@@ -304,23 +288,6 @@ public class ThrowableObject : NetworkBehaviour
         controller.Punch(force);
     }
     
-    [Command (requiresAuthority = false)]
-    private void CmdChangeThrowState(ThrowState state)
-    {
-        RpcChangeThrowState(state);
-    }
-    [ClientRpc]
-    private void RpcChangeThrowState(ThrowState state)
-    {
-        _throwState = state;
-    }
-    
-    private void OnGUI()
-    {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 50;
-        GUILayout.Label("ThrowState: " + ThrowState);
-    }
 }
 
 /// <summary>

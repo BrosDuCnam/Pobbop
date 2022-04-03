@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using JetBrains.Annotations;
@@ -8,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
-using Object = System.Object;
 
 public class PickUpDropSystem : NetworkBehaviour
 {
@@ -23,7 +21,7 @@ public class PickUpDropSystem : NetworkBehaviour
     [Header("Needed Components")]
     [SerializeField] private BasePlayer basePlayer;
     
-    [SerializeField] private float _timeToStone = 0;
+    private float _timeToStone = 0;
 
     public bool IsStone
     {
@@ -35,8 +33,7 @@ public class PickUpDropSystem : NetworkBehaviour
         }
     }
     
-    public UnityEvent OnPickUp = new UnityEvent();
-    public UnityEvent OnDrop = new UnityEvent();
+    public UnityEvent OnPickUp;
 
     /// <summary>
     /// Return the current PickableObject in hand, null if there is none
@@ -46,35 +43,30 @@ public class PickUpDropSystem : NetworkBehaviour
         get => _pickableObject;
         set
         {
+            print("set pickable object");
+            
+            
             if(_pickableObject == value) return;
 
-            if (_pickableObject != null && value == null)
-            {
-                OnDrop.Invoke();
-
-                print("Drop");
-                _pickableObject.IsPicked = false;
-            }
-            else if (_pickableObject == null && value != null)
-            {
-                OnPickUp.Invoke();
-                CmdAssignAuthority(value.gameObject);
-                
-                print("PickUp");
-                value.IsPicked = true;
-            }
-
+            if (_pickableObject != null) _pickableObject.IsPicked = false;
             _pickableObject = value;
+            
+            if (_pickableObject != null) _pickableObject.IsPicked = true;
+            OnPickUp.Invoke();
+            
+            if (PickableObject != null)
+                CmdAssignAuthority(PickableObject.gameObject);
         }
     }
 
-    [Command (requiresAuthority = false)]
+    [Command]
     private void CmdAssignAuthority(GameObject ball)
     {
         ball.GetComponent<NetworkIdentity>().RemoveClientAuthority();
         ball.GetComponent<NetworkIdentity>()
             .AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
-        //print("changed authority");
+        print("changed authority");
+
     }
     
     
@@ -103,9 +95,8 @@ public class PickUpDropSystem : NetworkBehaviour
     {
         if (PickableObject != null)
         {
-            if (PickableObject.hasAuthority) PickableObject.transform.position = _pickUpPoint.position;
-
             //PickableObject.GetComponent<Rigidbody>().MovePosition(_pickUpPoint.position);
+            PickableObject.transform.position = _pickUpPoint.position;
             //PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
         }
 
@@ -130,7 +121,6 @@ public class PickUpDropSystem : NetworkBehaviour
         if (PickableObject != null) // If the player has an object in hand
         {
             print("RemoveAuthority");
-            OnDrop.Invoke();
             PickableObject.Drop();
             //RemoveAuthority(PickableObject.gameObject);
             //PickableObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
@@ -145,28 +135,15 @@ public class PickUpDropSystem : NetworkBehaviour
     /// <param name="other">The collider who enter in range</param>
     private void OnColliderStay(Collider other)
     {
-        if (IsStone) return;
         if (PickableObject != null) return; // If the player has an object in hand
-        //print("AAAAAAAAAA");
-        // If the object is not pickable>
+        
+        // If the object is not pickable
         PickableObject pickableObject = other.GetComponent<PickableObject>();
         if ((pickableObject == null) || pickableObject == PickableObject || !pickableObject.IsPickable) return;
-        //Debug.Log("BBBBBBBBBBBB", other.gameObject);
+        
         ThrowableObject throwableObject = other.GetComponent<ThrowableObject>();
-        if (throwableObject != null && throwableObject.ThrowState != ThrowState.Idle)
-        {
-            if (throwableObject.Owner == gameObject) return;
-            
-            IsStone = true;
-            throwableObject.StopThrow(() =>
-            {
-                HealthSystem healthSystem = basePlayer.healthSystem;
-                Debug.Log("hit", healthSystem.gameObject);
-                healthSystem.TakeDamage(1, throwableObject.Owner); // TODO - change the damage
-            });
-            return;
-        }
-        //Debug.Log("CCCCCCCCCCCCCC - "+throwableObject.ThrowState, other.gameObject);
+        if (throwableObject != null && throwableObject.ThrowState != ThrowState.Idle) return; //TODO - change condition 
+        
         if (_pickupMode == PickupMode.Auto)
         {
             PickableObject = pickableObject;
@@ -175,16 +152,14 @@ public class PickUpDropSystem : NetworkBehaviour
         {
             if (Utils.IsVisibleByCamera(pickableObject.gameObject, basePlayer.Camera))
             {
+                Debug.Log(throwableObject.ThrowState, throwableObject);
                 PickableObject = pickableObject;
             }
         }
     }
-    
 
-    /*
     private void OnTriggerEnter(Collider other)
     {
-        if (IsStone) return;
         if (PickableObject != null) return; // If the player has an object in hand
         
         // If the object is not pickable
@@ -196,40 +171,31 @@ public class PickUpDropSystem : NetworkBehaviour
         {
             PickableObject = pickableObject;
         }
-    }*/
+    }
 
     /// <summary>
     /// Function to try to pick up an object
     /// </summary>
     private void TryToPickUp()
     {
-        Debug.LogWarning("Try to pick up");
+        if (IsStone) return;
         
         RaycastHit[] hits = Physics.SphereCastAll(basePlayer.Camera.transform.position, _pickUpDistance, 
             basePlayer.Camera.transform.forward, _pickUpDistance); // Get all objects in range
-        
         if (hits.Length > 0) // If the list of object is not empty
         {
-            print("A : " + hits.Length);
             PickableObject[] pickableObjects =
                 hits.Where(hit => hit.collider.GetComponent<PickableObject>() != null)
                     .Select(hit => hit.collider.GetComponent<PickableObject>())
                     .ToArray(); //Take only pickable objects
-            
-            print("B : " + pickableObjects.Length);
 
             pickableObjects = pickableObjects.Where(pickableObject =>
                 Utils.IsVisibleByCamera(pickableObject.transform.position, basePlayer.Camera) &&
                 pickableObject.IsPickable).ToArray(); // Take only visible objects
 
-            print("C : " + pickableObjects.Length);
-
-            
             pickableObjects = pickableObjects.OrderBy(pickableObject =>
                     Vector3.Distance(pickableObject.transform.position, basePlayer.Camera.transform.position))
                 .ToArray(); // Take the closest object
-
-            print("D : " + pickableObjects.Length);
 
             if (pickableObjects.Length > 0) // If there is at least one object in range
             {
@@ -238,7 +204,7 @@ public class PickUpDropSystem : NetworkBehaviour
                 
                 // If the player is not in Manual mode or if the closest object is thrown (To catch the thrown object)
                 ThrowableObject throwableObject = closestPickableObject.GetComponent<ThrowableObject>();
-                if (_pickupMode != PickupMode.Manual && (throwableObject != null && throwableObject.ThrowState == ThrowState.Idle)) return;
+                if (_pickupMode != PickupMode.Manual || (throwableObject && throwableObject.ThrowState != ThrowState.Idle)) return;
                 
                 PickableObject = closestPickableObject;
                 PickableObject.PickUp();
