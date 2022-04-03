@@ -67,7 +67,6 @@ public class PlayerSpawnSystem : NetworkBehaviour
         Transform spawnPoint = spawnPointsList[random.Next(0, spawnPointsList.Count)];
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
-        CmdDebugSpawn(gameObject.name);
     }
     
     private void Respawn()
@@ -77,18 +76,8 @@ public class PlayerSpawnSystem : NetworkBehaviour
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
         OnAddPlayerTransform?.Invoke(transform, teamNumber);
-        CmdDebugSpawn(gameObject.name);
-    }
-
-    void CmdDebugSpawn(string name)
-    {
-        RpcDebugSpawn(name);
     }
     
-    void RpcDebugSpawn(string name)
-    {
-        Debug.Log($"{name} spawned");
-    }
     
 
     private Transform PickSpawnPoint()
