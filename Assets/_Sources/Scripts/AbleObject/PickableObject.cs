@@ -80,4 +80,11 @@ public class PickableObject : NetworkBehaviour
         if (_rigidbody != null) _rigidbody.isKinematic = false;
     }
     
+    private void OnGUI()
+    {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 50;
+        style.margin = new RectOffset(0, 500, 0, 0);
+        GUILayout.Label("Is Pickable : " + _isPickable, style);
+    }
 }
