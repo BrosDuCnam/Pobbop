@@ -107,7 +107,7 @@ public class ThrowableObject : NetworkBehaviour
     [Command]
     private void CmdWarnPlayer(Transform player, bool setBall)
     {
-        WarnPlayer(player, setBall);
+        //WarnPlayer(player, setBall);
     }
 
     [ClientRpc]
