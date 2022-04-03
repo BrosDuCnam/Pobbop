@@ -23,4 +23,16 @@ public class UtilsServer : NetworkBehaviour
     {
         
     }
+
+    [Command (requiresAuthority = false)]
+    public static void SyncValue<T>(ref T parentValue, T value)
+    {
+        RpcSyncValue(ref parentValue, value);
+    }
+    
+    [ClientRpc]
+    private static void RpcSyncValue<T>(ref T parentValue, T value)
+    {
+        parentValue = value;
+    }
 }

@@ -27,6 +27,7 @@ public class PickableObject : NetworkBehaviour
         {
             if (_isPicked == value) return;
             CmdChangeIsPicked(value);
+            UtilsServer.SyncValue(ref _isPicked, value);
             if (value) PickUp();
             else Drop();
             _isPicked = value;
