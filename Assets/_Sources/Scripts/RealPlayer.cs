@@ -40,18 +40,30 @@ public class RealPlayer : BasePlayer
         
     }
 
+    [Command]
+    private void AssignAuthority(GameObject obj)
+    {
+        obj.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient);
+    }
+
+    [Command]
+    private void RemoveAuthority(GameObject obj)
+    {
+        obj.GetComponent<NetworkIdentity>().RemoveClientAuthority();
+    }
+
     public void HoldingStateChange(bool isHolding)
     {
         if (isHolding)
         {
-            //TODO: Apply authority to HoldingObject
+            AssignAuthority(HoldingObject);
         }
         else
         {
-            //TODO: Remove authority to HoldingObject
+            RemoveAuthority(HoldingObject);
         }
     }
-    
+
     private void Update()
     {
         UpdateTargetUI();
