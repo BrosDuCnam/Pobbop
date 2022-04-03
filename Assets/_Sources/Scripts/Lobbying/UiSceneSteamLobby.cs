@@ -6,6 +6,7 @@ using Mirror;
 using Steamworks;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 
 public class UiSceneSteamLobby : MonoBehaviour
 {
@@ -53,6 +54,12 @@ public class UiSceneSteamLobby : MonoBehaviour
         SteamMatchmaking.CreateLobby(lobbyType, maxPlayers);
     }
 
+    public void SwitchSceneHost()
+    {
+        SceneManager.LoadScene("BuildScene-0.0.1");
+        HostLobby(ELobbyType.k_ELobbyTypePublic, 10);
+    }
+    
     public virtual void StartJoinLobby()
     {
         if (filterLobbies)
