@@ -139,7 +139,7 @@ public class ThrowableObject : NetworkBehaviour
         Owner = player;
 
         if (_throwState != ThrowState.Rebound)
-            CmdWarnPlayer(target, true);
+            CmdWarnPlayer(target.GetComponentInParent<BasePlayer>().transform, true);
         
         Vector3 origin = transform.position;
         Vector3 originTargetPosition = target.position;
@@ -179,7 +179,7 @@ public class ThrowableObject : NetworkBehaviour
 
             yield return null;
         }
-        CmdWarnPlayer(target, false);
+        CmdWarnPlayer(target.GetComponentInParent<BasePlayer>().transform, false);
         
         Owner = null;
         _rigidbody.useGravity = true;
