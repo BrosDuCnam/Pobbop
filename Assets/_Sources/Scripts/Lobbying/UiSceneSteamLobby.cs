@@ -11,6 +11,8 @@ using UnityEngine.SceneManagement;
 public class UiSceneSteamLobby : MonoBehaviour
 {
     [SerializeField] private bool filterLobbies;
+    [SerializeField] private GameObject content;
+
     
     public static UiSceneSteamLobby instance;
 
@@ -62,6 +64,7 @@ public class UiSceneSteamLobby : MonoBehaviour
     
     public virtual void StartJoinLobby()
     {
+        content.GetComponent<LobbyListManager>().ClearLobbyUIList();
         if (filterLobbies)
         {
             SteamMatchmaking.AddRequestLobbyListStringFilter("game", "pobbop", ELobbyComparison.k_ELobbyComparisonEqual);
@@ -83,7 +86,7 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     protected virtual void OnGetLobbyInfo(LobbyDataUpdate_t callback)
     {
-        //Stuff
+        content.GetComponent<LobbyListManager>().DisplayLobbies(lobbyIDS, callback);
     }
 
     protected virtual void OnLobbyCreated(LobbyCreated_t callback)
@@ -108,6 +111,7 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
     {
+        SceneManager.LoadScene("BuildScene-0.0.1");
         SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
     }
 
@@ -124,6 +128,7 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     public void JoinLobby(CSteamID lobbyId)
     {
+        SceneManager.LoadScene("BuildScene-0.0.1");
         SteamMatchmaking.JoinLobby(lobbyId);
     }
 

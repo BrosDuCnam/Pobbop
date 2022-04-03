@@ -14,7 +14,7 @@ public class LobbyElement : MonoBehaviour
 
     public void JoinLobby()
     {
-        SteamLobby.instance.JoinLobby(lobbySteamID);
+        UiSceneSteamLobby.instance.JoinLobby(lobbySteamID);
     }
     
     public void SetLobbyName(string _lobbyName)
