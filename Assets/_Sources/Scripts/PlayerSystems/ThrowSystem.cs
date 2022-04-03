@@ -3,6 +3,7 @@ using System.Linq;
 using Mirror;
 //using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -22,6 +23,8 @@ public class ThrowSystem : NetworkBehaviour
     [SerializeField] public float minStepMultiplier = 2f;
     [SerializeField] public float maxStepMultiplier = 30f;
     [SerializeField] private bool _drawCurve = true;
+    
+    public UnityEvent OnThrow;
     
     private float _startChargeTime;
     private bool _isCharging;
@@ -118,6 +121,8 @@ public class ThrowSystem : NetworkBehaviour
         {
             ThrowableObject throwableObject = _basePlayer.HoldingObject.GetComponent<ThrowableObject>();
             if (throwableObject == null) return; // If the object is not throwable
+            
+            OnThrow.Invoke();
             
             _basePlayer.IsHoldingObject = false;
             if (_basePlayer.HasTarget) // If player has a target

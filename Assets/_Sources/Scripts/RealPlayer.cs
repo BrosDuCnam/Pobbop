@@ -2,6 +2,7 @@
 using System.Linq;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -32,6 +33,23 @@ public class RealPlayer : BasePlayer
     private void Start() //TODO: use by Camille to debug bot
     {
         GameControllerDEBUG.AddPlayer(this); // May cause lag
+        
+        pickUpDropSystem.OnPickUp.AddListener(() => HoldingStateChange(true));
+        pickUpDropSystem.OnDrop.AddListener(() => HoldingStateChange(false));
+        throwSystem.OnThrow.AddListener(() => HoldingStateChange(false));
+        
+    }
+
+    public void HoldingStateChange(bool isHolding)
+    {
+        if (isHolding)
+        {
+            //TODO: Apply authority to HoldingObject
+        }
+        else
+        {
+            //TODO: Remove authority to HoldingObject
+        }
     }
     
     private void Update()

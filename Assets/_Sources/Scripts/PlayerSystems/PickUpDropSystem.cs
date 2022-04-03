@@ -36,6 +36,7 @@ public class PickUpDropSystem : NetworkBehaviour
     }
     
     public UnityEvent OnPickUp;
+    public UnityEvent OnDrop;
 
     /// <summary>
     /// Return the current PickableObject in hand, null if there is none
@@ -120,6 +121,7 @@ public class PickUpDropSystem : NetworkBehaviour
         if (PickableObject != null) // If the player has an object in hand
         {
             print("RemoveAuthority");
+            OnDrop.Invoke();
             PickableObject.Drop();
             //RemoveAuthority(PickableObject.gameObject);
             //PickableObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(); //On perd l'authorité sur l'ogject qu'on a drop
