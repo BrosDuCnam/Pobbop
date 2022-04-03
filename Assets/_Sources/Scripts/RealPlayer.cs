@@ -155,8 +155,13 @@ public class RealPlayer : BasePlayer
         print("name changed to " + name);
 
     }
-    
-    
+
+    public bool HasAuthority()
+    {
+        return hasAuthority;
+    }
+
+
     #region "Inputs"
     
     public void TogglePickupDrop(InputAction.CallbackContext ctx)

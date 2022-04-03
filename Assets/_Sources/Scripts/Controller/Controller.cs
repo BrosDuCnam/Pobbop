@@ -105,6 +105,7 @@ public class Controller : NetworkBehaviour
 
     private bool animCrouch;
     private bool animJump;
+        
     
     protected void Awake()
     {
@@ -134,7 +135,6 @@ public class Controller : NetworkBehaviour
        // Debug.Log("slide nerf : " + slideNerf);
        // Debug.Log("enter sliding : " + enterSliding);
         if (Time.time > slideNerf && slideNerf != 0) enterSliding = true;
-
     }
 
     private void FixedUpdate()
