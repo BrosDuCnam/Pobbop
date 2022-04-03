@@ -33,7 +33,7 @@ public class ThrowableObject : NetworkBehaviour
         set
         {
             if (_throwState == value) return;
-            UtilsServer.SyncValue(ref _throwState, value);
+            CmdChangeThrowState(value);
             _throwState = value;
             OnStateChanged.Invoke();
         }
@@ -304,6 +304,16 @@ public class ThrowableObject : NetworkBehaviour
         controller.Punch(force);
     }
     
+    [Command (requiresAuthority = false)]
+    private void CmdChangeThrowState(ThrowState state)
+    {
+        RpcChangeThrowState(state);
+    }
+    [ClientRpc]
+    private void RpcChangeThrowState(ThrowState state)
+    {
+        _throwState = state;
+    }
     
     private void OnGUI()
     {
