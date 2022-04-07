@@ -8,6 +8,8 @@ TagManager:
   - StartTagTeam1
   - StartTagTeam2
   - StartTagTeam3
+  - Targetter
+  - StartTagTeam4
   layers:
   - Default
   - TransparentFX
