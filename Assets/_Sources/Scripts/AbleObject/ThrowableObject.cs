@@ -68,9 +68,9 @@ public class ThrowableObject : NetworkBehaviour
     /// </summary>
     /// <param name="direction">Direction to throw</param>
     /// <param name="force">Force in meter/s</param>
-    //[Command]
     public void Throw(GameObject player, Vector3 direction, float force)
     {
+        Debug.Log("ball throw state : " + ThrowState);
         if (ThrowState != ThrowState.Idle) return;
         Owner = player;
         ThrowState = ThrowState.FreeThrow;
@@ -109,7 +109,7 @@ public class ThrowableObject : NetworkBehaviour
     [Command (requiresAuthority = false)]
     private void CmdWarnPlayer(Transform player, bool setBall)
     {
-        //WarnPlayer(player, setBall);
+        WarnPlayer(player, setBall);
     }
 
     [ClientRpc]

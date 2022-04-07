@@ -97,6 +97,7 @@ public class PickUpDropSystem : NetworkBehaviour
         {
             //PickableObject.GetComponent<Rigidbody>().MovePosition(_pickUpPoint.position);
             PickableObject.transform.position = _pickUpPoint.position;
+            PickableObject.transform.rotation = _pickUpPoint.rotation;
             //PickableObject.GetComponent<NetworkIdentity>().AssignClientAuthority(GetComponent<NetworkIdentity>().connectionToClient); //On a l'authorité sur l'object qu'on à en main
         }
 

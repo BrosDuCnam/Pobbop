@@ -18,9 +18,7 @@ public class TargetSystem : NetworkBehaviour
 
     //La liste est en static pour qu'elle puisse être modifiée
     [SyncVar] [SerializeField] private List<GameObject> _targets;
-
-    private GameObject lastTarget;
-
+    
     public List<GameObject> Targets
     {
         get { return _targets; }
@@ -72,54 +70,8 @@ public class TargetSystem : NetworkBehaviour
                 }
             }
         }
-        
-        if (basePlayer.IsCharging)
-            WarnTargetedPlayer();
-    }
-
-    /// <summary>
-    /// Trigger the border UI of the targeted player to warn him that he is being targeted
-    /// </summary>
-    private void WarnTargetedPlayer()
-    {
-        //Warn the other player if he is being targeted (active each time the thrower changes target or has a new one)
-        if (CurrentTarget != null)
-        {
-            if (lastTarget == null)
-            {
-                CmdTargetPlayerWarn(CurrentTarget, true);
-                lastTarget = CurrentTarget;
-            }
-            
-            if (CurrentTarget != lastTarget)
-            {
-                CmdTargetPlayerWarn(lastTarget, false);
-                CmdTargetPlayerWarn(CurrentTarget, true);
-            }
-
-            lastTarget = CurrentTarget;
-        }
-        else if (lastTarget!= null)
-        {
-            CmdTargetPlayerWarn(lastTarget, false);
-            lastTarget = null;
-        }
     }
     
-    [Command (requiresAuthority = false)]
-    private void CmdTargetPlayerWarn(GameObject player, bool targetState)
-    {
-        RpcTargetPlayerWarn(player, targetState);
-    }
-
-    [ClientRpc]
-    private void RpcTargetPlayerWarn(GameObject player, bool targetState)
-    {
-        if (player.TryGetComponent(out DirIndicatorHandler handler))
-        {
-            handler.isTargeted = targetState;
-        }
-    }
 
     /// <summary>
     /// Function to order targets by distance to center of screen
@@ -160,4 +112,5 @@ public class TargetSystem : NetworkBehaviour
         }
         return visibleTargets;
     }
+    
 }

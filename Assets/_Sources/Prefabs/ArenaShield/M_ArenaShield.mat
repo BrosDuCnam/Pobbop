@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - ImpactParticles:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -77,6 +81,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_8ea1bc7bdf7943ba97235dec1eaad729_Texture_1:
         m_Texture: {fileID: 2800000, guid: 40d63b70ff9595a4fba100cb585513bf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_a373a6a49fe44471a51d755bd367994b_Texture_1:
+        m_Texture: {fileID: 8400000, guid: 0e4d23bb5d26b604eb508ace5552037b, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_b0f408d538324df1844b548695fbec72_Texture_1:

@@ -129,8 +129,8 @@ public class Controller : NetworkBehaviour
     protected void Update()
     {
         CalculateCam();
-        UpdateTPSAnimator();
-        UpdatePOVAnimator();
+        //UpdateTPSAnimator();
+        //UpdatePOVAnimator();
         CamCrouch();
        // Debug.Log("slide nerf : " + slideNerf);
        // Debug.Log("enter sliding : " + enterSliding);
@@ -486,8 +486,9 @@ public class Controller : NetworkBehaviour
     }
 
     #endregion
-
-    #region Private Methods
+    
+    /*
+    #region Animator
 
     private void UpdateTPSAnimator()
     {
@@ -524,6 +525,7 @@ public class Controller : NetworkBehaviour
     }
 
     #endregion
+*/
     
     #region Inputs
     public void Axis(Vector2 axis)
@@ -542,7 +544,7 @@ public class Controller : NetworkBehaviour
         run = true;
         if (run)
         {
-            player.CancelCharge();
+            //player.CancelCharge();
             cancelThrow = true;
             walkSpeed = _walkSpeed;
         }
