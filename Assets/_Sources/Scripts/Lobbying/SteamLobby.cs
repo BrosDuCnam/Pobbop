@@ -31,6 +31,10 @@ public class SteamLobby : MonoBehaviour
         if (!SteamManager.Initialized)
         {
             Debug.Log("Can't access to steam networks, steam may be offline");
+            
+            ErrorThrower.Instance.ThrowError("Can't access to steam networks, steam may be offline.\n" +
+                                              "Please check your internet connection and try again, or restart steam");
+            
             return;
         }
         MakeInstance();
