@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
         Debug.LogError("Multiple game managers");
     }
     
+    
     public static void RegisterPlayer(string netID,  Player player)
     {
         string playerId = playerIdPrefix + netID;

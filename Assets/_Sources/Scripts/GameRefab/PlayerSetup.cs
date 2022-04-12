@@ -47,7 +47,7 @@ public class PlayerSetup : NetworkBehaviour
     }
     
 
-        [Command]
+    [Command]
     void CmdSetUsername(string playerID, string username)
     {
         Player player = GameManager.GetPlayer(playerID);
