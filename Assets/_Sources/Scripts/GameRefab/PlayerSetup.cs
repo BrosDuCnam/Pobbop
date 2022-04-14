@@ -12,6 +12,7 @@ public class PlayerSetup : NetworkBehaviour
     
     private void Start()
     {
+        
         if (!isLocalPlayer)
         {
             DisableOnClients();
@@ -64,10 +65,10 @@ public class PlayerSetup : NetworkBehaviour
 
         string netID = GetComponent<NetworkIdentity>().netId.ToString();
         Player player = GetComponent<Player>();
-
         GameManager.RegisterPlayer(netID, player);
     }
     
+
     private void OnDisable()
     {
         GameManager.UnRegisterPlayer(transform.name);

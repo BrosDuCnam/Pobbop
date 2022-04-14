@@ -7,6 +7,14 @@ using UnityEngine.PlayerLoop;
 
 public class BallRefab : NetworkBehaviour
 {
+    public GameObject owner;
+    public Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
     public enum BallStateRefab
     {
         Free,
@@ -16,10 +24,12 @@ public class BallRefab : NetworkBehaviour
 
     public BallStateRefab _ballState = BallStateRefab.Free;
 
-    public void ChangeBallState(BallStateRefab ballState)
+    public void ChangeBallState(BallStateRefab ballState, GameObject _owner = null)
     {
         _ballState = ballState;
+        owner = _owner;
     }
+
     
     private void OnGUI()
     {

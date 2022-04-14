@@ -49,6 +49,17 @@ public static class Utils
     }
     
     /// <summary>
+    /// Function ro know if a transform is in the camera view
+    /// </summary>
+    /// <param name="transform">The transform</param>
+    /// <param name="cam">The camera</param>
+    /// <returns>True if the object is in camera view</returns>
+    public static bool IsVisibleByCamera(Transform transform, Camera cam)
+    {
+        return IsVisibleByCamera(transform.position, cam);
+    }
+    
+    /// <summary>
     /// Function ro know if a position is in the camera view
     /// </summary>
     /// <param name="position">The position</param>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Mirror;
 using Unity.Mathematics;
@@ -11,10 +12,16 @@ using UnityEngine.PlayerLoop;
 public class Pickup : NetworkBehaviour
 {
     [SerializeField] private Transform pickupPoint;
-
-    [CanBeNull] private Transform ball;
+    [SerializeField] private float maxVelToPickup = 5f;
+    [SerializeField] private float cooldownTime = 0.4f;
+    [CanBeNull] public Transform ball;
+    private Player _player;
+    private bool cooldown;
     
-    private bool move;
+    private void Start()
+    {
+        _player = GetComponent<Player>();
+    }
 
     private void Update()
     {
@@ -29,37 +36,42 @@ public class Pickup : NetworkBehaviour
     private void CmdMoveBall(Transform ball, Vector3 position)
     {
         ball.position = position;
-        if (isServer)
-        {
-            RpcMoveBall(ball, position);
-        }
     }
-    [ClientRpc]
-    private void RpcMoveBall(Transform ball, Vector3 position)
-    {
-        ball.position = position;
-    }
-    
 
     [Command]
-    private void CmdChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab)
+    public void CmdChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab)
     {
         RpcChangeBallState(_ballRefab, _ballStateRefab);
     }
     [ClientRpc]
     private void RpcChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab)
     {
-        _ballRefab.ChangeBallState(_ballStateRefab);
-        _ballRefab.GetComponent<Rigidbody>().isKinematic = true;
+        _ballRefab.ChangeBallState(_ballStateRefab, gameObject);
+        _ballRefab.rb.isKinematic = _ballStateRefab != BallRefab.BallStateRefab.Free;
     }
 
+    public void Throw()
+    {
+        ball = null;
+        cooldown = true;
+        StartCoroutine(ResetCooldownCoroutine());
+    }
+
+    private IEnumerator ResetCooldownCoroutine()
+    {
+        yield return new WaitForSeconds(cooldownTime);
+        cooldown = false;
+    }
+    
     private void OnTriggerEnter(Collider col)
     {
         if (!enabled) return;
+        if (cooldown) return;
         if (col.CompareTag("Ball"))
         {
             if (col.TryGetComponent(out BallRefab ballRefab))
             {
+                if (ballRefab.rb.velocity.magnitude > maxVelToPickup) return;
                 //Pick if pickable
                 if (ballRefab._ballState != BallRefab.BallStateRefab.Free) return;
                 ball = col.transform;
@@ -68,10 +80,5 @@ public class Pickup : NetworkBehaviour
                 print ("Ball picked :: " + name);
             }
         }
-    }
-
-    public void InputClick(InputAction.CallbackContext ctx)
-    {
-        move = ctx.performed;
     }
 }
