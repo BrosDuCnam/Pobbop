@@ -15,6 +15,7 @@ public class Player : NetworkBehaviour
     public Camera playerCam;
     [SerializeField] private RawImage _targetImage;
     [SerializeField] public Transform targetPoint;
+    [SerializeField] private float ballVelToDie = 8;
 
     [SyncVar]
     private bool _isDead = false;
@@ -54,27 +55,10 @@ public class Player : NetworkBehaviour
         return _pickup.ball;
     }
 
-    [ClientRpc]
-    public void RpcTakeDamage(float damage, string sourceID)
+    private void Die()
     {
-        if (isDead) return;
-
-        currentHealth -= damage;
-
-        if (currentHealth <= 0) Die(sourceID);
-    }
-    
-    private void Die(string sourceID)
-    {
-
-        Player sourcePlayer = GameManager.GetPlayer(sourceID);
-        if (sourcePlayer != null)
-        {
-            sourcePlayer.kills++;
-            GameManager.instance.onPlayerKilledCallback.Invoke(username, sourcePlayer.username);
-        }
         deaths++;
-
+        print("dead" + name);
 
         isDead = true;
 
@@ -150,7 +134,17 @@ public class Player : NetworkBehaviour
         get => _targeter.CurrentTarget.gameObject;
     }
     
-    
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.CompareTag("Ball"))
+        {
+            BallRefab ball = col.gameObject.GetComponent<BallRefab>();
+            if (ball.rb.velocity.magnitude > ballVelToDie)
+            {
+                Die();
+            }
+        }
+    }
     
     public void Throw(InputAction.CallbackContext ctx)
     {
