@@ -78,6 +78,7 @@ public class Player : NetworkBehaviour
         {
             ChangeBallLayer(_pickup.ball.gameObject, false);
             _pickup.CmdChangeBallState(_pickup.ball.GetComponent<BallRefab>(), BallRefab.BallStateRefab.Free);
+            _pickup.ballTransform = null;
             _pickup.ball = null;
         }
         _pickup.enabled = false;
