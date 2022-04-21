@@ -397,6 +397,7 @@ GameObject:
   - component: {fileID: 4458084024684211118}
   - component: {fileID: 52816822358932927}
   - component: {fileID: 8455922505097929944}
+  - component: {fileID: -6959653211031553873}
   m_Layer: 0
   m_Name: PlayerRefab
   m_TagString: Player
@@ -571,6 +572,7 @@ MonoBehaviour:
   - {fileID: 4539989864678404381}
   - {fileID: 7561597772532264304}
   - {fileID: 1049668766847879428}
+  - {fileID: 1547539918011441973}
   compToDisableOnLocal: []
   gameObjectsToDeactivateOnClients:
   - {fileID: 3619699616637287386}
@@ -611,6 +613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  rb: {fileID: 0}
   _walkSpeed: 5
   runSpeed: 8
   _crouchSpeed: 2.5
@@ -666,9 +669,11 @@ MonoBehaviour:
   playerCam: {fileID: 1008197578226024919}
   _targetImage: {fileID: 3760971874584597178}
   targetPoint: {fileID: 5270562764824853360}
+  ballVelToDie: 1
   _pickup: {fileID: 0}
   _throw: {fileID: 0}
   _targeter: {fileID: 0}
+  _controller: {fileID: 0}
 --- !u!114 &1547539918011441973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -710,6 +715,35 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _speedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 6.707547
+      outSlope: 6.707547
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.050632913
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minStepMultiplier: 2
+  maxStepMultiplier: 30
+  _drawCurve: 1
+  DEBUG: 1
+  dbgTime: 0.87
 --- !u!114 &1049668766847879428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,6 +757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targets: []
+  _targetsPlayer: []
   _targetRange: 100
   DEBUG: 1
 --- !u!136 &5484164245318665628
@@ -735,7 +770,7 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 7955de1dcc708dd418826ca2431fcfe0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.073566794
+  m_Radius: 0.31
   m_Height: 2
   m_Direction: 1
   m_Center: {x: -0.0007029399, y: 1, z: -0.0655424}
@@ -842,6 +877,22 @@ MonoBehaviour:
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+--- !u!114 &-6959653211031553873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5484164245318665630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.05
+  clientAuthority: 1
+  animator: {fileID: 1486732123007837926}
 --- !u!1 &5553950938184964713
 GameObject:
   m_ObjectHideFlags: 0

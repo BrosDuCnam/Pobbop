@@ -11,24 +11,30 @@ using UnityEngine.PlayerLoop;
 
 public class Pickup : NetworkBehaviour
 {
-    [SerializeField] private Transform pickupPoint;
+    [SerializeField] public Transform pickupPoint;
     [SerializeField] private float maxVelToPickup = 5f;
     [SerializeField] private float cooldownTime = 0.4f;
-    [CanBeNull] public Transform ball;
+    [CanBeNull] public Transform ballTransform;
+    public BallRefab ball;
     private Player _player;
-    private bool cooldown;
+    [HideInInspector] public bool cooldown;
     
     private void Start()
     {
         _player = GetComponent<Player>();
+        ballTransform = null;
     }
 
     private void Update()
     {
-        if (ball != null)
+        if (ballTransform != null)
         {
-            ball.position = pickupPoint.position;
-            CmdMoveBall(ball, pickupPoint.position);
+            if (ball == null) ball = ballTransform.GetComponent<BallRefab>();
+            if (ball._ballState == BallRefab.BallStateRefab.Picked)
+            {
+                ballTransform.position = pickupPoint.position;
+                CmdMoveBall(ballTransform, pickupPoint.position);
+            }
         }
     }
 
@@ -46,13 +52,13 @@ public class Pickup : NetworkBehaviour
     [ClientRpc]
     private void RpcChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab)
     {
-        _ballRefab.ChangeBallState(_ballStateRefab, gameObject);
+        _ballRefab.ChangeBallState(_ballStateRefab, _player);
         _ballRefab.rb.isKinematic = _ballStateRefab != BallRefab.BallStateRefab.Free;
     }
 
     public void Throw()
     {
-        ball = null;
+        ballTransform = null;
         cooldown = true;
         StartCoroutine(ResetCooldownCoroutine());
     }
@@ -71,11 +77,14 @@ public class Pickup : NetworkBehaviour
         {
             if (col.TryGetComponent(out BallRefab ballRefab))
             {
-                if (ballRefab.rb.velocity.magnitude > maxVelToPickup) return;
                 //Pick if pickable
-                if (ballRefab._ballState != BallRefab.BallStateRefab.Free) return;
-                ball = col.transform;
+                if (ballRefab._ballState != BallRefab.BallStateRefab.Free ||
+                    ballRefab.rb.velocity.magnitude > maxVelToPickup ||
+                    _player.IsHoldingObject) return;
+                ballTransform = col.transform;
+                ball = ballRefab;
                 CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Picked);
+                _player.ChangeBallLayer(ballRefab.gameObject, true);
                 
                 print ("Ball picked :: " + name);
             }

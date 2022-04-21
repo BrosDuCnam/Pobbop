@@ -14,7 +14,7 @@ using UnityEngine.PlayerLoop;
 public class Controller : NetworkBehaviour
 {
 
-    protected Rigidbody rb;
+    public Rigidbody rb;
 
     private Vector2 axis;
     private Vector3 dir = Vector3.zero;
@@ -87,7 +87,7 @@ public class Controller : NetworkBehaviour
     protected bool lurch;
     private float slideNerf;
 
-    private BasePlayer player;
+    private Player player;
 
     //Cam
     private Vector2 camAxis;
@@ -116,7 +116,7 @@ public class Controller : NetworkBehaviour
         onDirectionAxis.AddListener(OnDirection);
         onLurch.AddListener(OnLurch);
 
-        player = GetComponent<BasePlayer>();
+        player = GetComponent<Player>();
         rb = GetComponent<Rigidbody>();
         walkSpeed = _walkSpeed;
         crouchSpeed = _crouchSpeed;
@@ -129,8 +129,8 @@ public class Controller : NetworkBehaviour
     protected void Update()
     {
         CalculateCam();
-        //UpdateTPSAnimator();
-        //UpdatePOVAnimator();
+        UpdateTPSAnimator();
+        UpdatePOVAnimator();
         CamCrouch();
        // Debug.Log("slide nerf : " + slideNerf);
        // Debug.Log("enter sliding : " + enterSliding);
@@ -487,7 +487,7 @@ public class Controller : NetworkBehaviour
 
     #endregion
     
-    /*
+    
     #region Animator
 
     private void UpdateTPSAnimator()
@@ -525,7 +525,7 @@ public class Controller : NetworkBehaviour
     }
 
     #endregion
-*/
+
     
     #region Inputs
     public void Axis(Vector2 axis)

@@ -287,12 +287,6 @@ public class ThrowableObject : NetworkBehaviour
                 print("hit");
                 livingObject.TakeDamage(1, _owner); // TODO - change the damage
 
-                //Not working properly
-                /*if (otherObject.TryGetComponent(out BasePlayer otherPlayer))
-                {
-                    CmdPunchOpponent(otherPlayer._controller, _rigidbody.velocity * 4);
-                }*/
-                
                 if (_reboundOnKill)
                 {
                     //if (livingObject.Health <= 0 && owner != null)

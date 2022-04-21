@@ -29,20 +29,32 @@ public class Player : NetworkBehaviour
     public Pickup _pickup;
     public Throw _throw;
     public Targeter _targeter;
+    public Controller _controller;
 
     public bool IsHoldingObject
     {
-        get => _pickup.ball != null;
+        get
+        {
+            if (_pickup == null) return false;
+            return _pickup.ball != null;
+        } 
         set => _pickup.ball = value ? _pickup.ball : null;
     }
 
-    public bool IsCharging { get => _throw.IsCharging; }  
+    public bool IsCharging 
+    { get
+        {
+            if (_throw == null) return false;
+            return _throw.IsCharging;
+        }
+    }  
 
     private void Start()
     {
         _pickup = GetComponent<Pickup>();
         _throw = GetComponent<Throw>();
         _targeter = GetComponent<Targeter>();
+        _controller = GetComponent<Controller>();
     }
 
     private void Update()
@@ -52,26 +64,43 @@ public class Player : NetworkBehaviour
 
     public Transform GetBall()
     {
-        return _pickup.ball;
+        return _pickup.ballTransform;
     }
 
-    private void Die()
+    public void Die()
     {
+        if (isDead) return;
         deaths++;
         print("dead" + name);
-
         isDead = true;
+        //Drop ball if it's in hand
+        if (_pickup.ball != null)
+        {
+            ChangeBallLayer(_pickup.ball.gameObject, false);
+            _pickup.CmdChangeBallState(_pickup.ball.GetComponent<BallRefab>(), BallRefab.BallStateRefab.Free);
+            _pickup.ball = null;
+        }
+        _pickup.enabled = false;
+        _controller.enabled = false;
+        _targeter.enabled = false;
+        _throw.enabled = false;
 
         StartCoroutine(Respawn());
     }
     
     private IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.4f);
         
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
+        _controller.rb.velocity = Vector3.zero;
+        isDead = false;
+        _pickup.enabled = true;
+        _controller.enabled = true;
+        _targeter.enabled = true;
+        _throw.enabled = true;
     }
     
     private void UpdateTargetUI()
@@ -133,18 +162,35 @@ public class Player : NetworkBehaviour
     {
         get => _targeter.CurrentTarget.gameObject;
     }
+
+    /// <summary>
+    /// Toggle ball layer. Set to true to be on top.
+    /// </summary>
+    /// <param name="ball"></param>
+    /// <param name="layer"></param>
+    public void ChangeBallLayer(GameObject ball, bool layer)
+    {
+        if (ball == null) return;
+        ball.gameObject.layer = layer ? 
+            LayerMask.NameToLayer("Always On Top") : 
+            LayerMask.NameToLayer("Default");
+    }
     
     private void OnCollisionEnter(Collision col)
     {
+        if (!enabled) return;
         if (col.gameObject.CompareTag("Ball"))
         {
             BallRefab ball = col.gameObject.GetComponent<BallRefab>();
-            if (ball.rb.velocity.magnitude > ballVelToDie)
+            if (ball.rb.velocity.magnitude > ballVelToDie && !isDead &&
+                ball.owner != this && (ball._ballState == BallRefab.BallStateRefab.Curve || 
+                ball._ballState == BallRefab.BallStateRefab.FreeThrow))
             {
                 Die();
             }
         }
     }
+    
     
     public void Throw(InputAction.CallbackContext ctx)
     {

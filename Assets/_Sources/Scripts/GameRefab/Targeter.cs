@@ -32,8 +32,7 @@ public class Targeter : MonoBehaviour
     
     private void Update()
     {
-        //TODO: fix isCharging null reference to enable locking on a target while charging the ball
-        if (/*_player.IsCharging == false &&*/ _targets.Count > 0) // If player is not charger we can search for targets
+        if (_player.IsCharging == false && _targets.Count > 0) // If player is not charger we can search for targets
         {
             List<GameObject> visibleTargets = GetVisibleTargets(_targets, _targetsPlayer); // Get all visible targets
             visibleTargets =
