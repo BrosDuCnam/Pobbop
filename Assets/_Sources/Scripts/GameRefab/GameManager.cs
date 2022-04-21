@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null) instance = this; return;
-        Debug.LogError("Multiple game managers");
     }
 
     public static void RegisterPlayer(string netID,  Player player)
