@@ -9,7 +9,7 @@ public class NetworkManagerRefab : NetworkManager
 {
     public Transform GetRespawnPosition(Transform playerToRespawn)
     {
-        float distance = float.MaxValue;
+        /*float distance = float.MaxValue;
         Transform spawnPoint = new GameObject().transform;
         List<Transform> allPlayers = GameManager.GetAllPlayers().Select(x => x.transform).ToList();
         //Get the spawnpoint that id the furthest away from all players
@@ -25,7 +25,8 @@ public class NetworkManagerRefab : NetworkManager
                 distance = tempDistance;
                 spawnPoint = spawnPointTransform;
             }
-        }
-        return spawnPoint;
+        }*/
+        //return spawnPoint;
+        return startPositions[UnityEngine.Random.Range(0, startPositions.Count)];
     }
 }

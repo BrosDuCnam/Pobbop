@@ -26,6 +26,7 @@ public class Player : NetworkBehaviour
     private int _deaths = 0;
     public int deaths { get { return _deaths; } set { _deaths = value; } }
 
+    private NetworkManagerRefab _networkManagerRefab;
     public Pickup _pickup;
     public Throw _throw;
     public Targeter _targeter;
@@ -94,8 +95,8 @@ public class Player : NetworkBehaviour
         yield return new WaitForSeconds(0.4f);
         
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-        transform.position = spawnPoint.position;
-        transform.rotation = spawnPoint.rotation;
+        transform.position = _networkManagerRefab.GetRespawnPosition(transform).position; //spawnPoint.position;
+        transform.rotation = _networkManagerRefab.GetRespawnPosition(transform).rotation;//spawnPoint.rotation;
         _controller.rb.velocity = Vector3.zero;
         isDead = false;
         _pickup.enabled = true;
