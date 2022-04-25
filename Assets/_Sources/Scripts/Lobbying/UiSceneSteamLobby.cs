@@ -16,7 +16,7 @@ public class UiSceneSteamLobby : MonoBehaviour
     
     public static UiSceneSteamLobby instance;
 
-    protected NetworkManagerLobby networkManager;
+    protected NetworkManagerRefab networkManager;
     protected const string HostAdressKey = "HostAdress";
     protected string lobbyName = "Default name";
     
@@ -42,7 +42,7 @@ public class UiSceneSteamLobby : MonoBehaviour
         }
         MakeInstance();
         
-        networkManager = GetComponent<NetworkManagerLobby>();
+        networkManager = GetComponent<NetworkManagerRefab>();
 
         lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
@@ -58,7 +58,7 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     public void SwitchSceneHost()
     {
-        SceneManager.LoadScene("BuildScene-0.0.1");
+        SceneManager.LoadScene("RefabLocal");
         HostLobby(ELobbyType.k_ELobbyTypePublic, 10);
     }
     
@@ -101,7 +101,6 @@ public class UiSceneSteamLobby : MonoBehaviour
             SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyJoinable(new CSteamID(callback.m_ulSteamIDLobby), true);
         
-        networkManager.playerName = SteamFriends.GetPersonaName();
     }
 
     protected void SetLobbyName(string _lobbyName)
@@ -111,16 +110,14 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
     {
-        SceneManager.LoadScene("BuildScene-0.0.1");
+        SceneManager.LoadScene("RefabLocal");
         SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
     }
 
     protected virtual void OnLobbyEntered(LobbyEnter_t callback)
     {
         if (NetworkServer.active) {return;}
-
-        networkManager.playerName = SteamFriends.GetPersonaName();
-
+        
         string hostAdress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey);
         networkManager.networkAddress = hostAdress;
         networkManager.StartClient();
@@ -128,7 +125,7 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     public void JoinLobby(CSteamID lobbyId)
     {
-        SceneManager.LoadScene("BuildScene-0.0.1");
+        SceneManager.LoadScene("RefabLocal");
         SteamMatchmaking.JoinLobby(lobbyId);
     }
 
