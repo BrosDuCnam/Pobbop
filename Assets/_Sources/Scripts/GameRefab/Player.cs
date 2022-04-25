@@ -95,8 +95,8 @@ public class Player : NetworkBehaviour
         yield return new WaitForSeconds(0.4f);
         
         Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-        transform.position = _networkManagerRefab.GetRespawnPosition(transform).position; //spawnPoint.position;
-        transform.rotation = _networkManagerRefab.GetRespawnPosition(transform).rotation;//spawnPoint.rotation;
+        transform.position = Vector3.zero; //spawnPoint.position;
+        transform.rotation = Quaternion.Euler(Vector3.zero);//spawnPoint.rotation;
         _controller.rb.velocity = Vector3.zero;
         isDead = false;
         _pickup.enabled = true;
