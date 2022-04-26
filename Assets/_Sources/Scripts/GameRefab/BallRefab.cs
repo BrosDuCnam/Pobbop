@@ -9,10 +9,12 @@ public class BallRefab : NetworkBehaviour
 {
     public Player owner;
     public Rigidbody rb;
+    public Collider collider; 
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        collider = GetComponent<Collider>();
     }
 
     public enum BallStateRefab
@@ -36,7 +38,7 @@ public class BallRefab : NetworkBehaviour
     {
         if (col.gameObject.TryGetComponent(out Player player))
         {
-            if (_ballState == BallStateRefab.Picked || player == owner) return;
+            if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player == owner) return;
             RpcDie(player);
         }
         RpcChangeBallState(BallStateRefab.Free);

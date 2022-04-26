@@ -42,9 +42,10 @@ public class Throw : NetworkBehaviour
             ball = _player.GetBall();
             _startChargeTime = Time.time;
             IsCharging = true;
+            _player._controller.IsThrowing = true;
         }
     }
-    
+
     private float GetNormalizedForce(float force)
     {
         return (force - _minThrowForce) / (_maxThrowForce - _minThrowForce);
@@ -52,10 +53,12 @@ public class Throw : NetworkBehaviour
 
     public void ReleaseThrow()
     {
-        if (ball != null)
+        if (ball != null && IsCharging)
         {
+            _player._controller.IsThrowing = false;
             _player._pickup.Throw();
             BallRefab ballRefab = ball.GetComponent<BallRefab>();
+            ballRefab.collider.enabled = true;
             CmdSetKinematic(ballRefab, false);
             _player._pickup.CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Free);
             _player.ChangeBallLayer(ballRefab.gameObject, false);
@@ -189,15 +192,21 @@ public class Throw : NetworkBehaviour
         
         ball.rb.velocity = direction;
     }
+    
+    /// <summary>
+    /// Cancel throw and cancel charge
+    /// </summary>
+    public void CancelThrow()
+    {
+        if (IsCharging) IsCharging = false;
+    }
 
-    [Command]
+    [Command] 
     private void CmdMoveBall(BallRefab ball, Vector3 nextPos)
     {
         ball.transform.position = ball.rb.position;
         ball.rb.MovePosition(nextPos);
     }
-
-
 
     [Command]
     public void CmdChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab, Player player)

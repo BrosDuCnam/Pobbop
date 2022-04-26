@@ -79,6 +79,7 @@ public class Player : NetworkBehaviour
         {
             ChangeBallLayer(_pickup.ball.gameObject, false);
             _pickup.CmdChangeBallState(_pickup.ball.GetComponent<BallRefab>(), BallRefab.BallStateRefab.Free);
+            _pickup.ball.collider.enabled = true;
             _pickup.ballTransform = null;
             _pickup.ball = null;
         }
@@ -94,9 +95,10 @@ public class Player : NetworkBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         
-        Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-        transform.position = Vector3.zero; //spawnPoint.position;
-        transform.rotation = Quaternion.Euler(Vector3.zero);//spawnPoint.rotation;
+        
+        Transform spawnPoint = NetworkManagerRefab.instance.GetRespawnPosition();
+        transform.position =  spawnPoint.position;
+        transform.rotation = spawnPoint.rotation;
         _controller.rb.velocity = Vector3.zero;
         isDead = false;
         _pickup.enabled = true;

@@ -124,6 +124,8 @@ public class Controller : NetworkBehaviour
         collider = gameObject.GetComponent<CapsuleCollider>();
         initialColHeight = collider.height;
         initialColCenter = collider.center;
+
+        isGrounded = true;
     }
     
     protected void Update()
@@ -496,6 +498,7 @@ public class Controller : NetworkBehaviour
         {
             velX = Vector3.Dot(transform.right, rb.velocity) / _walkSpeed;
             velY = Vector3.Dot(transform.forward, rb.velocity) / _walkSpeed;
+            //set the velocity to 0 if it's 0.0001...
             velX = Mathf.Round(velX * 1000) / 1000;
             velY = Mathf.Round(velY * 1000) / 1000;
             
@@ -544,7 +547,7 @@ public class Controller : NetworkBehaviour
         run = true;
         if (run)
         {
-            //player.CancelCharge();
+            player._throw.CancelThrow();
             cancelThrow = true;
             walkSpeed = _walkSpeed;
         }

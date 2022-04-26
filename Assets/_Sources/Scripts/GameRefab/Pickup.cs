@@ -81,8 +81,10 @@ public class Pickup : NetworkBehaviour
                 if (ballRefab._ballState != BallRefab.BallStateRefab.Free ||
                     ballRefab.rb.velocity.magnitude > maxVelToPickup ||
                     _player.IsHoldingObject) return;
+                
                 ballTransform = col.transform;
                 ball = ballRefab;
+                ballRefab.collider.enabled = false;
                 CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Picked);
                 _player.ChangeBallLayer(ballRefab.gameObject, true);
                 

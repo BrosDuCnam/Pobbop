@@ -27,12 +27,7 @@ public class UiSceneSteamLobby : MonoBehaviour
     protected Callback<LobbyEnter_t> lobbyEntered;
     protected Callback<LobbyMatchList_t> lobbyListRetrieved;
     protected Callback<LobbyDataUpdate_t> lobbyDataUpdated;
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(transform.gameObject);
-    }
-
+    
     protected  virtual void Start()
     {
         if (!SteamManager.Initialized)
@@ -58,7 +53,6 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     public void SwitchSceneHost()
     {
-        SceneManager.LoadScene("RefabLocal");
         HostLobby(ELobbyType.k_ELobbyTypePublic, 10);
     }
     
@@ -92,7 +86,7 @@ public class UiSceneSteamLobby : MonoBehaviour
     protected virtual void OnLobbyCreated(LobbyCreated_t callback)
     {
         networkManager.StartHost();
-
+        
         if (lobbyName == "Default name")
             lobbyName = SteamFriends.GetPersonaName() + "'s Lobby";
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", lobbyName);
@@ -110,7 +104,6 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
     {
-        SceneManager.LoadScene("RefabLocal");
         SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
     }
 
@@ -125,7 +118,6 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     public void JoinLobby(CSteamID lobbyId)
     {
-        SceneManager.LoadScene("RefabLocal");
         SteamMatchmaking.JoinLobby(lobbyId);
     }
 

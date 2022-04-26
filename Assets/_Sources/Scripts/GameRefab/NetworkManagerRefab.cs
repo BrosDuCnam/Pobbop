@@ -4,12 +4,61 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NetworkManagerRefab : NetworkManager
 {
-    public Transform GetRespawnPosition(Transform playerToRespawn)
+    [Scene] [SerializeField] private string menuScene = string.Empty;
+
+    [Header("Room")]
+    [SerializeField] private RoomPlayer roomPlayerPrefab;
+    
+    public static NetworkManagerRefab instance;
+
+    public static event Action OnClientConnected;
+    public static event Action OnClientDisconnected;
+
+
+    private void Awake()
     {
-        /*float distance = float.MaxValue;
+        if (instance == null) instance = this; return;
+    }
+
+    public override void OnStartClient()
+    {
+        DontDestroyOnLoad(gameObject);
+        base.OnStartClient();
+    }
+    
+    public override void OnClientConnect()
+    {
+        base.OnClientConnect();
+        OnClientConnected?.Invoke();
+    }
+
+    public override void OnClientDisconnect() {
+        base.OnClientDisconnect();
+        OnClientDisconnected?.Invoke();
+    }
+
+    public override void OnServerAddPlayer(NetworkConnection conn)
+    {
+        base.OnServerAddPlayer(conn);
+        
+        if (SceneManager.GetActiveScene().name == menuScene)
+        {
+            bool isLeader = LobbyData.instance.roomPlayers.Count == 0;
+
+            RoomPlayer roomPlayerInstance = Instantiate(roomPlayerPrefab);
+            
+            NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
+            print("addedRoomPlayer");
+        }
+    }
+    
+    public Transform GetRespawnPosition()
+    {
+        float distance = float.MinValue;
         Transform spawnPoint = new GameObject().transform;
         List<Transform> allPlayers = GameManager.GetAllPlayers().Select(x => x.transform).ToList();
         //Get the spawnpoint that id the furthest away from all players
@@ -25,8 +74,8 @@ public class NetworkManagerRefab : NetworkManager
                 distance = tempDistance;
                 spawnPoint = spawnPointTransform;
             }
-        }*/
-        //return spawnPoint;
-        return startPositions[UnityEngine.Random.Range(0, startPositions.Count)];
+        }
+        return spawnPoint;
     }
+        
 }

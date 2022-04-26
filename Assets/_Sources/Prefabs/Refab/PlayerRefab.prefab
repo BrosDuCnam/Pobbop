@@ -598,7 +598,9 @@ MonoBehaviour:
   pickupPoint: {fileID: 2993412299723579490}
   maxVelToPickup: 5
   cooldownTime: 0.4
+  ballTransform: {fileID: 0}
   ball: {fileID: 0}
+  cooldown: 0
 --- !u!114 &4539989864678404381
 MonoBehaviour:
   m_ObjectHideFlags: 0

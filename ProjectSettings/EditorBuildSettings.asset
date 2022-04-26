@@ -9,27 +9,9 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/_Sources/Scenes/CamilleDev/UIDev.unity
-    guid: 0e7c65021fe7c4a4a996f97e41f16089
-  - enabled: 1
-    path: Assets/_Sources/Scenes/BuildScene-0.0.1.unity
-    guid: 54d8c5755237c1f42816ee1db54fc6ef
-  - enabled: 0
-    path: Assets/_Sources/Scenes/BuildPOC.unity
-    guid: 8ab782d7b9743d5479797bb548ad1159
-  - enabled: 0
-    path: Assets/_Sources/Scenes/LobbyBrowser.unity
-    guid: df0a4cc7aae4a364d816414151f24e87
-  - enabled: 0
-    path: Assets/_Sources/Scenes/SebTest/multiplayer test.unity
-    guid: cd433914d23bd6c45ac65e38a73f2beb
-  - enabled: 0
-    path: Assets/_Sources/Scenes/CamilleDev/GameplayDev.unity
-    guid: e12309fb0471d014e9656950f58cd9d9
-  - enabled: 1
     path: Assets/_Sources/Scenes/YmDevScene_/UIRefab.unity
     guid: f5c14aa6abf207e4eb8e9ba3747e3593
   - enabled: 1
-    path: Assets/_Sources/Scenes/YmDevScene_/RefabLocal.unity
-    guid: 811d04c69c9d6bc4c8846b3637cbe8c0
+    path: Assets/_Sources/Scenes/YmDevScene_/RefabMulti.unity
+    guid: e984f0d27e57e25489bc8aa5c399eada
   m_configObjects: {}
