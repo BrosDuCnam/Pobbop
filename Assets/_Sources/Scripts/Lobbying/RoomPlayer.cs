@@ -5,5 +5,6 @@ using UnityEngine;
 public class RoomPlayer : MonoBehaviour
 {
     public string name = "DefaultName";
-    public int teamId = 0;
+    public int teamId;
+    public int ping;
 }

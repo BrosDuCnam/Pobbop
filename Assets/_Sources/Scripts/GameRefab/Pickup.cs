@@ -53,7 +53,6 @@ public class Pickup : NetworkBehaviour
     private void RpcChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab)
     {
         _ballRefab.ChangeBallState(_ballStateRefab, _player);
-        _ballRefab.rb.isKinematic = _ballStateRefab != BallRefab.BallStateRefab.Free;
     }
 
     public void Throw()
@@ -77,6 +76,19 @@ public class Pickup : NetworkBehaviour
         {
             if (col.TryGetComponent(out BallRefab ballRefab))
             {
+                //If it's a pass
+                if (ballRefab._ballState == BallRefab.BallStateRefab.Pass
+                    && !_player.IsHoldingObject
+                    && ballRefab.owner.teamId == _player.teamId)
+                {
+                    ballTransform = col.transform;
+                    ball = ballRefab;
+                    ballRefab.collider.enabled = false;
+                    CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Picked);
+                    _player.ChangeBallLayer(ballRefab.gameObject, true);
+                    return;
+                }
+
                 //Pick if pickable
                 if (ballRefab._ballState != BallRefab.BallStateRefab.Free ||
                     ballRefab.rb.velocity.magnitude > maxVelToPickup ||

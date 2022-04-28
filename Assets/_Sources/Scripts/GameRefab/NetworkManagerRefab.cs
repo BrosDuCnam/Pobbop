@@ -14,14 +14,13 @@ public class NetworkManagerRefab : NetworkManager
     [SerializeField] private RoomPlayer roomPlayerPrefab;
     
     public static NetworkManagerRefab instance;
-
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
 
 
     private void Awake()
     {
-        if (instance == null) instance = this; return;
+        if (instance == null) instance = this;
     }
 
     public override void OnStartClient()
@@ -77,5 +76,5 @@ public class NetworkManagerRefab : NetworkManager
         }
         return spawnPoint;
     }
-        
+
 }

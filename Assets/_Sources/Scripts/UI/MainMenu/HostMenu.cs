@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
+using UI.Host;
 using UnityEngine;
 
 namespace UI
@@ -26,7 +27,7 @@ namespace UI
         
         [Header("Prefabs")]
         [SerializeField] private GameObject _playerPrefab;
-        
+
         private void Start()
         {
             hostMenuData.TeamAmount = 2;
@@ -59,6 +60,7 @@ namespace UI
                 UpdateUI();
             }
         }
+        
         
         private void UpdateTeamUI()
         {

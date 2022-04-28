@@ -22,7 +22,8 @@ public class BallRefab : NetworkBehaviour
         Free,
         Picked,
         Curve,
-        FreeThrow
+        FreeThrow,
+        Pass
     }
 
     public BallStateRefab _ballState = BallStateRefab.Free;
@@ -38,9 +39,10 @@ public class BallRefab : NetworkBehaviour
     {
         if (col.gameObject.TryGetComponent(out Player player))
         {
-            if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player == owner) return;
+            if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player.teamId == owner.teamId) return;
             RpcDie(player);
         }
+        if (_ballState == BallStateRefab.Picked) return;
         RpcChangeBallState(BallStateRefab.Free);
         RpcChangeOwner(null);
 

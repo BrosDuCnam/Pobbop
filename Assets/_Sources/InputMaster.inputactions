@@ -42,7 +42,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "PickupDrop",
+                    "name": "Pass",
                     "type": "Button",
                     "id": "e1ba1bfd-a9e8-477b-9e57-40d23b8a450d",
                     "expectedControlType": "Button",
@@ -187,7 +187,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PickupDrop",
+                    "action": "Pass",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

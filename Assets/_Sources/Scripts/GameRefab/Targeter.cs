@@ -8,7 +8,8 @@ public class Targeter : MonoBehaviour
 {
     private Player _player;
     [SerializeField] private List<GameObject> _targets = new List<GameObject>();
-    [SerializeField] private List<Player> _targetsPlayer = new List<Player>();
+    [SerializeField] private List<Player> _targetPlayers = new List<Player>();
+    [SerializeField] private List<Player> _friendlyPlayers = new List<Player>();
     [NotNull] public GameObject CurrentTarget { get; private set; }
     [SerializeField] private float _targetRange = 100f;
     [SerializeField] private bool DEBUG;
@@ -26,15 +27,19 @@ public class Targeter : MonoBehaviour
     /// </summary>
     private void UpdateTargets(string name = "")
     {
-        _targetsPlayer = GameManager.GetAllPlayers().Where(p => p != _player).ToList();
-        _targets = _targetsPlayer.Select(x => x.gameObject).ToList();
+        foreach (Player player in GameManager.GetAllPlayers())
+        {
+            if (player.teamId == _player.teamId && player != _player) _friendlyPlayers.Add(player);
+            else _targetPlayers.Add(player);
+        }
+        _targets = _targetPlayers.Select(x => x.gameObject).ToList();
     }
     
     private void Update()
     {
         if (_player.IsCharging == false && _targets.Count > 0) // If player is not charger we can search for targets
         {
-            List<GameObject> visibleTargets = GetVisibleTargets(_targets, _targetsPlayer); // Get all visible targets
+            List<GameObject> visibleTargets = GetVisibleTargets(_targets, _targetPlayers); // Get all visible targets
             visibleTargets =
                 OrderByDistanceToCenterOfScreen(
                     visibleTargets); // Order visible targets by distance to center of screen
@@ -63,7 +68,7 @@ public class Targeter : MonoBehaviour
                             color = Color.yellow;
                         }
                     }
-                    Debug.DrawLine(_player.targetPoint.position, _targetsPlayer[i].targetPoint.position, color);
+                    Debug.DrawLine(_player.targetPoint.position, _targetPlayers[i].targetPoint.position, color);
                 }
             }
         }
@@ -111,5 +116,17 @@ public class Targeter : MonoBehaviour
             }
         }
         return visibleTargets;
+    }
+
+    /// <summary>
+    /// Gets the friendly player who is the closest to the center of the screen
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetDesiredFriend()
+    {
+        if (_friendlyPlayers.Count == 0) return null;
+        List<GameObject> visibleFriendlies = GetVisibleTargets(_friendlyPlayers.Select(x => x.gameObject).ToList(), _friendlyPlayers);
+        if (visibleFriendlies.Count == 0) return null;
+        return OrderByDistanceToCenterOfScreen(visibleFriendlies)[0];
     }
 }

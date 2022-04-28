@@ -11,6 +11,7 @@ public class Throw : NetworkBehaviour
     [SerializeField] private float _maxChargeTime = 5;
     [SerializeField] private AnimationCurve _chargeCurve;
     [SerializeField] private AnimationCurve _speedCurve;
+    [SerializeField] private AnimationCurve _passCurve;
     [SerializeField] public float minStepMultiplier = 2f;
     [SerializeField] public float maxStepMultiplier = 30f;
     [SerializeField] private bool _drawCurve = true;
@@ -34,6 +35,8 @@ public class Throw : NetworkBehaviour
     {
         _player = GetComponent<Player>();
     }
+
+    #region Throw
 
     public void ChargeThrow()
     {
@@ -71,41 +74,38 @@ public class Throw : NetworkBehaviour
 
             ball = null;
             IsCharging = false;
-            if (true) // If player hold an object
+            
+            _player.IsHoldingObject = false;
+            if (_player.HasTarget) // If player has a target
             {
-                Transform ball = _player.GetBall();
+                GameObject target = _player.Target;
                 
-                _player.IsHoldingObject = false;
-                if (_player.HasTarget) // If player has a target
-                {
-                    GameObject target = _player.Target;
-                    
-                    Transform targetPointTransform = target.transform;
-                    targetPointTransform = target.GetComponent<Player>().targetPoint;
+                Transform targetPointTransform = target.transform;
+                targetPointTransform = target.GetComponent<Player>().targetPoint;
 
-                    // Calculate the multiplier of step distance
-                    float multiplier = Mathf.Pow(1.5f, _player._controller.rb.velocity.magnitude);
-                    multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
-                    multiplier = Mathf.Clamp(multiplier, minStepMultiplier, maxStepMultiplier);
+                // Calculate the multiplier of step distance
+                float multiplier = Mathf.Pow(1.5f, _player._controller.rb.velocity.magnitude);
+                multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
+                multiplier = Mathf.Clamp(multiplier, minStepMultiplier, maxStepMultiplier);
 
-                    Vector3 stepPosition = (_player.playerCam.transform.forward * multiplier) + _player.playerCam.transform.position;
+                Vector3 stepPosition = (_player.playerCam.transform.forward * multiplier) + _player.playerCam.transform.position;
 
-                    //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
-                    float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
-                    
-                    CmdThrowBall(ballRefab, _player, stepPosition, targetPointTransform, force, accuracy, _speedCurve, ThrowState.Thrown); // Throw the object
-                }
-                else
-                {
-                    //Simple throw
-                    print("simple throw");
-                    Vector3 direction = _player.playerCam.transform.forward;
-                    Vector3 velocity = direction * force;
-                    CmdSetKinematic(ballRefab, false);
-                    CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.FreeThrow, _player);
-                    CmdSimpleThrowBall(ballRefab, velocity); // Throw the object in front of the camera
-                }
+                //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
+                float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
+                
+                CmdThrowBall(ballRefab, _player, stepPosition, targetPointTransform, force, accuracy, _speedCurve, ThrowState.Thrown); // Throw the object
             }
+            else
+            {
+                //Simple throw
+                print("simple throw");
+                Vector3 direction = _player.playerCam.transform.forward;
+                Vector3 velocity = direction * force;
+                CmdSetKinematic(ballRefab, false);
+                CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.FreeThrow, _player);
+                CmdSimpleThrowBall(ballRefab, velocity); // Throw the object in front of the camera
+            }
+            
         }
     }
 
@@ -161,7 +161,6 @@ public class Throw : NetworkBehaviour
         float time = 0;
         float distance = Utils.BezierCurveDistance(origin, step, target.position, 10);
         float i = 1 / (distance / speed);
-        float lastDeltaTime = 0;
 
         Vector3 direction = (target.position - step);
         Vector3 lastPos = origin;
@@ -180,13 +179,11 @@ public class Throw : NetworkBehaviour
             time += Time.deltaTime; // TODO : Remove this line and use the line above
             
             direction = nextPos - lastPos;
-            direction /= lastDeltaTime;
-            lastDeltaTime = Time.deltaTime;
+            direction /= Time.fixedDeltaTime;
             lastPos = nextPos;            
 
             yield return null;
         }
-        //When the ball collides with something, we set the state to FreeThrow
         CmdSetKinematic(ball, false);
         CmdChangeBallState(ball, BallRefab.BallStateRefab.FreeThrow, _player);
         
@@ -245,4 +242,76 @@ public class Throw : NetworkBehaviour
     {
         ball.rb.velocity = velocity;
     }
+
+
+    #endregion
+    
+    
+    #region Pass
+
+    public void Pass()
+    {
+        GameObject target = _player.GetDesiredFriendly();
+        ball = _player.GetBall();
+        if (target == null || ball == null) return; 
+
+        _player._controller.IsThrowing = false;
+        _player._pickup.Throw();
+        BallRefab ballRefab = ball.GetComponent<BallRefab>();
+        ballRefab.collider.enabled = true;
+        _player._pickup.CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Pass);
+        _player.ChangeBallLayer(ballRefab.gameObject, false);
+        CmdSetKinematic(ballRefab, true);
+            
+        ball = null;
+        IsCharging = false;
+        _player.IsHoldingObject = false;
+
+        Transform targetPointTransform = target.transform;
+        targetPointTransform = target.GetComponent<Player>().targetPoint;
+        
+        StartCoroutine(PassEnumerator(ballRefab, _player, targetPointTransform, 20f, _passCurve));
+    }
+    
+    private IEnumerator PassEnumerator(BallRefab ball, Player throwingPlayer, Transform target, float speed, AnimationCurve curve)
+    {
+        ball.owner = throwingPlayer;
+        ball._ballState = BallRefab.BallStateRefab.Pass;
+        CmdChangeBallState(ball, BallRefab.BallStateRefab.Pass, _player);
+
+        //Vector3 origin = transform.position;
+        Vector3 origin = _player._pickup.pickupPoint.position;
+        float time = 0;
+        Vector3 direction = Vector3.zero;
+        Vector3 lastPos = origin;
+        print(ball._ballState == BallRefab.BallStateRefab.Pass);
+        while (ball._ballState == BallRefab.BallStateRefab.Pass)
+        {
+            Vector3 targetPos = target.position;
+            Vector3 nextPos = ball.rb.position + (targetPos - ball.rb.position).normalized * speed / 50;
+            ball.rb.MovePosition(nextPos);
+            CmdMoveBall(ball, nextPos);
+            CmdUpdateVelocity(ball, ball.rb.velocity);
+            //ball.transform.position = ball.rb.position;
+
+            new WaitForFixedUpdate();
+            time += Time.fixedDeltaTime * speed / 50;
+            
+            direction = nextPos - lastPos;
+            direction /= Time.fixedDeltaTime;
+            lastPos = nextPos;    
+            
+            yield return null;
+        }
+
+        if (ball._ballState != BallRefab.BallStateRefab.Picked)
+        {
+            CmdSetKinematic(ball, false);
+            CmdChangeBallState(ball, BallRefab.BallStateRefab.FreeThrow, _player);
+        
+            ball.rb.velocity = direction;
+        }
+    }
+
+    #endregion
 }

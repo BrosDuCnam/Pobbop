@@ -9,9 +9,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
-{
-    [SyncVar] private float currentHealth;
-    [SyncVar] public string username = "Noob";
+{ 
+    public int teamId;
+    private float currentHealth;
+    public string username = "Noob";
     public Camera playerCam;
     [SerializeField] private RawImage _targetImage;
     [SerializeField] public Transform targetPoint;
@@ -56,6 +57,7 @@ public class Player : NetworkBehaviour
         _throw = GetComponent<Throw>();
         _targeter = GetComponent<Targeter>();
         _controller = GetComponent<Controller>();
+        //teamId = UnityEngine.Random.Range(0, 2220);
     }
 
     private void Update()
@@ -68,6 +70,11 @@ public class Player : NetworkBehaviour
         return _pickup.ballTransform;
     }
 
+    public GameObject GetDesiredFriendly()
+    {
+        return _targeter.GetDesiredFriend();
+    }
+    
     public void Die()
     {
         if (isDead) return;
@@ -186,9 +193,12 @@ public class Player : NetworkBehaviour
         if (col.gameObject.CompareTag("Ball"))
         {
             BallRefab ball = col.gameObject.GetComponent<BallRefab>();
-            if (ball.rb.velocity.magnitude > ballVelToDie && !isDead &&
-                ball.owner != this && (ball._ballState == BallRefab.BallStateRefab.Curve || 
-                ball._ballState == BallRefab.BallStateRefab.FreeThrow))
+            if (ball.owner != null)
+                if (ball.owner.teamId == teamId)
+                    return;
+            
+            if (ball.rb.velocity.magnitude > ballVelToDie && !isDead
+                && (ball._ballState == BallRefab.BallStateRefab.Curve || ball._ballState == BallRefab.BallStateRefab.FreeThrow))
             {
                 Die();
             }
@@ -200,6 +210,11 @@ public class Player : NetworkBehaviour
     {
         if (ctx.started) _throw.ChargeThrow();
         if (ctx.canceled) _throw.ReleaseThrow();
+    }
+
+    public void Pass(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started) _throw.Pass();
     }
     
 }
