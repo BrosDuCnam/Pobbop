@@ -13,6 +13,12 @@ public class Targeter : MonoBehaviour
     [NotNull] public GameObject CurrentTarget { get; private set; }
     [SerializeField] private float _targetRange = 100f;
     [SerializeField] private bool DEBUG;
+    
+    public List<GameObject> Targets
+    {
+        get { return _targets; }
+        set { _targets = value; }
+    }
 
     void Start()
     {

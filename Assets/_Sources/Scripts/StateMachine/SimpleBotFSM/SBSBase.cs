@@ -7,20 +7,20 @@ public class SBSBase : FSMState<SBStateInfo>
     public override void doState(ref SBStateInfo infos)
     {
         //Save all position of visible player
-        List<BasePlayer> visiblePlayer = Utils.GetAllVisibleObject(infos.playerList.Select(x => x.gameObject).ToList(),
-            infos.bot.controller.camera, hit => true).Select(x => x.GetComponent<BasePlayer>()).ToList();
+        List<Player> visiblePlayer = Utils.GetAllVisibleObject(infos.playerList.Select(x => x.gameObject).ToList(),
+            infos.bot._controller.camera, hit => true).Select(x => x.GetComponent<Player>()).ToList();
 
-        foreach (BasePlayer player in visiblePlayer)
+        foreach (Player player in visiblePlayer)
         {
             if (infos.playerHistory.ContainsKey(player)) infos.playerHistory[player] = player.transform.position;
             else infos.playerHistory.Add(player, player.transform.position);
         }
         
         //Save all position of visible ball
-        List<ThrowableObject> visibleBall = Utils.GetAllVisibleObject(infos.ballList.Select(x => x.gameObject).ToList(),
-            infos.bot.controller.camera, hit => true).Select(x => x.GetComponent<ThrowableObject>()).ToList();
+        List<Ball> visibleBall = Utils.GetAllVisibleObject(infos.ballList.Select(x => x.gameObject).ToList(),
+            infos.bot._controller.camera, hit => true).Select(x => x.GetComponent<Ball>()).ToList();
 
-        foreach (ThrowableObject ball in visibleBall)
+        foreach (Ball ball in visibleBall)
         {
             if (infos.ballHistory.ContainsKey(ball)) infos.ballHistory[ball] = ball.transform.position;
             else infos.ballHistory.Add(ball, ball.transform.position);

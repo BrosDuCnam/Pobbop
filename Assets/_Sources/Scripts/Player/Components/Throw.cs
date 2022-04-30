@@ -30,6 +30,18 @@ public class Throw : NetworkBehaviour
         get => _isCharging;
         private set => _isCharging = value;
     }
+    public float ChargeValue
+    {
+        get
+        {
+            if (!IsCharging) return 0;
+            
+            float chargeTime = Time.time - _startChargeTime;
+            float chargeValue = chargeTime / _maxChargeTime;
+            
+            return Mathf.Clamp(chargeValue, 0, 1);
+        }
+    }
     
     void Start()
     {
@@ -60,11 +72,11 @@ public class Throw : NetworkBehaviour
         {
             _player._controller.IsThrowing = false;
             _player._pickup.Throw();
-            BallRefab ballRefab = ball.GetComponent<BallRefab>();
-            ballRefab.collider.enabled = true;
-            CmdSetKinematic(ballRefab, false);
-            _player._pickup.CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Free);
-            _player.ChangeBallLayer(ballRefab.gameObject, false);
+            Ball ball = this.ball.GetComponent<Ball>();
+            ball.collider.enabled = true;
+            CmdSetKinematic(ball, false);
+            _player._pickup.CmdChangeBallState(ball, Ball.BallStateRefab.Free);
+            _player.ChangeBallLayer(ball.gameObject, false);
 
             //Counts the charging time of the ball and converts it to the fore applied
             float chargeTime = Mathf.Clamp(Time.time - _startChargeTime, 0, _maxChargeTime);
@@ -72,7 +84,7 @@ public class Throw : NetworkBehaviour
             float fMultiplier = (_maxThrowForce - _minThrowForce) / _maxChargeTime;
             float force = fMultiplier * chargeValue + _minThrowForce;
 
-            ball = null;
+            this.ball = null;
             IsCharging = false;
             
             _player.IsHoldingObject = false;
@@ -93,7 +105,7 @@ public class Throw : NetworkBehaviour
                 //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
                 float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
                 
-                CmdThrowBall(ballRefab, _player, stepPosition, targetPointTransform, force, accuracy, _speedCurve, ThrowState.Thrown); // Throw the object
+                CmdThrowBall(ball, _player, stepPosition, targetPointTransform, force, accuracy, _speedCurve, ThrowState.Thrown); // Throw the object
             }
             else
             {
@@ -101,19 +113,19 @@ public class Throw : NetworkBehaviour
                 print("simple throw");
                 Vector3 direction = _player.playerCam.transform.forward;
                 Vector3 velocity = direction * force;
-                CmdSetKinematic(ballRefab, false);
-                CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.FreeThrow, _player);
-                CmdSimpleThrowBall(ballRefab, velocity); // Throw the object in front of the camera
+                CmdSetKinematic(ball, false);
+                CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
+                CmdSimpleThrowBall(ball, velocity); // Throw the object in front of the camera
             }
             
         }
     }
 
     [Command]
-    private void CmdSimpleThrowBall(BallRefab ballRefab, Vector3 velocity)
+    private void CmdSimpleThrowBall(Ball ball, Vector3 velocity)
     {
         print("simple throw");
-        ballRefab.rb.velocity = velocity;
+        ball.rb.velocity = velocity;
     }
     
     /// <summary>
@@ -126,7 +138,7 @@ public class Throw : NetworkBehaviour
     /// <param name="accuracy">The accuracy of throw (ex: 1 = object finish path on the target, 0.5 = object finish path between first position and now position of the target</param>
     /// <param name="curve">The curve of speed during time</param>
     /// <param name="state">The future state of the object</param>
-    public void CmdThrowBall(BallRefab ball, Player throwingPlayer , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve, ThrowState state)
+    public void CmdThrowBall(Ball ball, Player throwingPlayer , Vector3 step, Transform target, float speed, float accuracy, AnimationCurve curve, ThrowState state)
     {
         StartCoroutine(ThrowEnumerator(ball, throwingPlayer, step, target, speed, accuracy, curve, state));
     }
@@ -142,11 +154,11 @@ public class Throw : NetworkBehaviour
     /// <param name="accuracy">The accuracy of throw (ex: 1 = object finish path on the target, 0.5 = object finish path between first position and now position of the target</param>
     /// <param name="curve">The curve of speed during time</param>
     /// <param name="state">The future state of the object</param>
-    private IEnumerator ThrowEnumerator(BallRefab ball, Player throwingPlayer, Vector3 step, Transform target, float speed, float accuracy,
+    private IEnumerator ThrowEnumerator(Ball ball, Player throwingPlayer, Vector3 step, Transform target, float speed, float accuracy,
         AnimationCurve curve, ThrowState state = ThrowState.Thrown)
     {
         ball.owner = throwingPlayer;
-        CmdChangeBallState(ball, BallRefab.BallStateRefab.Curve, _player);
+        CmdChangeBallState(ball, Ball.BallStateRefab.Curve, _player);
 
         //Vector3 origin = transform.position;
         Vector3 origin = _player._pickup.pickupPoint.position;
@@ -165,7 +177,7 @@ public class Throw : NetworkBehaviour
         Vector3 direction = (target.position - step);
         Vector3 lastPos = origin;
 
-        while (time < 1 && ball._ballState != BallRefab.BallStateRefab.Free)
+        while (time < 1 && ball._ballState != Ball.BallStateRefab.Free)
         {
             Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
@@ -185,7 +197,7 @@ public class Throw : NetworkBehaviour
             yield return null;
         }
         CmdSetKinematic(ball, false);
-        CmdChangeBallState(ball, BallRefab.BallStateRefab.FreeThrow, _player);
+        CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
         
         ball.rb.velocity = direction;
     }
@@ -199,46 +211,46 @@ public class Throw : NetworkBehaviour
     }
 
     [Command] 
-    private void CmdMoveBall(BallRefab ball, Vector3 nextPos)
+    private void CmdMoveBall(Ball ball, Vector3 nextPos)
     {
         ball.transform.position = ball.rb.position;
         ball.rb.MovePosition(nextPos);
     }
 
     [Command]
-    public void CmdChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab, Player player)
+    public void CmdChangeBallState(Ball _ball, Ball.BallStateRefab _ballStateRefab, Player player)
     {
-        RpcChangeBallState(_ballRefab, _ballStateRefab, player);
+        RpcChangeBallState(_ball, _ballStateRefab, player);
     }
     [ClientRpc]
-    private void RpcChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab, Player player)
+    private void RpcChangeBallState(Ball _ball, Ball.BallStateRefab _ballStateRefab, Player player)
     {
-        if (_ballStateRefab != BallRefab.BallStateRefab.Free)
-            _ballRefab.ChangeBallState(_ballStateRefab, player);
+        if (_ballStateRefab != Ball.BallStateRefab.Free)
+            _ball.ChangeBallState(_ballStateRefab, player);
         else 
-            _ballRefab.ChangeBallState(_ballStateRefab);
+            _ball.ChangeBallState(_ballStateRefab);
         
-        _ballRefab.rb.isKinematic = _ballStateRefab != BallRefab.BallStateRefab.Free && _ballStateRefab != BallRefab.BallStateRefab.FreeThrow;
+        _ball.rb.isKinematic = _ballStateRefab != Ball.BallStateRefab.Free && _ballStateRefab != Ball.BallStateRefab.FreeThrow;
     }
     
     [Command]
-    private void CmdSetKinematic(BallRefab ball, bool isKinematic)
+    private void CmdSetKinematic(Ball ball, bool isKinematic)
     {
         RpcSetKinematic(ball, isKinematic);
     }
     [ClientRpc]
-    private void RpcSetKinematic(BallRefab ball, bool isKinematic)
+    private void RpcSetKinematic(Ball ball, bool isKinematic)
     {
         ball.rb.isKinematic = isKinematic;
     }
     
     [Command]
-    private void CmdUpdateVelocity(BallRefab ball, Vector3 velocity)
+    private void CmdUpdateVelocity(Ball ball, Vector3 velocity)
     {
         RpcUpdateVelocity(ball, velocity);
     }
     [ClientRpc]
-    private void RpcUpdateVelocity(BallRefab ball, Vector3 velocity)
+    private void RpcUpdateVelocity(Ball ball, Vector3 velocity)
     {
         ball.rb.velocity = velocity;
     }
@@ -252,40 +264,40 @@ public class Throw : NetworkBehaviour
     public void Pass()
     {
         GameObject target = _player.GetDesiredFriendly();
-        ball = _player.GetBall();
-        if (target == null || ball == null) return; 
+        this.ball = _player.GetBall();
+        if (target == null || this.ball == null) return; 
 
         _player._controller.IsThrowing = false;
         _player._pickup.Throw();
-        BallRefab ballRefab = ball.GetComponent<BallRefab>();
-        ballRefab.collider.enabled = true;
-        _player._pickup.CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Pass);
-        _player.ChangeBallLayer(ballRefab.gameObject, false);
-        CmdSetKinematic(ballRefab, true);
+        Ball ball = this.ball.GetComponent<Ball>();
+        ball.collider.enabled = true;
+        _player._pickup.CmdChangeBallState(ball, Ball.BallStateRefab.Pass);
+        _player.ChangeBallLayer(ball.gameObject, false);
+        CmdSetKinematic(ball, true);
             
-        ball = null;
+        this.ball = null;
         IsCharging = false;
         _player.IsHoldingObject = false;
 
         Transform targetPointTransform = target.transform;
         targetPointTransform = target.GetComponent<Player>().targetPoint;
         
-        StartCoroutine(PassEnumerator(ballRefab, _player, targetPointTransform, 20f, _passCurve));
+        StartCoroutine(PassEnumerator(ball, _player, targetPointTransform, 20f, _passCurve));
     }
     
-    private IEnumerator PassEnumerator(BallRefab ball, Player throwingPlayer, Transform target, float speed, AnimationCurve curve)
+    private IEnumerator PassEnumerator(Ball ball, Player throwingPlayer, Transform target, float speed, AnimationCurve curve)
     {
         ball.owner = throwingPlayer;
-        ball._ballState = BallRefab.BallStateRefab.Pass;
-        CmdChangeBallState(ball, BallRefab.BallStateRefab.Pass, _player);
+        ball._ballState = Ball.BallStateRefab.Pass;
+        CmdChangeBallState(ball, Ball.BallStateRefab.Pass, _player);
 
         //Vector3 origin = transform.position;
         Vector3 origin = _player._pickup.pickupPoint.position;
         float time = 0;
         Vector3 direction = Vector3.zero;
         Vector3 lastPos = origin;
-        print(ball._ballState == BallRefab.BallStateRefab.Pass);
-        while (ball._ballState == BallRefab.BallStateRefab.Pass)
+        print(ball._ballState == Ball.BallStateRefab.Pass);
+        while (ball._ballState == Ball.BallStateRefab.Pass)
         {
             Vector3 targetPos = target.position;
             Vector3 nextPos = ball.rb.position + (targetPos - ball.rb.position).normalized * speed / 50;
@@ -304,14 +316,37 @@ public class Throw : NetworkBehaviour
             yield return null;
         }
 
-        if (ball._ballState != BallRefab.BallStateRefab.Picked)
+        if (ball._ballState != Ball.BallStateRefab.Picked)
         {
             CmdSetKinematic(ball, false);
-            CmdChangeBallState(ball, BallRefab.BallStateRefab.FreeThrow, _player);
+            CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
         
             ball.rb.velocity = direction;
         }
     }
 
     #endregion
+}
+
+/// <summary>
+/// Enum to define the state of the throw.
+/// </summary>
+public enum ThrowState
+{
+    /// <summary>
+    /// The throw is idle.
+    /// </summary>
+    Idle,
+    /// <summary>
+    /// The throw is in progress.
+    /// </summary>
+    Thrown,
+    /// <summary>
+    /// The throw is in progress and the object is rebounding.
+    /// </summary>
+    Rebound,
+    /// <summary>
+    /// The object is throw without curve
+    /// </summary>
+    FreeThrow
 }

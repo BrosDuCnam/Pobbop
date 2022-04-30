@@ -14,7 +14,6 @@ public class Player : NetworkBehaviour
     private float currentHealth;
     public string username = "Noob";
     public Camera playerCam;
-    [SerializeField] private RawImage _targetImage;
     [SerializeField] public Transform targetPoint;
     [SerializeField] private float ballVelToDie = 8;
 
@@ -32,6 +31,8 @@ public class Player : NetworkBehaviour
     public Throw _throw;
     public Targeter _targeter;
     public Controller _controller;
+    
+    public Camera Camera { get { return _controller.camera; } }
 
     public bool IsHoldingObject
     {
@@ -51,7 +52,7 @@ public class Player : NetworkBehaviour
         }
     }  
 
-    private void Start()
+    protected void Start()
     {
         _pickup = GetComponent<Pickup>();
         _throw = GetComponent<Throw>();
@@ -59,11 +60,7 @@ public class Player : NetworkBehaviour
         _controller = GetComponent<Controller>();
         //teamId = UnityEngine.Random.Range(0, 2220);
     }
-
-    private void Update()
-    {
-        UpdateTargetUI();
-    }
+    
 
     public Transform GetBall()
     {
@@ -85,7 +82,7 @@ public class Player : NetworkBehaviour
         if (_pickup.ball != null)
         {
             ChangeBallLayer(_pickup.ball.gameObject, false);
-            _pickup.CmdChangeBallState(_pickup.ball.GetComponent<BallRefab>(), BallRefab.BallStateRefab.Free);
+            _pickup.CmdChangeBallState(_pickup.ball.GetComponent<Ball>(), Ball.BallStateRefab.Free);
             _pickup.ball.collider.enabled = true;
             _pickup.ballTransform = null;
             _pickup.ball = null;
@@ -114,55 +111,6 @@ public class Player : NetworkBehaviour
         _throw.enabled = true;
     }
     
-    private void UpdateTargetUI()
-    {
-        if (HasTarget)
-        {
-            Vector2 canvasSize = _targetImage.GetComponent<RectTransform>().sizeDelta;
-            
-            Transform targetPointTransform = Target.transform;
-            if (Target.TryGetComponent(out Player otherPlayer))
-                targetPointTransform = otherPlayer.targetPoint;
-            
-            
-            
-            Vector3 targetPosition = playerCam.WorldToScreenPoint(targetPointTransform.position);
-
-            Vector3 targetPositionInCanvas = new Vector2(targetPosition.x / canvasSize.x * 100,
-                targetPosition.y / canvasSize.y * 100);
-            
-            _targetImage.enabled = true;
-
-            //Clamp the target to the border of the screen if we are looking behind
-            if (targetPosition.z < 0)
-            {
-                //Invert because it's behind
-                targetPositionInCanvas = (targetPositionInCanvas - new Vector3(Screen.width/2, Screen.height/2)) * -1 +
-                                         new Vector3(Screen.width/2, Screen.height/2);
-                
-                //Vector from the middle of the screen
-                Vector2 targetPositionAbsolute =  (Vector2)targetPositionInCanvas - new Vector2(Screen.width/2, Screen.height/2);
-                
-                //Max magnitude for fullHD screen (from center to corner) = sqrt((1080/2)² + (1920/2)²) = 1102
-                float maxMagnitude = Mathf.Sqrt(Mathf.Pow(Screen.width / 2,2) + Mathf.Pow(Screen.height / 2,2));
-                if (targetPositionAbsolute.magnitude < maxMagnitude)
-                {
-                    //Offsets the target of the screen so we can clamp it back later
-                    float fact = maxMagnitude / targetPositionAbsolute.magnitude;
-                    targetPositionInCanvas = (targetPositionInCanvas - new Vector3(Screen.width/2, Screen.height/2)) * fact +
-                                              new Vector3(Screen.width/2, Screen.height/2);
-                }
-            }
-
-            targetPositionInCanvas.x = Mathf.Clamp(targetPositionInCanvas.x, 0, Screen.width);
-            targetPositionInCanvas.y = Mathf.Clamp(targetPositionInCanvas.y, 0, Screen.height);
-
-            _targetImage.rectTransform.position = targetPositionInCanvas; // Set target image position to the current target
-        } else
-        {
-            _targetImage.enabled = false;
-        }
-    }
         
     public bool HasTarget
     {
@@ -192,29 +140,16 @@ public class Player : NetworkBehaviour
         if (!enabled) return;
         if (col.gameObject.CompareTag("Ball"))
         {
-            BallRefab ball = col.gameObject.GetComponent<BallRefab>();
+            Ball ball = col.gameObject.GetComponent<Ball>();
             if (ball.owner != null)
                 if (ball.owner.teamId == teamId)
                     return;
             
             if (ball.rb.velocity.magnitude > ballVelToDie && !isDead
-                && (ball._ballState == BallRefab.BallStateRefab.Curve || ball._ballState == BallRefab.BallStateRefab.FreeThrow))
+                && (ball._ballState == Ball.BallStateRefab.Curve || ball._ballState == Ball.BallStateRefab.FreeThrow))
             {
                 Die();
             }
         }
     }
-    
-    
-    public void Throw(InputAction.CallbackContext ctx)
-    {
-        if (ctx.started) _throw.ChargeThrow();
-        if (ctx.canceled) _throw.ReleaseThrow();
-    }
-
-    public void Pass(InputAction.CallbackContext ctx)
-    {
-        if (ctx.started) _throw.Pass();
-    }
-    
 }

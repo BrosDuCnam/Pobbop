@@ -17,7 +17,7 @@ public class PlayerTargetUpdate : MonoBehaviour
     /// <param name="newTargetList"></param>
     public void UpdateTargets(List<GameObject> newTargetList)
     {
-        GetComponent<TargetSystem>().Targets = new List<GameObject>(newTargetList);
-        GetComponent<TargetSystem>().Targets.Remove(transform.gameObject);
+        GetComponent<Targeter>().Targets = new List<GameObject>(newTargetList);
+        GetComponent<Targeter>().Targets.Remove(transform.gameObject);
     }
 }

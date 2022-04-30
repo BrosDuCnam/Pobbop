@@ -6,8 +6,9 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(BotController))]
-public class BotPlayer : BasePlayer
+public class BotPlayer : Player
 {
+    public Rigidbody rigidbody;
     [SerializeField] public SBStateInfo fsmStateInfo = new SBStateInfo();
     private FSMachine<SBSBase, SBStateInfo> _fsm = new FSMachine<SBSBase, SBStateInfo>();
 
@@ -16,10 +17,11 @@ public class BotPlayer : BasePlayer
         get => SeeEnemyWithWeapon();
     }
     
-    private new void Awake()
+    private new void Start()
     {
-        base.Awake();
+        base.Start();
 
+        rigidbody = GetComponent<Rigidbody>();
         fsmStateInfo.bot = this;
         fsmStateInfo.PeriodUpdate = 0.1f;
     }
@@ -31,18 +33,19 @@ public class BotPlayer : BasePlayer
 
     public void Shoot(float chargeTime)
     {
-        throwSystem.ChargeThrow();
+        _throw.ChargeThrow();
         StartCoroutine(Utils.TimedAction(chargeTime, b =>
         {
-            if (!b) throwSystem.ReleaseThrow();
+            if (!b) _throw.ReleaseThrow();
         }));
     }
     
-    private bool SeeEnemyWithWeapon()
+    
+    private bool SeeEnemyWithWeapon() //TODO Fix this function
     {
-        return targetSystem.GetVisibleTargets(targetSystem.Targets) // Get visible targets
+        return /*_targeter.GetVisibleTargets(targetSystem.Targets) // Get visible targets
             .Any(x => x.GetComponent<PickUpDropSystem>() && // If the enemy has PickUpDropSystem
                       x.GetComponent<PickUpDropSystem>().PickableObject != null && // If the enemy has PickUpDropSystem with a PickableObject
-                      x.GetComponent<ThrowSystem>()); // If the enemy can throw his PickableObject
+                      x.GetComponent<ThrowSystem>()); // If the enemy can throw his PickableObject*/ true;
     }
 }

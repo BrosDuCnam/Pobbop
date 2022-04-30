@@ -42,7 +42,7 @@ public class NetworkManagerLobby : NetworkManager
         // instantiating a "Player" prefab gives it the name "Player(clone)"
         // => appending the connectionId is WAY more useful for debugging!
         NetworkServer.AddPlayerForConnection(conn, player);
-        player.GetComponent<RealPlayer>().ChangeName(playerName);
+        //player.GetComponent<RealPlayer>().ChangeName(playerName);
     }
     
     

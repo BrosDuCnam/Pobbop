@@ -17,7 +17,7 @@ public class GameControllerDEBUG : MonoBehaviour
         else Destroy(this);
     }
 
-    public static void AddPlayer(BasePlayer player)
+    public static void AddPlayer(Player player)
     {
        foreach (BotPlayer bot in Instance._bots) 
        {

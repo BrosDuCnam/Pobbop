@@ -4,6 +4,7 @@ This is a school project for Le CNAM ENJMIN L1
 - Yann Minh
 - Sebastien
 - Camille
+- Jonathan
 
 [comment]: # (Faut qu'on voit ensemble si vous voullez mettre vos noms)
 
@@ -18,7 +19,6 @@ Assets/Resources is the folder to put all resources that need to be loaded in ru
 
 ### External Resources :
 - Mirror
-- Polygon Prototype _(from Synty studio)_
 
 ### Added Components :
 - Input System

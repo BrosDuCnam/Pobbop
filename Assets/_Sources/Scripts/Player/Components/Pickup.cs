@@ -14,8 +14,9 @@ public class Pickup : NetworkBehaviour
     [SerializeField] public Transform pickupPoint;
     [SerializeField] private float maxVelToPickup = 5f;
     [SerializeField] private float cooldownTime = 0.4f;
+    [SerializeField] private float catchDistance = 4f;
     [CanBeNull] public Transform ballTransform;
-    public BallRefab ball;
+    public Ball ball;
     private Player _player;
     [HideInInspector] public bool cooldown;
     
@@ -29,8 +30,8 @@ public class Pickup : NetworkBehaviour
     {
         if (ballTransform != null)
         {
-            if (ball == null) ball = ballTransform.GetComponent<BallRefab>();
-            if (ball._ballState == BallRefab.BallStateRefab.Picked)
+            if (ball == null) ball = ballTransform.GetComponent<Ball>();
+            if (ball._ballState == Ball.BallStateRefab.Picked)
             {
                 ballTransform.position = pickupPoint.position;
                 CmdMoveBall(ballTransform, pickupPoint.position);
@@ -45,14 +46,14 @@ public class Pickup : NetworkBehaviour
     }
 
     [Command]
-    public void CmdChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab)
+    public void CmdChangeBallState(Ball _ball, Ball.BallStateRefab _ballStateRefab)
     {
-        RpcChangeBallState(_ballRefab, _ballStateRefab);
+        RpcChangeBallState(_ball, _ballStateRefab);
     }
     [ClientRpc]
-    private void RpcChangeBallState(BallRefab _ballRefab, BallRefab.BallStateRefab _ballStateRefab)
+    private void RpcChangeBallState(Ball _ball, Ball.BallStateRefab _ballStateRefab)
     {
-        _ballRefab.ChangeBallState(_ballStateRefab, _player);
+        _ball.ChangeBallState(_ballStateRefab, _player);
     }
 
     public void Throw()
@@ -74,33 +75,66 @@ public class Pickup : NetworkBehaviour
         if (cooldown) return;
         if (col.CompareTag("Ball"))
         {
-            if (col.TryGetComponent(out BallRefab ballRefab))
+            if (col.TryGetComponent(out Ball ballRefab))
             {
                 //If it's a pass
-                if (ballRefab._ballState == BallRefab.BallStateRefab.Pass
+                if (ballRefab._ballState == Ball.BallStateRefab.Pass
                     && !_player.IsHoldingObject
                     && ballRefab.owner.teamId == _player.teamId)
                 {
                     ballTransform = col.transform;
                     ball = ballRefab;
                     ballRefab.collider.enabled = false;
-                    CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Picked);
+                    CmdChangeBallState(ballRefab, Ball.BallStateRefab.Picked);
                     _player.ChangeBallLayer(ballRefab.gameObject, true);
                     return;
                 }
 
                 //Pick if pickable
-                if (ballRefab._ballState != BallRefab.BallStateRefab.Free ||
+                if (ballRefab._ballState != Ball.BallStateRefab.Free ||
                     ballRefab.rb.velocity.magnitude > maxVelToPickup ||
                     _player.IsHoldingObject) return;
                 
                 ballTransform = col.transform;
                 ball = ballRefab;
                 ballRefab.collider.enabled = false;
-                CmdChangeBallState(ballRefab, BallRefab.BallStateRefab.Picked);
+                CmdChangeBallState(ballRefab, Ball.BallStateRefab.Picked);
                 _player.ChangeBallLayer(ballRefab.gameObject, true);
                 
                 print ("Ball picked :: " + name);
+            }
+        }
+    }
+
+    public void TryToCatch()
+    {
+        RaycastHit[] hits = Physics.SphereCastAll(_player.Camera.transform.position, catchDistance, 
+            _player.Camera.transform.forward, catchDistance); // Get all objects in range
+        if (hits.Length > 0) // If the list of object is not empty
+        {
+            Ball[] balls =
+                hits.Where(hit => hit.collider.GetComponent<Ball>() != null)
+                    .Select(hit => hit.collider.GetComponent<Ball>())
+                    .ToArray(); //Take only pickable objects
+
+            balls = balls.Where(ball =>
+                Utils.IsVisibleByCamera(ball.transform.position, _player.Camera) &&
+                ball._ballState != Ball.BallStateRefab.Picked).ToArray(); // Take only visible objects annd not picked
+
+            balls = balls.OrderBy(ball =>
+                    Vector3.Distance(ball.transform.position, _player.Camera.transform.position))
+                .ToArray(); // Take the closest object
+
+            if (balls.Length > 0) // If there is at least one object in range
+            {
+                Ball closestBall = balls[0]; // Take the closest object
+                
+                ball = closestBall;
+                closestBall.collider.enabled = false;
+                CmdChangeBallState(closestBall, Ball.BallStateRefab.Picked);
+                _player.ChangeBallLayer(closestBall.gameObject, true);
+                
+                print ("Ball catched :: " + name);
             }
         }
     }
