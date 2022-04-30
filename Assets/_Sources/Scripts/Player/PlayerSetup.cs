@@ -46,7 +46,6 @@ public class PlayerSetup : NetworkBehaviour
             behaviour.enabled = false;
         }
     }
-    
 
     [Command]
     void CmdSetUsername(string playerID, string username)

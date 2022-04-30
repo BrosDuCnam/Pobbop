@@ -3,15 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class NetworkManagerRefab : NetworkManager
 {
     [Scene] [SerializeField] private string menuScene = string.Empty;
+    [Scene] [SerializeField] private string gameScene = string.Empty;
 
     [Header("Room")]
-    [SerializeField] private RoomPlayer roomPlayerPrefab;
+    [SerializeField] private GameObject roomPlayerPrefab;    
+    
+    [Header("Game")]
+    [SerializeField] private GameObject gamePlayerPrefab;
     
     public static NetworkManagerRefab instance;
     public static event Action OnClientConnected;
@@ -32,6 +37,7 @@ public class NetworkManagerRefab : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
+        NetworkClient.AddPlayer();
         OnClientConnected?.Invoke();
     }
 
@@ -42,16 +48,11 @@ public class NetworkManagerRefab : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        base.OnServerAddPlayer(conn);
-        
-        if (SceneManager.GetActiveScene().name == menuScene)
+        if (SceneManager.GetActiveScene().path == menuScene)
         {
-            bool isLeader = LobbyData.instance.roomPlayers.Count == 0;
+            GameObject roomPlayerInstance = Instantiate(roomPlayerPrefab);
 
-            RoomPlayer roomPlayerInstance = Instantiate(roomPlayerPrefab);
-            
             NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
-            print("addedRoomPlayer");
         }
     }
     
@@ -75,6 +76,36 @@ public class NetworkManagerRefab : NetworkManager
             }
         }
         return spawnPoint;
+    }
+
+    public override void ServerChangeScene(string newSceneName)
+    {
+        if (newSceneName == gameScene)
+        {
+            List<RoomPlayer> roomPlayers = HostMenu.instance.hostMenuPlayerData.Select(x => x.RoomPlayer).ToList();
+            int indexCount = 0;
+            foreach (RoomPlayer roomPlayer in roomPlayers)
+            {
+                NetworkConnection conn = roomPlayer.connectionToClient;
+                GameObject gamePlayerInstance = Instantiate(gamePlayerPrefab, startPositions[indexCount].position, startPositions[indexCount].rotation);
+                gamePlayerInstance.GetComponent<RealPlayer>().teamId = roomPlayer.teamId;
+                
+                NetworkServer.Destroy(conn.identity.gameObject);
+                NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance);
+                    
+                indexCount++;
+            }
+        }
+        base.ServerChangeScene(newSceneName);
+    }
+
+
+    public void StartGame()
+    {
+        if (SceneManager.GetActiveScene().path == menuScene)
+        {
+            ServerChangeScene(gameScene);
+        }
     }
 
 }

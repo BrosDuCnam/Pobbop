@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
+using Mirror;
 using TMPro;
 using UI.Host;
 using UnityEngine;
 
 namespace UI
 {
-    public class HostMenu : MonoBehaviour
+    public class HostMenu : NetworkBehaviour
     {
         [SerializeField] public Host.HostMenuData hostMenuData;
-        [SerializeField] public List<Host.HostMenuPlayerData> hostMenuPlayerData;
+        [SerializeField] public List<Host.HostMenuPlayerData> hostMenuPlayerData = new List<HostMenuPlayerData>();
 
         [Header("Team UI Objects")] [SerializeField] [Tooltip("The list of team UI objects, don't change do not exceed 4")]
         private GameObject[] _teamsObjects;
@@ -28,21 +30,46 @@ namespace UI
         [Header("Prefabs")]
         [SerializeField] private GameObject _playerPrefab;
 
+        [Header("Deactivate On Client")] 
+        [SerializeField] private GameObject _startGame;
+        [SerializeField] private GameObject _teamAmount;
+        
+
+        public static HostMenu instance;
+
+        private void Awake()
+        {
+            if (instance == null) instance = this;
+        }
+
         private void Start()
         {
             hostMenuData.TeamAmount = 2;
 
+            if (!isServer)
+            {
+                _startGame.SetActive(false);
+                _teamAmount.SetActive(false);
+            }
+
             UpdateUI();
         }
 
+        public void AddPlayer(int playerId, string name, int ping, int teamIndex, RoomPlayer roomPlayer)
+        {
+            HostMenuPlayerData player = new HostMenuPlayerData(playerId, name, ping, teamIndex, roomPlayer);
+            hostMenuPlayerData.Add(player);
+            UpdateTeamUI();
+        }
+        
+        
         public void UpdateUI()
         {
             _teamAmountText.text = hostMenuData.TeamAmount.ToString();
 
             UpdateTeamUI();
         }
-        
-        
+
         public void IncreaseTeamSize()
         {
             if (hostMenuData.TeamAmount < 4)
@@ -60,8 +87,7 @@ namespace UI
                 UpdateUI();
             }
         }
-        
-        
+
         private void UpdateTeamUI()
         {
             switch (hostMenuData.TeamAmount)
@@ -77,24 +103,23 @@ namespace UI
                     break;
             }
 
-            for (var i = 0; i < hostMenuPlayerData.Count; i++)
+            foreach (GameObject teamObject in _teamsObjects)
             {
-                GameObject player = GetPlayerObject(hostMenuPlayerData[i].PlayerId);
-                if (player != null) //If player has already been instantied
+                Transform layout = teamObject.transform.GetChild(1).transform;
+                for (int i = 0; i < layout.childCount; i++)
                 {
-                    int actualTeam = Array.IndexOf(_teamsObjects, player.transform.parent.parent); //Get the actual team
-                    if (actualTeam != hostMenuPlayerData[i].TeamIndex) //If the team has changed
-                    {
-                        player.transform.SetParent(_teamsObjects[hostMenuPlayerData[i].TeamIndex].transform.GetChild(1)); //Move the player to the new team
-                    }
+                    Destroy(layout.GetChild(i).gameObject);
                 }
-                else
-                {
-                    player = Instantiate(_playerPrefab, _teamsObjects[hostMenuPlayerData[i].TeamIndex].transform.GetChild(1)); //Instantiate the player
-                    player.name = "Player_" + hostMenuPlayerData[i].PlayerId; //Set the name of the player
-                    player.GetComponentsInChildren<TextMeshProUGUI>()[0].text = hostMenuPlayerData[i].Name; //Set the player name
-                    player.GetComponentsInChildren<TextMeshProUGUI>()[1].text = hostMenuPlayerData[i].Ping.ToString(); //Set the player ping
-                }
+            }
+            
+            foreach (HostMenuPlayerData playerData in hostMenuPlayerData)
+            {
+                GameObject player = GetPlayerObject(playerData.PlayerId);
+                
+                player = Instantiate(_playerPrefab, _teamsObjects[playerData.TeamIndex].transform.GetChild(1)); //Instantiate the player
+                player.name = "Player_" + playerData.PlayerId; //Set the name of the player
+                player.GetComponentsInChildren<TextMeshProUGUI>()[0].text = playerData.Name; //Set the player name
+                player.GetComponentsInChildren<TextMeshProUGUI>()[1].text = playerData.Ping.ToString(); //Set the player ping
             }
         }
 
@@ -140,6 +165,34 @@ namespace UI
                         });
                     }
                 }
+            }
+        }
+
+        public void ChangeLocalPlayerTeam(int teamId)
+        {
+            RoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<RoomPlayer>();
+            localPlayer.CmdChangeTeam(teamId);
+        }
+
+        public void ChangePlayerTeam(int playerId, int teamId)
+        {
+            HostMenuPlayerData playerData = hostMenuPlayerData.Find(x => x.PlayerId == playerId);
+            playerData.TeamIndex = teamId;
+            UpdateUI();
+        }
+        
+        public void ChangeTeamNum(bool increase)
+        {
+            RoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<RoomPlayer>();
+            localPlayer.CmdChangeTeamNum(increase);
+            UpdateUI();
+        }
+
+        public void StartGame()
+        {
+            if (isServer)
+            {
+                NetworkManagerRefab.instance.StartGame();
             }
         }
     }

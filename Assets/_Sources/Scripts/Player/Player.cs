@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
 { 
-    public int teamId;
+    [SyncVar] public int teamId;
     private float currentHealth;
     public string username = "Noob";
     public Camera playerCam;
@@ -50,7 +50,12 @@ public class Player : NetworkBehaviour
             if (_throw == null) return false;
             return _throw.IsCharging;
         }
-    }  
+    }
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     protected void Start()
     {

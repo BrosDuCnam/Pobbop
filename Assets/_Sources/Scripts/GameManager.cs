@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour
     
     private void Awake()
     {
-        if (instance == null) instance = this; return;
+        if (instance == null) instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public static void RegisterPlayer(string netID,  Player player)
@@ -45,5 +46,4 @@ public class GameManager : MonoBehaviour
     {
         return players.Values.ToArray();
     }
-
 }
