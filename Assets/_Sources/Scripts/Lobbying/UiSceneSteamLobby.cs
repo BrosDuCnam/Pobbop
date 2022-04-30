@@ -12,6 +12,7 @@ public class UiSceneSteamLobby : MonoBehaviour
 {
     [SerializeField] private bool filterLobbies;
     [SerializeField] private GameObject content;
+    [SerializeField] private GameObject camera;
 
     
     public static UiSceneSteamLobby instance;
@@ -30,6 +31,8 @@ public class UiSceneSteamLobby : MonoBehaviour
     
     protected  virtual void Start()
     {
+        camera.SetActive(true);
+
         if (!SteamManager.Initialized)
         {
             Debug.Log("Can't access to steam networks, steam may be offline");
@@ -110,8 +113,8 @@ public class UiSceneSteamLobby : MonoBehaviour
     protected virtual void OnLobbyEntered(LobbyEnter_t callback)
     {
         if (NetworkServer.active) {return;}
-        
         string hostAdress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey);
+
         networkManager.networkAddress = hostAdress;
         networkManager.StartClient();
     }

@@ -6,6 +6,7 @@ using Mirror;
 using TMPro;
 using UI.Host;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace UI
 {
@@ -46,13 +47,21 @@ namespace UI
         {
             hostMenuData.TeamAmount = 2;
 
-            if (!isServer)
-            {
-                _startGame.SetActive(false);
-                _teamAmount.SetActive(false);
-            }
-
             UpdateUI();
+        }
+
+        public void HostGame()
+        {
+            NetworkManagerRefab.instance.StartHost();
+            HostMenuShowOnServer();
+        }
+        
+        private void HostMenuShowOnServer()
+        {
+
+            _startGame.SetActive(isServer);
+            _teamAmount.SetActive(isServer);
+            
         }
 
         public void AddPlayer(int playerId, string name, int ping, int teamIndex, RoomPlayer roomPlayer)
