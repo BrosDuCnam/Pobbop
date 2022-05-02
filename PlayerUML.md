@@ -3,14 +3,25 @@ classDiagram
 Controller <|-- PlayerInputController
 Controller <|-- BotController
 
-BasePlayer *-- TargetSystem
-BasePlayer *-- ThrowSystem
-BasePlayer *-- PickUpDropSystem
-BasePlayer *-- HealthSystem
+Player *-- Targetter
+Player *-- Throw
+Player *-- PickUp
 
-BasePlayer <|-- RealPlayer
-BasePlayer <|-- BotPlayer
+Player <|-- RealPlayer
+Player <|-- BotPlayer
 
 RealPlayer *-- PlayerInputController
 BotPlayer *-- BotController
+
+FSMachine *-- BotPlayer
+
+FSMStateInfo <|-- SBStateInfo
+FSMState <|-- SBStateInfo
+
+FSMState <|-- SBSBase
+FSMState <|-- SBSNavigate
+FSMState <|-- SBSBallChasing
+FSMState <|-- SBSShoot
+FSMState <|-- SBSPlayerChasing
+FSMState <|-- SBSHasBall
 ````
