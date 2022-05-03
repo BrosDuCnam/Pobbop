@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &179929019 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 892826083597940311, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+  m_PrefabInstance: {fileID: 1869116236}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &428487269
 GameObject:
   m_ObjectHideFlags: 0
@@ -1914,6 +1919,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 892826084684448868, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+      propertyPath: HostPanel
+      value: 
+      objectReference: {fileID: 179929019}
+    - target: {fileID: 892826084684448868, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+      propertyPath: JoinPanel
+      value: 
+      objectReference: {fileID: 1904148970}
     - target: {fileID: 892826084794984567, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2611,6 +2624,11 @@ PrefabInstance:
 --- !u!1 &1869116238 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 892826084590463650, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+  m_PrefabInstance: {fileID: 1869116236}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1904148970 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 892826082699161097, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
   m_PrefabInstance: {fileID: 1869116236}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1954350041

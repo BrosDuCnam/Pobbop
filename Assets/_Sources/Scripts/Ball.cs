@@ -40,7 +40,6 @@ public class Ball : NetworkBehaviour
 
     private void OnCollisionStay(Collision col)
     {
-        print("ball collision");
         if (col.gameObject.TryGetComponent(out Player player))
         {
             LetPlayerDie(player);

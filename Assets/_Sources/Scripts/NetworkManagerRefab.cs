@@ -31,6 +31,8 @@ public class NetworkManagerRefab : NetworkManager
     public override void OnStartClient()
     {
         DontDestroyOnLoad(gameObject);
+        HostMenu.instance.RedirectOnHostPage();
+        print("OnStartClient");
         base.OnStartClient();
     }
     

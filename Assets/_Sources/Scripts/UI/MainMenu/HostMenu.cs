@@ -34,13 +34,19 @@ namespace UI
         [Header("Deactivate On Client")] 
         [SerializeField] private GameObject _startGame;
         [SerializeField] private GameObject _teamAmount;
+
+        [Header("MenuPanels")]
+        [SerializeField] private GameObject HostPanel;
+        [SerializeField] private GameObject JoinPanel;
         
+        [HideInInspector] public MainMenu _mainMenu;
 
         public static HostMenu instance;
 
         private void Awake()
         {
             if (instance == null) instance = this;
+            _mainMenu = GetComponent<MainMenu>();
         }
 
         private void Start()
@@ -50,26 +56,16 @@ namespace UI
             UpdateUI();
         }
 
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-            if (isServer) return;
-            _startGame.SetActive(false);
-            _teamAmount.SetActive(false);
-        }
-
         public void HostGame()
         {
             NetworkManagerRefab.instance.StartHost();
-            HostMenuShowOnServer();
+            UpdateUI();
         }
         
         private void HostMenuShowOnServer()
         {
-
             _startGame.SetActive(isServer);
             _teamAmount.SetActive(isServer);
-            
         }
 
         public void AddPlayer(int playerId, string name, int ping, int teamIndex, RoomPlayer roomPlayer)
@@ -83,7 +79,7 @@ namespace UI
         public void UpdateUI()
         {
             _teamAmountText.text = hostMenuData.TeamAmount.ToString();
-
+            HostMenuShowOnServer();
             UpdateTeamUI();
         }
 
@@ -211,6 +207,12 @@ namespace UI
             {
                 NetworkManagerRefab.instance.StartGame();
             }
+        }
+
+        public void RedirectOnHostPage()
+        {
+            _mainMenu.OpenSubMenu(JoinPanel, true);
+            _mainMenu.OpenSubMenuAnimated(HostPanel);
         }
     }
 }

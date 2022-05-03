@@ -751,6 +751,11 @@ MonoBehaviour:
   _uiTheme: {fileID: 11400000, guid: 7bf174e1291174644b1a9a229a4415f0, type: 2}
   gradientPure: {fileID: 0}
   gradientSmall: {fileID: 0}
+--- !u!1 &971838815 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 892826083597940311, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+  m_PrefabInstance: {fileID: 1869116236}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1039006196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,6 +1244,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bf34060e6fce6a4a97a30dfb9041eb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1530832841 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 892826082699161097, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+  m_PrefabInstance: {fileID: 1869116236}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1543490050 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 892826084684448890, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
@@ -2206,6 +2216,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 156.56
       objectReference: {fileID: 0}
+    - target: {fileID: 892826084684448868, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+      propertyPath: HostPanel
+      value: 
+      objectReference: {fileID: 971838815}
+    - target: {fileID: 892826084684448868, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+      propertyPath: JoinPanel
+      value: 
+      objectReference: {fileID: 1530832841}
     - target: {fileID: 892826084684448868, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
       propertyPath: _startGame
       value: 
