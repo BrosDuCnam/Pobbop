@@ -77,9 +77,12 @@ public class Player : NetworkBehaviour
         return _targeter.GetDesiredFriend();
     }
     
-    public void Die()
+    public void Die(Ball ball = null)
     {
         if (isDead) return;
+        if (ball != null)
+            if (GetBall() == ball.transform)
+                return;
         deaths++;
         print("dead" + name);
         isDead = true;

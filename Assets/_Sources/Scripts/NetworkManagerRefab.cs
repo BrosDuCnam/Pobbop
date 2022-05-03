@@ -61,6 +61,11 @@ public class NetworkManagerRefab : NetworkManager
         float distance = float.MinValue;
         Transform spawnPoint = new GameObject().transform;
         List<Transform> allPlayers = GameManager.GetAllPlayers().Select(x => x.transform).ToList();
+        //Fix for host not registering spawnpoints
+        if (startPositions.Count == 0)
+        {
+            startPositions = FindObjectsOfType<NetworkStartPosition>().Select(x => x.transform).ToList();
+        }
         //Get the spawnpoint that id the furthest away from all players
         foreach (Transform spawnPointTransform in startPositions)
         {

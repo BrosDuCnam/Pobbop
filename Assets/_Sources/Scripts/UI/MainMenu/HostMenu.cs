@@ -46,8 +46,16 @@ namespace UI
         private void Start()
         {
             hostMenuData.TeamAmount = 2;
-
+            
             UpdateUI();
+        }
+
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            if (isServer) return;
+            _startGame.SetActive(false);
+            _teamAmount.SetActive(false);
         }
 
         public void HostGame()

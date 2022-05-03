@@ -32,26 +32,48 @@ public class Ball : NetworkBehaviour
     {
         _ballState = ballState;
         owner = _owner;
+        if (ballState == BallStateRefab.Picked)
+        {
+            rb.isKinematic = true;
+        }
+    }
+
+    private void OnCollisionStay(Collision col)
+    {
+        print("ball collision");
+        if (col.gameObject.TryGetComponent(out Player player))
+        {
+            LetPlayerDie(player);
+        }
+        else
+        {
+            if (_ballState == BallStateRefab.Picked) return;
+            CmdChangeBallState(BallStateRefab.Free);
+            CmdChangeOwner(null);
+        }
     }
 
     [ServerCallback]
-    private void OnCollisionEnter(Collision col)
+    private void LetPlayerDie(Player player)
     {
-        if (col.gameObject.TryGetComponent(out Player player))
-        {
-            if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player.teamId == owner.teamId) return;
-            RpcDie(player);
-        }
-        if (_ballState == BallStateRefab.Picked) return;
+        if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player.teamId == owner.teamId) return;
+        RpcDie(player);
+            
         RpcChangeBallState(BallStateRefab.Free);
         RpcChangeOwner(null);
-
     }
+
 
     [ClientRpc]
     private void RpcDie(Player player)
     {
         player.Die();
+    }
+
+    [Command]
+    private void CmdChangeBallState(BallStateRefab ballState)
+    {
+        RpcChangeBallState(ballState);
     }
     
     [ClientRpc]

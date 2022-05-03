@@ -85,6 +85,7 @@ public class Pickup : NetworkBehaviour
                     ballTransform = col.transform;
                     ball = ballRefab;
                     ballRefab.collider.enabled = false;
+                    ball._ballState = Ball.BallStateRefab.Picked;
                     CmdChangeBallState(ballRefab, Ball.BallStateRefab.Picked);
                     _player.ChangeBallLayer(ballRefab.gameObject, true);
                     return;
@@ -98,6 +99,7 @@ public class Pickup : NetworkBehaviour
                 ballTransform = col.transform;
                 ball = ballRefab;
                 ballRefab.collider.enabled = false;
+                ball._ballState = Ball.BallStateRefab.Picked;
                 CmdChangeBallState(ballRefab, Ball.BallStateRefab.Picked);
                 _player.ChangeBallLayer(ballRefab.gameObject, true);
                 
@@ -119,7 +121,8 @@ public class Pickup : NetworkBehaviour
 
             balls = balls.Where(ball =>
                 Utils.IsVisibleByCamera(ball.transform.position, _player.Camera) &&
-                ball._ballState != Ball.BallStateRefab.Picked).ToArray(); // Take only visible objects annd not picked
+                (ball._ballState != Ball.BallStateRefab.Free && ball._ballState != Ball.BallStateRefab.Picked)
+                && ball.owner != _player).ToArray(); // Take only visible objects annd not picked
 
             balls = balls.OrderBy(ball =>
                     Vector3.Distance(ball.transform.position, _player.Camera.transform.position))
@@ -130,7 +133,10 @@ public class Pickup : NetworkBehaviour
                 Ball closestBall = balls[0]; // Take the closest object
                 
                 ball = closestBall;
+                ballTransform = closestBall.transform;
                 closestBall.collider.enabled = false;
+                ball.rb.velocity = Vector3.zero;
+                ball._ballState = Ball.BallStateRefab.Picked;
                 CmdChangeBallState(closestBall, Ball.BallStateRefab.Picked);
                 _player.ChangeBallLayer(closestBall.gameObject, true);
                 

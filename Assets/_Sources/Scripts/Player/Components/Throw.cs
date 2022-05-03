@@ -196,9 +196,13 @@ public class Throw : NetworkBehaviour
 
             yield return null;
         }
-        CmdSetKinematic(ball, false);
-        CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
-        
+
+        if (ball._ballState != Ball.BallStateRefab.Picked)
+        {
+            CmdSetKinematic(ball, false);
+            CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
+        }   
+
         ball.rb.velocity = direction;
     }
     

@@ -723,7 +723,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _minThrowForce: 10
-  _maxThrowForce: 35
+  _maxThrowForce: 25
   _maxChargeTime: 2.5
   _chargeCurve:
     serializedVersion: 2
