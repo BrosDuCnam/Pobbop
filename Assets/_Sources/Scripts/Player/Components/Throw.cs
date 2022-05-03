@@ -113,11 +113,15 @@ public class Throw : NetworkBehaviour
                 print("simple throw");
                 Vector3 direction = _player.playerCam.transform.forward;
                 Vector3 velocity = direction * force;
+                float magnitude = velocity.magnitude;
+                //Add the player current velocity to the throw 
+                Vector3 playerVelAlongCam = Vector3.Project(_player._controller.rb.velocity, _player.playerCam.transform.forward);
+                velocity += playerVelAlongCam;
+                
                 CmdSetKinematic(ball, false);
                 CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
                 CmdSimpleThrowBall(ball, velocity); // Throw the object in front of the camera
             }
-            
         }
     }
 

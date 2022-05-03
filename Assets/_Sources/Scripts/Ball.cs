@@ -36,6 +36,10 @@ public class Ball : NetworkBehaviour
         {
             rb.isKinematic = true;
         }
+        else if (ballState == BallStateRefab.Free)
+        {
+            owner = null;
+        }
     }
 
     private void OnCollisionStay(Collision col)
@@ -46,9 +50,9 @@ public class Ball : NetworkBehaviour
         }
         else
         {
-            if (_ballState == BallStateRefab.Picked) return;
-            CmdChangeBallState(BallStateRefab.Free);
-            CmdChangeOwner(null);
+            if (_ballState == BallStateRefab.Picked || owner == null) return;
+            
+            owner._pickup.CmdChangeBallState(this, BallStateRefab.Free);
         }
     }
 
@@ -69,11 +73,6 @@ public class Ball : NetworkBehaviour
         player.Die();
     }
 
-    [Command]
-    private void CmdChangeBallState(BallStateRefab ballState)
-    {
-        RpcChangeBallState(ballState);
-    }
     
     [ClientRpc]
     private void RpcChangeBallState(BallStateRefab ballState)
