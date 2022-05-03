@@ -12,7 +12,6 @@ public class PlayerSetup : NetworkBehaviour
     
     private void Start()
     {
-        
         if (!isLocalPlayer)
         {
             DisableOnClients();
@@ -20,7 +19,6 @@ public class PlayerSetup : NetworkBehaviour
         else
         {
             DisableOnLocal();
-            CmdSetUsername(transform.name, "default");
         }
     }
     private void DisableOnLocal()
@@ -47,17 +45,6 @@ public class PlayerSetup : NetworkBehaviour
         }
     }
 
-    [Command]
-    void CmdSetUsername(string playerID, string username)
-    {
-        Player player = GameManager.GetPlayer(playerID);
-        if (player != null)
-        {
-            Debug.Log(username + " joined");
-            player.username = username;
-        }
-    }
-    
     public override void OnStartClient()
     {
         base.OnStartClient();

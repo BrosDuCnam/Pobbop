@@ -14,6 +14,8 @@ public class UiSceneSteamLobby : MonoBehaviour
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject camera;
 
+    public string steamUsername = "DefaultName";
+
     
     public static UiSceneSteamLobby instance;
 
@@ -47,6 +49,9 @@ public class UiSceneSteamLobby : MonoBehaviour
         lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
         lobbyListRetrieved = Callback<LobbyMatchList_t>.Create(OnLobbyListRetrieved);
         lobbyDataUpdated = Callback<LobbyDataUpdate_t>.Create(OnGetLobbyInfo);
+        
+        steamUsername = SteamFriends.GetPersonaName();
+
     }
 
     protected void HostLobby(ELobbyType lobbyType, int maxPlayers)
@@ -91,7 +96,7 @@ public class UiSceneSteamLobby : MonoBehaviour
         networkManager.StartHost();
         
         if (lobbyName == "Default name")
-            lobbyName = SteamFriends.GetPersonaName() + "'s Lobby";
+            lobbyName = steamUsername + "'s Lobby";
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", lobbyName);
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "game", "pobbop");
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey,

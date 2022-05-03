@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     {
         string playerId = playerIdPrefix + netID;
         players.Add(playerId, player);
-        player.transform.name = playerId;
+        player.transform.name = playerId + $" ({player.username})";
         if (instance != null && instance.onPlayerJoinedCallback != null)
             instance.onPlayerJoinedCallback.Invoke(playerId);
     }

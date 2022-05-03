@@ -16,8 +16,8 @@ public class RoomPlayer : NetworkBehaviour
 
     private void Start()
     {
+        username = FindObjectOfType<UiSceneSteamLobby>().steamUsername;
         myId = (int) GetComponent<NetworkIdentity>().netId;
-        username += myId;
         HostMenu.instance.AddPlayer(myId, username, 0, teamId, this);
     }
 

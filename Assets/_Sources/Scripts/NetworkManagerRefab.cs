@@ -17,6 +17,7 @@ public class NetworkManagerRefab : NetworkManager
     
     [Header("Game")]
     [SerializeField] private GameObject gamePlayerPrefab;
+
     
     public static NetworkManagerRefab instance;
     public static event Action OnClientConnected;
@@ -95,7 +96,9 @@ public class NetworkManagerRefab : NetworkManager
             {
                 NetworkConnection conn = roomPlayer.connectionToClient;
                 GameObject gamePlayerInstance = Instantiate(gamePlayerPrefab, startPositions[indexCount].position, startPositions[indexCount].rotation);
-                gamePlayerInstance.GetComponent<RealPlayer>().teamId = roomPlayer.teamId;
+                RealPlayer player = gamePlayerInstance.GetComponent<RealPlayer>();
+                player.teamId = roomPlayer.teamId;
+                player.username = roomPlayer.username;
                 
                 NetworkServer.Destroy(conn.identity.gameObject);
                 NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance);
