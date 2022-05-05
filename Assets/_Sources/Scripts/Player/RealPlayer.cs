@@ -34,6 +34,7 @@ public class RealPlayer : Player
     private void Update()
     {
         UpdateTargetUI();
+        DrawChargingCurve();
     } 
     
     private void UpdateTargetUI()
@@ -88,28 +89,44 @@ public class RealPlayer : Player
 
     private void DrawChargingCurve()
     {
-        if (HasTarget && IsHoldingObject)
+        if (HasTarget && IsCharging)
         {
             _chargingCurveLineRenderer.enabled = true;
             
-            // Calculate the multiplier of step distance
-           float multiplier = Mathf.Pow(50f, _throw.ChargeValue);
-
-            multiplier = Mathf.Clamp(multiplier, _throw.minStepMultiplier, _throw.maxStepMultiplier);
-
-            Vector3 stepPosition = (Camera.transform.forward * multiplier) + Camera.transform.position;
-
-
             Transform targetPointTransform = Target.transform;
-            if (Target.transform.FindObjectsWithTag("Targetter").Count > 0)
-            {
-                targetPointTransform = Target.transform.FindObjectsWithTag("Targetter").First().transform;
-            }
+            targetPointTransform = Target.GetComponent<Player>().targetPoint;
             
+            float chargeTime = Mathf.Clamp(Time.time - _throw._startChargeTime, 0, _throw._maxChargeTime);
+            float chargeValue = _throw._chargeCurve.Evaluate(chargeTime / _throw._maxChargeTime);
+
+            Transform playerCam = this.playerCam.transform;
+            Vector3 a = (targetPointTransform.position - playerCam.position) / 2; // Adjacent : half distance between the player and the target
+            float camAngelToA = Vector3.Angle(playerCam.forward, a); // Angle between a and hypotenuse (where the player is looking)
+
+            float hMagnitude = a.magnitude / Mathf.Cos(camAngelToA * Mathf.Deg2Rad);
+            Vector3 h = playerCam.forward * hMagnitude; // Hypotenuse
+            if (Vector3.Dot(playerCam.forward, a) < 0) h *= -1; // If the player is looking at the inverse direction of the target, invert the vector
+            Vector3 o = playerCam.position + h - (playerCam.position + a); // Opposite : the vector from adjacent to hypotenuse
+                
+            o *= Mathf.Clamp(chargeValue, 0, 1); // Change curve amplitude following the charge time (scale opposite)
+            o *= Mathf.Clamp(1 / (o.magnitude / 15 ), 0, 1); // Limit curve amplitude
+
+            Vector3 multiplier = Vector3.zero; 
+            if (Vector3.Dot(playerCam.forward, a) < 0) // Add offset to the step point if the player is looking behind
+                multiplier = -a * Mathf.Pow((90 - camAngelToA) / 90, 2);
+
+            Vector3 stepPosition = playerCam.position + a + o + multiplier;
+
+            Debug.DrawRay(playerCam.position, h, Color.red);
+            Debug.DrawRay(playerCam.position, a, Color.blue);
+            Debug.DrawRay(playerCam.position + a, o, Color.green);
+            Debug.DrawRay(playerCam.position, a + o + multiplier, Color.yellow);
+            Debug.DrawRay(playerCam.position + a + o, multiplier, Color.magenta);
+
             Vector3[] positions = Utils.GetBezierCurvePositions(GetBall().position, stepPosition, targetPointTransform.position, 30);
             _chargingCurveLineRenderer.positionCount = positions.Length+1;
             _chargingCurveLineRenderer.SetPositions(positions);
-            _chargingCurveLineRenderer.SetPosition(_chargingCurveLineRenderer.positionCount-1, Target.transform.position);
+            _chargingCurveLineRenderer.SetPosition(_chargingCurveLineRenderer.positionCount-1, targetPointTransform.position);
         }
         else
         {

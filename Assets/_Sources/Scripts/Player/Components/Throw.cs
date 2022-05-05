@@ -8,8 +8,8 @@ public class Throw : NetworkBehaviour
 {
     [SerializeField] private float _minThrowForce = 10f;
     [SerializeField] private float _maxThrowForce = 35f;
-    [SerializeField] private float _maxChargeTime = 5;
-    [SerializeField] private AnimationCurve _chargeCurve;
+    [SerializeField] public float _maxChargeTime = 5;
+    [SerializeField] public AnimationCurve _chargeCurve;
     [SerializeField] private AnimationCurve _speedCurve;
     [SerializeField] private AnimationCurve _passCurve;
     [SerializeField] public float minStepMultiplier = 2f;
@@ -22,7 +22,7 @@ public class Throw : NetworkBehaviour
 
 
     private Player _player;
-    private float _startChargeTime;
+    [HideInInspector] public float _startChargeTime;
     private Transform ball;
 
     private bool _isCharging;
@@ -99,15 +99,23 @@ public class Throw : NetworkBehaviour
                 Transform targetPointTransform = target.transform;
                 targetPointTransform = target.GetComponent<Player>().targetPoint;
 
-                /*// Calculate the multiplier of step distance
-                float multiplier = Mathf.Pow(1.5f, _player._controller.rb.velocity.magnitude);
-                multiplier += Mathf.Pow(50f, GetNormalizedForce(force));
-                multiplier = Mathf.Clamp(multiplier, minStepMultiplier, maxStepMultiplier);*/
+                Transform playerCam = _player.playerCam.transform;
+                Vector3 a = (targetPointTransform.position - playerCam.position) / 2; // Adjacent : half distance between the player and the target
+                float camAngelToA = Vector3.Angle(playerCam.forward, a); // Angle between a and hypotenuse (where the player is looking)
 
-                float multiplier = Mathf.Pow(50f, GetNormalizedForce(force));
-                multiplier = Mathf.Clamp(multiplier, minStepMultiplier, maxStepMultiplier);
+                float hMagnitude = a.magnitude / Mathf.Cos(camAngelToA * Mathf.Deg2Rad);
+                Vector3 h = playerCam.forward * hMagnitude; // Hypotenuse
+                if (Vector3.Dot(playerCam.forward, a) < 0) h *= -1; // If the player is looking at the inverse direction of the target, invert the vector
+                Vector3 o = playerCam.position + h - (playerCam.position + a); // Opposite : the vector from adjacent to hypotenuse
                 
-                Vector3 stepPosition = (_player.playerCam.transform.forward * multiplier) + _player.playerCam.transform.position;
+                o *= Mathf.Clamp(chargeValue, 0, 1); // Change curve amplitude following the charge time (scale opposite)
+                o *= Mathf.Clamp(1 / (o.magnitude / 15 ), 0, 1); // Limit curve amplitude
+
+                Vector3 multiplier = Vector3.zero; 
+                if (Vector3.Dot(playerCam.forward, a) < 0) // Add offset to the step point if the player is looking behind
+                    multiplier = -a * Mathf.Pow((90 - camAngelToA) / 90, 2);
+
+                Vector3 stepPosition = playerCam.position + a + o + multiplier;
 
                 //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
                 float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
@@ -277,73 +285,4 @@ public class Throw : NetworkBehaviour
 
     #endregion
     
-    /*
-    #region Pass
-
-    public void Pass()
-    {
-        GameObject target = _player.GetDesiredFriendly();
-        this.ball = _player.GetBall();
-        if (target == null || this.ball == null) return; 
-
-        _player._controller.IsThrowing = false;
-        _player._pickup.Throw();
-        Ball ball = this.ball.GetComponent<Ball>();
-        ball.collider.enabled = true;
-        _player._pickup.CmdChangeBallState(ball, Ball.BallStateRefab.Pass);
-        _player.ChangeBallLayer(ball.gameObject, false);
-        CmdSetKinematic(ball, true);
-            
-        this.ball = null;
-        IsCharging = false;
-        _player.IsHoldingObject = false;
-
-        Transform targetPointTransform = target.transform;
-        targetPointTransform = target.GetComponent<Player>().targetPoint;
-        
-        StartCoroutine(PassEnumerator(ball, _player, targetPointTransform, 20f, _passCurve));
-    }
-    
-    private IEnumerator PassEnumerator(Ball ball, Player throwingPlayer, Transform target, float speed, AnimationCurve curve)
-    {
-        ball.owner = throwingPlayer;
-        ball._ballState = Ball.BallStateRefab.Pass;
-        CmdChangeBallState(ball, Ball.BallStateRefab.Pass, _player);
-
-        //Vector3 origin = transform.position;
-        Vector3 origin = _player._pickup.pickupPoint.position;
-        float time = 0;
-        Vector3 direction = Vector3.zero;
-        Vector3 lastPos = origin;
-        print(ball._ballState == Ball.BallStateRefab.Pass);
-        while (ball._ballState == Ball.BallStateRefab.Pass)
-        {
-            Vector3 targetPos = target.position;
-            Vector3 nextPos = ball.rb.position + (targetPos - ball.rb.position).normalized * speed / 50;
-            ball.rb.MovePosition(nextPos);
-            CmdMoveBall(ball, nextPos);
-            CmdUpdateVelocity(ball, ball.rb.velocity);
-            //ball.transform.position = ball.rb.position;
-
-            new WaitForFixedUpdate();
-            time += Time.fixedDeltaTime * speed / 50;
-            
-            direction = nextPos - lastPos;
-            direction /= Time.fixedDeltaTime;
-            lastPos = nextPos;    
-            
-            yield return null;
-        }
-
-        if (ball._ballState != Ball.BallStateRefab.Picked)
-        {
-            CmdSetKinematic(ball, false);
-            CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
-        
-            ball.rb.velocity = direction;
-        }
-    }
-
-    #endregion
-    */
 }
