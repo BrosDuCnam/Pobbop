@@ -64,6 +64,7 @@ public class Player : NetworkBehaviour
         _targeter = GetComponent<Targeter>();
         _controller = GetComponent<Controller>();
         //teamId = UnityEngine.Random.Range(0, 2220);
+        Die(null, 0.2f); //Temp fix for client player TODO: Find a better fix
     }
     
 
@@ -77,7 +78,7 @@ public class Player : NetworkBehaviour
         return _targeter.GetDesiredFriend();
     }
     
-    public void Die(Ball ball = null)
+    public void Die(Ball ball = null, float respawnTime = 0.4f)
     {
         if (isDead) return;
         if (ball != null)
@@ -94,18 +95,19 @@ public class Player : NetworkBehaviour
             _pickup.ball.collider.enabled = true;
             _pickup.ballTransform = null;
             _pickup.ball = null;
+            _throw.IsCharging = false;
         }
         _pickup.enabled = false;
         _controller.enabled = false;
         _targeter.enabled = false;
         _throw.enabled = false;
 
-        StartCoroutine(Respawn());
+        StartCoroutine(Respawn(respawnTime));
     }
     
-    private IEnumerator Respawn()
+    private IEnumerator Respawn(float respawnTime)
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(respawnTime);
         
         
         Transform spawnPoint = NetworkManagerRefab.instance.GetRespawnPosition();
@@ -113,10 +115,13 @@ public class Player : NetworkBehaviour
         transform.rotation = spawnPoint.rotation;
         _controller.rb.velocity = Vector3.zero;
         isDead = false;
-        _pickup.enabled = true;
-        _controller.enabled = true;
-        _targeter.enabled = true;
-        _throw.enabled = true;
+        if (isLocalPlayer)
+        {
+            _pickup.enabled = true;
+            _controller.enabled = true;
+            _targeter.enabled = true;
+            _throw.enabled = true;
+        }
     }
     
         

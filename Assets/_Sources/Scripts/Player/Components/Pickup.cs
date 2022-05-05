@@ -78,9 +78,8 @@ public class Pickup : NetworkBehaviour
             if (col.TryGetComponent(out Ball ballRefab))
             {
                 //If it's a pass
-                if (ballRefab._ballState == Ball.BallStateRefab.Pass
-                    && !_player.IsHoldingObject
-                    && ballRefab.owner.teamId == _player.teamId)
+                if ((ballRefab._ballState == Ball.BallStateRefab.Pass || ballRefab._ballState == Ball.BallStateRefab.FreeThrow)
+                    && !_player.IsHoldingObject && ballRefab.owner.teamId == _player.teamId)
                 {
                     ballTransform = col.transform;
                     ball = ballRefab;
@@ -90,7 +89,7 @@ public class Pickup : NetworkBehaviour
                     _player.ChangeBallLayer(ballRefab.gameObject, true);
                     return;
                 }
-
+                
                 //Pick if pickable
                 if (ballRefab._ballState != Ball.BallStateRefab.Free ||
                     ballRefab.rb.velocity.magnitude > maxVelToPickup ||

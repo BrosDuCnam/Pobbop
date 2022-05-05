@@ -20,7 +20,8 @@ public class RealPlayer : Player
 
     public void Pass(InputAction.CallbackContext ctx)
     {
-        if (ctx.started) _throw.Pass();
+        if (ctx.started) _throw.ChargeThrow();
+        if (ctx.canceled) _throw.ReleaseThrow(true);
     }
     
     public void Catch(InputAction.CallbackContext ctx)
