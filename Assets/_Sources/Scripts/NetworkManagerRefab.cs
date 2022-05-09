@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class NetworkManagerRefab : NetworkManager
 {
     [Scene] [SerializeField] private string menuScene = string.Empty;
+    [Scene] [SerializeField] private string menuSceneAlt = "default";
     [Scene] [SerializeField] private string gameScene = string.Empty;
 
     [Header("Room")]
@@ -51,7 +52,7 @@ public class NetworkManagerRefab : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        if (SceneManager.GetActiveScene().path == menuScene)
+        if (SceneManager.GetActiveScene().path == menuScene || SceneManager.GetActiveScene().path == menuSceneAlt)
         {
             GameObject roomPlayerInstance = Instantiate(roomPlayerPrefab);
 
