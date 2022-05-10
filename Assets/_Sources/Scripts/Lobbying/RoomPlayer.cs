@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class RoomPlayer : NetworkBehaviour
 {
-    public string username = "Player ";
+    [SyncVar] public string username;
     public int myId;
     public int teamId;
 
@@ -16,8 +16,13 @@ public class RoomPlayer : NetworkBehaviour
 
     private void Start()
     {
-        if (FindObjectOfType<UiSceneSteamLobby>() != null) //For local (when steam isn't initialized)
-            username = FindObjectOfType<UiSceneSteamLobby>().steamUsername;
+        if (isLocalPlayer)
+        {
+            if (FindObjectOfType<UiSceneSteamLobby>() != null) //For local (when steam isn't initialized)
+                username = FindObjectOfType<UiSceneSteamLobby>().steamUsername;
+        }
+        
+        
         myId = (int) GetComponent<NetworkIdentity>().netId;
         HostMenu.instance.AddPlayer(myId, username, 0, teamId, this);
     }
