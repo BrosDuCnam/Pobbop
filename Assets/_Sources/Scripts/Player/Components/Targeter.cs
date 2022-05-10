@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Mirror;
 using UnityEngine;
 
 public class Targeter : MonoBehaviour
@@ -43,7 +44,7 @@ public class Targeter : MonoBehaviour
     
     private void Update()
     {
-        if (_player.IsCharging == false && _targets.Count > 0) // If player is not charger we can search for targets
+        if (_player.IsCharging == false && _targets.Count > 0) // If player is not charging we can search for targets
         {
             List<GameObject> visibleTargets = GetVisibleTargets(_targets, _targetPlayers); // Get all visible targets
             visibleTargets =

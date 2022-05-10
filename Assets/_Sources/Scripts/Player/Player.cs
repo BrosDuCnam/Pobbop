@@ -16,6 +16,7 @@ public class Player : NetworkBehaviour
     public Camera playerCam;
     [SerializeField] public Transform targetPoint;
     [SerializeField] private float ballVelToDie = 8;
+    
 
     [SyncVar]
     private bool _isDead = false;
@@ -31,6 +32,7 @@ public class Player : NetworkBehaviour
     public Throw _throw;
     public Targeter _targeter;
     public Controller _controller;
+    public DirIndicatorHandler _dirIndicatorHandler;
     
     public Camera Camera { get { return _controller.camera; } }
 
@@ -63,8 +65,9 @@ public class Player : NetworkBehaviour
         _throw = GetComponent<Throw>();
         _targeter = GetComponent<Targeter>();
         _controller = GetComponent<Controller>();
+        _dirIndicatorHandler = GetComponent<DirIndicatorHandler>();
         //teamId = UnityEngine.Random.Range(0, 2220);
-        Die(null, 0.2f); //Temp fix for client player TODO: Find a better fix
+        Die(null, 0.4f); //Temp fix for client player TODO: Find a better fix
     }
     
 
@@ -87,6 +90,7 @@ public class Player : NetworkBehaviour
         deaths++;
         print("dead" + name);
         isDead = true;
+        _dirIndicatorHandler.incomingBall = null;
         //Drop ball if it's in hand
         if (_pickup.ball != null)
         {
@@ -161,7 +165,7 @@ public class Player : NetworkBehaviour
             if (ball.rb.velocity.magnitude > ballVelToDie && !isDead
                 && (ball._ballState == Ball.BallStateRefab.Curve || ball._ballState == Ball.BallStateRefab.FreeThrow))
             {
-                Die();
+                Die(ball);
             }
         }
     }

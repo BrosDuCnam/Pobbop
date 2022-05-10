@@ -10,14 +10,24 @@ public class DirIndicatorHandler : MonoBehaviour
     [SerializeField] private Material uiMat;
     [SerializeField] private Camera cam;
     [SerializeField] private float minSize = 7;
-    [SerializeField] private float sizeFact = 0.5f;
-    [SerializeField] private float lengthSize = 0.5f;
+    [SerializeField] private float sizeFact = 0.7f;
+    [SerializeField] private float lengthSize = 0.1f;
     [SerializeField] [Range(0,1)] private float displayFactor = 0.1f;
 
     private float ballAngle;
     private float angleX, angleY, sizeX, sizeY, rotation;
-    
-    [CanBeNull] public Transform incomingBall;
+
+    [CanBeNull] public Transform incomingBall
+    {
+        get => _incomingBall;
+        set
+        {
+            _incomingBall = value;
+            if (value == null)
+                ResetBall();
+        }
+    }
+    private Transform _incomingBall;
     public bool isTargeted;
     
     
@@ -180,7 +190,13 @@ public class DirIndicatorHandler : MonoBehaviour
 
     public void ResetBall()
     {
-        incomingBall = null;
+        uiMat.SetFloat("BorderSize", 0);
+        uiMat.SetFloat("SizeX", 0);
+        uiMat.SetFloat("SizeY", 0);
+    }
+
+    private void OnApplicationQuit()
+    {
         uiMat.SetFloat("BorderSize", 0);
         uiMat.SetFloat("SizeX", 0);
         uiMat.SetFloat("SizeY", 0);

@@ -60,7 +60,7 @@ public class Ball : NetworkBehaviour
     private void LetPlayerDie(Player player)
     {
         if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player.teamId == owner.teamId) return;
-        RpcDie(player);
+        RpcDie(player, this);
             
         RpcChangeBallState(BallStateRefab.Free);
         RpcChangeOwner(null);
@@ -68,9 +68,9 @@ public class Ball : NetworkBehaviour
 
 
     [ClientRpc]
-    private void RpcDie(Player player)
+    private void RpcDie(Player player, Ball ball)
     {
-        player.Die();
+        player.Die(ball);
     }
 
     

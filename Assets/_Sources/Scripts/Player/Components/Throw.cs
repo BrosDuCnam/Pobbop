@@ -95,9 +95,12 @@ public class Throw : NetworkBehaviour
             if ((pass && friendly != null) || (!pass && _player.HasTarget)) // If player has a target
             {
                 GameObject target = pass ? friendly : _player.Target;
-                
+
                 Transform targetPointTransform = target.transform;
-                targetPointTransform = target.GetComponent<Player>().targetPoint;
+                Player targetPlayer = target.GetComponent<Player>();
+                targetPointTransform = targetPlayer.targetPoint;
+
+                CmdWarnPlayer(targetPlayer, ball, true);
 
                 Transform playerCam = _player.playerCam.transform;
                 Vector3 a = (targetPointTransform.position - playerCam.position) / 2; // Adjacent : half distance between the player and the target
@@ -133,11 +136,13 @@ public class Throw : NetworkBehaviour
                 //Add the player current velocity to the throw 
                 Vector3 playerVelAlongCam = Vector3.Project(_player._controller.rb.velocity, _player.playerCam.transform.forward);
                 velocity += playerVelAlongCam;
-                
+
+                ball.rb.isKinematic = false;
                 CmdSetKinematic(ball, false);
                 ball._ballState = Ball.BallStateRefab.FreeThrow;
                 ball.owner = _player;
                 CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
+                ball.rb.velocity = velocity;
                 CmdSimpleThrowBall(ball, velocity); // Throw the object in front of the camera
             }
         }
@@ -146,7 +151,6 @@ public class Throw : NetworkBehaviour
     [Command]
     private void CmdSimpleThrowBall(Ball ball, Vector3 velocity)
     {
-        print("simple throw");
         ball.rb.velocity = velocity;
     }
     
@@ -222,12 +226,16 @@ public class Throw : NetworkBehaviour
 
         if (ball._ballState != Ball.BallStateRefab.Picked)
         {
-            CmdSetKinematic(ball, false);
-            CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
+            CmdValidateAndChangeState(ball, Ball.BallStateRefab.Picked, true, Ball.BallStateRefab.FreeThrow, _player,
+                false);
+            /*CmdSetKinematic(ball, false);
+            CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);*/
         }
 
         ball.rb.velocity = direction;
     }
+    
+
     
     /// <summary>
     /// Cancel throw and cancel charge
@@ -235,6 +243,25 @@ public class Throw : NetworkBehaviour
     public void CancelThrow()
     {
         if (IsCharging) IsCharging = false;
+    }
+
+    [Command]
+    private void CmdValidateAndChangeState(Ball ball, Ball.BallStateRefab desiredState, bool invertState, 
+        Ball.BallStateRefab finalState, Player player, bool ballKinematic)
+    {
+        if (invertState)
+        {
+            if (ball._ballState != desiredState)
+            {
+                RpcSetKinematic(ball, ballKinematic);
+                RpcChangeBallState(ball, finalState, player);
+            }
+        }
+        else if (ball._ballState == desiredState)
+        {
+            RpcSetKinematic(ball, ballKinematic);
+            RpcChangeBallState(ball, finalState, player);
+        }
     }
 
     [Command] 
@@ -284,5 +311,21 @@ public class Throw : NetworkBehaviour
 
 
     #endregion
+
+    #region Ui Player Warn
+
+    [Command]
+    public void CmdWarnPlayer(Player player, Ball ball, bool warn)
+    {
+        RpcWarnPlayer(player, ball, warn);
+    }
+    
+    [ClientRpc]
+    private void RpcWarnPlayer(Player player, Ball ball, bool warn)
+    {
+        player._dirIndicatorHandler.incomingBall = warn ? ball.transform : null;
+    }
+
+    #endregion 
     
 }

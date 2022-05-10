@@ -460,6 +460,7 @@ MonoBehaviour:
   filterLobbies: 1
   content: {fileID: 1869116238}
   camera: {fileID: 629525548}
+  steamUsername: DefaultName
 --- !u!114 &731194131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488,6 +489,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 5484164245318665630, guid: 93d9915ac5c7ba247afe3450732e0f90, type: 3}
   menuScene: Assets/_Sources/Scenes/YmDevScene_/UIRefab.unity
+  menuSceneAlt: 
   gameScene: Assets/_Sources/Scenes/YmDevScene_/RefabMulti.unity
   roomPlayerPrefab: {fileID: 2146637403515613536, guid: 367816d3c70d3754b856af91f24852e7, type: 3}
   gamePlayerPrefab: {fileID: 5484164245318665630, guid: 93d9915ac5c7ba247afe3450732e0f90, type: 3}

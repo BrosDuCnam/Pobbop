@@ -132,6 +132,7 @@ MonoBehaviour:
   syncInterval: 0.1
   owner: {fileID: 0}
   rb: {fileID: 0}
+  collider: {fileID: 0}
   _ballState: 0
 --- !u!114 &7717068878445263795
 MonoBehaviour:

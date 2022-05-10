@@ -391,6 +391,7 @@ GameObject:
   - component: {fileID: 731194131}
   - component: {fileID: 731194129}
   - component: {fileID: 731194127}
+  - component: {fileID: 731194130}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -458,6 +459,25 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
+--- !u!114 &731194130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731194126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96b149f511061407fb54895c057b7736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wrap: {fileID: 731194129}
+  latencySpikeMultiplier: 0
+  latencySpikeSpeedMultiplier: 1
+  reliableLatency: 0.2
+  unreliableLoss: 0
+  unreliableLatency: 0
+  unreliableScramble: 0
 --- !u!114 &731194131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,7 +496,7 @@ MonoBehaviour:
   serverTickRate: 30
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 731194129}
+  transport: {fileID: 731194130}
   networkAddress: localhost
   maxConnections: 100
   authenticator: {fileID: 0}
@@ -486,6 +506,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 5484164245318665630, guid: 93d9915ac5c7ba247afe3450732e0f90, type: 3}
   menuScene: Assets/_Sources/Scenes/YmDevScene_/UIRefabLocal.unity
+  menuSceneAlt: 
   gameScene: Assets/_Sources/Scenes/YmDevScene_/RefabMulti.unity
   roomPlayerPrefab: {fileID: 2146637403515613536, guid: 367816d3c70d3754b856af91f24852e7, type: 3}
   gamePlayerPrefab: {fileID: 5484164245318665630, guid: 93d9915ac5c7ba247afe3450732e0f90, type: 3}

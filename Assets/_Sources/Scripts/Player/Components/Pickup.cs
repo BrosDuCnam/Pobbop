@@ -79,7 +79,7 @@ public class Pickup : NetworkBehaviour
             {
                 //If it's a pass
                 if ((ballRefab._ballState == Ball.BallStateRefab.Pass || ballRefab._ballState == Ball.BallStateRefab.FreeThrow)
-                    && !_player.IsHoldingObject && ballRefab.owner.teamId == _player.teamId)
+                    && !_player.IsHoldingObject && ballRefab.owner.teamId == _player.teamId && ballRefab.owner != _player)
                 {
                     ballTransform = col.transform;
                     ball = ballRefab;
@@ -99,6 +99,7 @@ public class Pickup : NetworkBehaviour
                 ball = ballRefab;
                 ballRefab.collider.enabled = false;
                 ball._ballState = Ball.BallStateRefab.Picked;
+                _player._dirIndicatorHandler.incomingBall = null;
                 CmdChangeBallState(ballRefab, Ball.BallStateRefab.Picked);
                 _player.ChangeBallLayer(ballRefab.gameObject, true);
                 
@@ -138,6 +139,7 @@ public class Pickup : NetworkBehaviour
                 ball._ballState = Ball.BallStateRefab.Picked;
                 CmdChangeBallState(closestBall, Ball.BallStateRefab.Picked);
                 _player.ChangeBallLayer(closestBall.gameObject, true);
+                _player._throw.CmdWarnPlayer(_player, ball, false);
                 
                 print ("Ball catched :: " + name);
             }
