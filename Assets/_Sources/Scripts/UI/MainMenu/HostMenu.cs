@@ -151,6 +151,18 @@ namespace UI
 
             return null;
         }
+
+        public void ChangeUsernameById(int id, string username)
+        {
+            foreach (HostMenuPlayerData playerData in hostMenuPlayerData)
+            {
+                if (playerData.PlayerId == id)
+                {
+                    playerData.Name = username;
+                    UpdateTeamUI();
+                }
+            }
+        }
         
         private void SetLayout(RectTransformData[] layout)
         {

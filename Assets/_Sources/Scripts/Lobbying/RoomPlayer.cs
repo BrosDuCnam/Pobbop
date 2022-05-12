@@ -5,6 +5,7 @@ using Mirror;
 using UI;
 using UI.Host;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class RoomPlayer : NetworkBehaviour
 {
@@ -26,7 +27,19 @@ public class RoomPlayer : NetworkBehaviour
         myId = (int) GetComponent<NetworkIdentity>().netId;
         HostMenu.instance.AddPlayer(myId, username, 0, teamId, this);
     }
-
+    
+    
+    [Command]
+    private void CmdChangePlayerUsername(int id, string username)
+    {
+        RpcChangePlayerUsername(id, username);
+    }
+    [ClientRpc]
+    private void RpcChangePlayerUsername(int id, string username)
+    {
+        HostMenu.instance.ChangeUsernameById(id, username);
+    }
+    
     [Command]
     public void CmdChangeTeam(int teamId)
     {
