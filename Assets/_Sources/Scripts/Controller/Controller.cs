@@ -43,6 +43,8 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float jumpNerfResetTime = 0.5f;
     [SerializeField] [Range(0, 180)] private float lurchMaxAngle = 20;
     [SerializeField] [Range(0, 1)] private float crouchColliderHeightMultiplier = 0.3f;
+    [SerializeField] private float rayLength = 0.5f;
+    [SerializeField] private float groundStickForce = 2f;
     
     
     [Header("Camera Settings")]
@@ -134,8 +136,6 @@ public class Controller : NetworkBehaviour
         UpdateTPSAnimator();
         UpdatePOVAnimator();
         CamCrouch();
-       // Debug.Log("slide nerf : " + slideNerf);
-       // Debug.Log("enter sliding : " + enterSliding);
         if (Time.time > slideNerf && slideNerf != 0) enterSliding = true;
     }
 
@@ -373,6 +373,31 @@ public class Controller : NetworkBehaviour
         }
     }
 
+    private bool IsGroundNear()
+    {
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(transform.position, Vector3.down * rayLength);
+        foreach (RaycastHit hit in hits)
+        {
+            if (!hit.collider.transform.CompareTag("Player") && !hit.collider.transform.CompareTag("Ball"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private IEnumerator StickToGround()
+    {
+        while (!isGrounded && !jump && !animJump)
+        {
+            if (IsGroundNear())
+            {
+                rb.AddForce(Vector3.down * groundStickForce, ForceMode.Acceleration);
+            }
+            yield return null;
+        }
+    }
 
     #endregion
 
@@ -462,6 +487,7 @@ public class Controller : NetworkBehaviour
     private void OnCollisionExit(Collision col)
     {
         isGrounded = false;
+        StartCoroutine(StickToGround());
     }
 
     #endregion
