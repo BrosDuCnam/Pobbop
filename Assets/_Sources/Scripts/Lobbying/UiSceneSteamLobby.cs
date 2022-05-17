@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Permissions;
+using JetBrains.Annotations;
 using Mirror;
 using Steamworks;
+using UI;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
@@ -16,13 +18,13 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     public string steamUsername = "DefaultName";
 
-    
     public static UiSceneSteamLobby instance;
 
     protected NetworkManagerRefab networkManager;
     protected const string HostAdressKey = "HostAdress";
     protected string lobbyName = "Default name";
     
+    protected CSteamID currentLobby = new CSteamID();
     protected List<CSteamID> lobbyIDS = new List<CSteamID>();
 
     protected Callback<LobbyCreated_t> lobbyCreated;
@@ -94,7 +96,8 @@ public class UiSceneSteamLobby : MonoBehaviour
     protected virtual void OnLobbyCreated(LobbyCreated_t callback)
     {
         networkManager.StartHost();
-        
+        currentLobby = new CSteamID(callback.m_ulSteamIDLobby);
+
         if (lobbyName == "Default name")
             lobbyName = steamUsername + "'s Lobby";
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", lobbyName);
@@ -119,6 +122,7 @@ public class UiSceneSteamLobby : MonoBehaviour
     {
         if (NetworkServer.active) {return;}
         string hostAdress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey);
+        currentLobby = new CSteamID(callback.m_ulSteamIDLobby);
 
         networkManager.networkAddress = hostAdress;
         networkManager.StartClient();
@@ -127,6 +131,19 @@ public class UiSceneSteamLobby : MonoBehaviour
     public void JoinLobby(CSteamID lobbyId)
     {
         SteamMatchmaking.JoinLobby(lobbyId);
+    }
+
+    public void LeaveLobby()
+    {
+        if (currentLobby == null) return;
+
+        SteamMatchmaking.LeaveLobby(currentLobby);
+
+        if (HostMenu.instance.isServer)
+            SteamMatchmaking.DeleteLobbyData(currentLobby, "game");
+        
+        networkManager.LeaveServer();
+        HostMenu.instance.ClearPlayers();
     }
 
     void MakeInstance()

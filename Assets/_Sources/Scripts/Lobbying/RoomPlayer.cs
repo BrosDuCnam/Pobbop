@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Mirror;
 using UI;
 using UI.Host;
@@ -23,12 +24,12 @@ public class RoomPlayer : NetworkBehaviour
                 username = FindObjectOfType<UiSceneSteamLobby>().steamUsername;
         }
         
-        
         myId = (int) GetComponent<NetworkIdentity>().netId;
         HostMenu.instance.AddPlayer(myId, username, 0, teamId, this);
+
+        Task.Delay(500).ContinueWith(t=> CmdChangePlayerUsername(myId, username));
     }
-    
-    
+
     [Command]
     private void CmdChangePlayerUsername(int id, string username)
     {

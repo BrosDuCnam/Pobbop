@@ -221,10 +221,20 @@ namespace UI
             }
         }
 
+        public void ClearPlayers()
+        {
+            hostMenuPlayerData = new List<HostMenuPlayerData>();
+        }
+
         public void RedirectOnHostPage()
         {
             _mainMenu.OpenSubMenu(JoinPanel, true);
             _mainMenu.OpenSubMenuAnimated(HostPanel);
+        }
+
+        public bool IsServer()
+        {
+            return isServer;
         }
     }
 }

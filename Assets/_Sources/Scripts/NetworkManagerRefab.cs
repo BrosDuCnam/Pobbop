@@ -110,6 +110,15 @@ public class NetworkManagerRefab : NetworkManager
         base.ServerChangeScene(newSceneName);
     }
 
+    public void LeaveServer()
+    {
+        if (HostMenu.instance.isServer)
+            StopHost();
+        else
+            StopClient();
+
+        HostMenu.instance.gameObject.SetActive(true);
+    }
 
     public void StartGame()
     {
