@@ -62,7 +62,7 @@ namespace UI
             _mainMenu = GetComponent<MainMenu>();
             _roomProperties = networkManager.GetComponent<RoomProperties>();
         }
-
+        
         private void Start()
         {
             hostMenuData.TeamAmount = 2;
