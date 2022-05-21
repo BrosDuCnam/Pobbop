@@ -864,7 +864,7 @@ MonoBehaviour:
   jumpNerfResetTime: 0.5
   lurchMaxAngle: 20
   crouchColliderHeightMultiplier: 0.3
-  camera: {fileID: 0}
+  camera: {fileID: 1008197578226024919}
   sensX: 0.1
   sensY: 0.1
   _TpsAnimator: {fileID: 0}
@@ -904,17 +904,18 @@ MonoBehaviour:
   syncInterval: 0.1
   teamId: 0
   username: Noob
-  playerCam: {fileID: 0}
-  targetPoint: {fileID: 0}
+  playerCam: {fileID: 1008197578226024919}
+  targetPoint: {fileID: 5270562764824853360}
   ballVelToDie: 8
   _pickup: {fileID: 0}
   _throw: {fileID: 0}
   _targeter: {fileID: 0}
   _controller: {fileID: 0}
-  rigidbody: {fileID: 0}
+  _dirIndicatorHandler: {fileID: 0}
+  rigidbody: {fileID: 5484164245318665624}
   fsmStateInfo:
     PeriodUpdate: 0
-    bot: {fileID: 0}
+    bot: {fileID: 7361736210894178589}
     playerList: []
     ballList: []
 --- !u!1 &5553950938184964713
