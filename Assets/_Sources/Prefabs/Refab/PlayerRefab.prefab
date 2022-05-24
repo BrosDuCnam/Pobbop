@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 980, y: 540}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3209265004266002137
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: a7637325601e85542895ed971e967a20, type: 3}
+  m_Texture: {fileID: 2800000, guid: 38778757b55fe5d43be7f28e7a4f9fb4, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -670,6 +670,8 @@ MonoBehaviour:
   jumpNerfResetTime: 1.2
   lurchMaxAngle: 20
   crouchColliderHeightMultiplier: 0.4
+  rayLength: 0.5
+  groundStickForce: 2
   camera: {fileID: 1008197578226024919}
   sensX: 0.1
   sensY: 0.1
@@ -712,6 +714,13 @@ MonoBehaviour:
   _dirIndicatorHandler: {fileID: 0}
   _targetImage: {fileID: 3760971874584597178}
   _chargingCurveLineRenderer: {fileID: 7901385578497279274}
+  targetColor: {r: 1, g: 0, b: 0, a: 1}
+  restColor: {r: 1, g: 1, b: 1, a: 1}
+  targetScale: 4.5
+  restScale: 0.2
+  moveSpeed: 4
+  scaleSpeed: 4
+  colorSpeed: 4
 --- !u!114 &1547539918011441973
 MonoBehaviour:
   m_ObjectHideFlags: 0

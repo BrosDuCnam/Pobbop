@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: a7637325601e85542895ed971e967a20, type: 3}
+  m_Texture: {fileID: 2800000, guid: 38778757b55fe5d43be7f28e7a4f9fb4, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -783,7 +783,7 @@ MonoBehaviour:
   username: Noob
   playerCam: {fileID: 0}
   targetPoint: {fileID: 0}
-  ballVelToDie: 8
+  ballVelToDie: 2
   _pickup: {fileID: 0}
   _throw: {fileID: 0}
   _targeter: {fileID: 0}

@@ -99,8 +99,9 @@ public class Throw : NetworkBehaviour
                 Transform targetPointTransform = target.transform;
                 Player targetPlayer = target.GetComponent<Player>();
                 targetPointTransform = targetPlayer.targetPoint;
-
-                CmdWarnPlayer(targetPlayer, ball, true);
+                
+                if (!pass)
+                    CmdWarnPlayer(targetPlayer, ball, true);
 
                 Transform playerCam = _player.playerCam.transform;
                 Vector3 a = (targetPointTransform.position - playerCam.position) / 2; // Adjacent : half distance between the player and the target

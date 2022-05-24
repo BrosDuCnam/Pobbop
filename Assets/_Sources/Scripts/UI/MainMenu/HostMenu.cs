@@ -216,6 +216,7 @@ namespace UI
         {
             HostMenuPlayerData playerData = hostMenuPlayerData.Find(x => x.PlayerId == playerId);
             playerData.TeamIndex = teamId;
+            print(playerData.TeamIndex);
             UpdateUI();
         }
 

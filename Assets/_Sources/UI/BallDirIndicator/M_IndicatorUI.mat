@@ -90,8 +90,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - BorderSize: 0
-    - PosX: -0.42813808
-    - PosY: 0.6965941
+    - PosX: 0.17473519
+    - PosY: -0.99950373
     - Rotation: 0
     - SizeX: 0
     - SizeY: 0

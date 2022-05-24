@@ -9,6 +9,21 @@ public class RealPlayer : Player
 {
     [SerializeField] protected RawImage _targetImage;
     [SerializeField] private LineRenderer _chargingCurveLineRenderer;
+    
+    [Header("Crosshair / Target UI params")]
+    [SerializeField] private Color targetColor = Color.red;
+    [SerializeField] private Color restColor = Color.white;
+    
+    [SerializeField] private float targetScale = 4f;
+    [SerializeField] private float restScale = 0.2f;
+    
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float scaleSpeed = 5f;
+    [SerializeField] private float colorSpeed = 5f;
+
+
+    private bool lockTargetUiPos = false;
+
 
     #region Inputs
 
@@ -39,15 +54,15 @@ public class RealPlayer : Player
     
     private void UpdateTargetUI()
     {
-        if (HasTarget)
+        if (HasTarget && IsHoldingObject)
         {
             Vector2 canvasSize = _targetImage.GetComponent<RectTransform>().sizeDelta;
             
             Transform targetPointTransform = Target.transform;
             if (Target.TryGetComponent(out Player otherPlayer))
                 targetPointTransform = otherPlayer.targetPoint;
-            
-            
+
+            _targetImage.color = targetColor;
             
             Vector3 targetPosition = playerCam.WorldToScreenPoint(targetPointTransform.position);
 
@@ -80,10 +95,66 @@ public class RealPlayer : Player
             targetPositionInCanvas.x = Mathf.Clamp(targetPositionInCanvas.x, 0, Screen.width);
             targetPositionInCanvas.y = Mathf.Clamp(targetPositionInCanvas.y, 0, Screen.height);
 
-            _targetImage.rectTransform.position = targetPositionInCanvas; // Set target image position to the current target
-        } else
+            
+            //Position
+            Vector2 currentPos = _targetImage.rectTransform.position;
+            float distance = Vector2.Distance(currentPos, targetPositionInCanvas);
+            if (distance > 10)
+            {
+                float multiplier = distance < 200 ? (200 - distance) / 10 : 1;
+                
+                Vector2 newPos = Vector2.Lerp(currentPos, targetPositionInCanvas, Time.deltaTime * moveSpeed * multiplier);
+                _targetImage.rectTransform.position = newPos;
+            }
+            else _targetImage.rectTransform.position = targetPositionInCanvas; // Set target image position to the current target
+            
+            //Scale
+            Vector2 currentScale = _targetImage.rectTransform.localScale;
+            Vector2 desiredScale = Vector2.one * (1 / targetPosition.z) * targetScale;
+            float scaleDistance = Vector2.Distance(currentScale, desiredScale);
+            if (Mathf.Abs(desiredScale.magnitude) > 1f)
+            {
+                if (targetPositionInCanvas.x > Screen.width * 0.9f || targetPositionInCanvas.x < Screen.width * 0.1f 
+                || targetPositionInCanvas.y > Screen.height * 0.9f || targetPositionInCanvas.y > Screen.height * 0.9f)
+                    return;
+                
+                float multiplier = scaleDistance < 2 ? (2 - distance) / 2 : 1;
+                
+                Vector2 newScale = Vector2.Lerp(currentScale, desiredScale, Time.deltaTime * scaleSpeed * multiplier);
+                _targetImage.rectTransform.localScale = newScale;
+            }
+            else _targetImage.rectTransform.localScale = desiredScale;
+            
+            //Color
+            Color currentColor = _targetImage.color;
+            Color newColor = Color.Lerp(currentColor, restColor, Time.deltaTime * colorSpeed);
+            _targetImage.color = newColor;
+
+
+            lockTargetUiPos = false;
+        } 
+        else
         {
-            _targetImage.enabled = false;
+            Vector2 screenCenter = new Vector2(Screen.width/2, Screen.height/2);
+
+            //Position
+            if (!lockTargetUiPos)
+            {
+                Vector2 currentPos = _targetImage.rectTransform.position;
+                Vector2 newPos = Vector2.Lerp(currentPos, screenCenter, Time.deltaTime * moveSpeed);
+                _targetImage.rectTransform.position = newPos;
+                if (Vector2.Distance(screenCenter, newPos) < 50) lockTargetUiPos = true;
+            }
+
+            
+            Vector2 currentScale = _targetImage.rectTransform.localScale;
+            Vector2 newScale = Vector2.Lerp(currentScale, Vector2.one * restScale, Time.deltaTime * scaleSpeed);
+            _targetImage.rectTransform.localScale = newScale;
+
+            Color currentColor = _targetImage.color;
+            Color newColor = Color.Lerp(currentColor, restColor, Time.deltaTime * colorSpeed);
+            _targetImage.color = newColor;
+            
         }
     }
 
