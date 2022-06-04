@@ -201,7 +201,8 @@ public class BotController : Controller
         List<Vector3> corners = path.corners.ToList();
 
         LookAt(corners[0], (() => {}));
-
+        // print(1);
+        
         bool stopLocomotion = false;
         StopLocomotion.AddListener(() => stopLocomotion = true);
         
@@ -210,29 +211,41 @@ public class BotController : Controller
             tempDestination = corners[0];
             if (Vector3.Distance(transform.position, tempDestination) > 1f)
             {
+                // print(2);
                 Vector3 direction3D = transform.InverseTransformPoint(tempDestination);
                 Vector2 direction = new Vector2(direction3D.x, direction3D.z).normalized;
-                
+                // print(2.1);
+
                 direction = Vector2.Lerp(Vector2.up, direction, strafeAccuracy);
+                // print(2.2);
 
                 onAxis.Invoke(direction);
+                // print(2.3);
 
                 hasDestination = true;
-                yield return new WaitForEndOfFrame();
-                
+                yield return new WaitForFixedUpdate();
+                // print(2.4);
+
                 destination = destinationFunc.Invoke();
                 NavMesh.CalculatePath(transform.position, destination, NavMesh.AllAreas, path);
                 corners = path.corners.ToList();
                 Utils.DebugNavMeshPath(path);
+                // print(2.5);
+
             }
             else
             {
+                print(3);
                 corners.RemoveAt(0);
                 
                 if (corners.Count > 0)
-                    LookAt(corners[0], (() => {}));
+                {
+                    print("Look at");
+                    LookAt(corners[0], (() => { }));
+                }
             }
         }
+        // print(4);
         onAxis.Invoke(Vector2.zero);
         //StopLook.Invoke();
         hasDestination = false;

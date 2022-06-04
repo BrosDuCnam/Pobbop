@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Throw : NetworkBehaviour
 {
@@ -20,10 +21,12 @@ public class Throw : NetworkBehaviour
     
     GameObject tempFriendly;
 
+    public UnityEvent OnThrow;
+    public UnityEvent OnPass;
 
     private Player _player;
     [HideInInspector] public float _startChargeTime;
-    private Transform ball;
+    public Transform ball;
 
     private bool _isCharging;
 
@@ -69,7 +72,7 @@ public class Throw : NetworkBehaviour
         return (force - _minThrowForce) / (_maxThrowForce - _minThrowForce);
     }
 
-    public void ReleaseThrow(bool pass = false)
+    public void ReleaseThrow(bool pass = false, float chargeFoce = -1, GameObject targetObj = null)
     {
         if (ball != null && IsCharging)
         {
@@ -80,12 +83,24 @@ public class Throw : NetworkBehaviour
             CmdSetKinematic(ball, false);
             _player.ChangeBallLayer(ball.gameObject, false);
 
-            //Counts the charging time of the ball and converts it to the fore applied
-            float chargeTime = Mathf.Clamp(Time.time - _startChargeTime, 0, _maxChargeTime);
-            float chargeValue = _chargeCurve.Evaluate(chargeTime / _maxChargeTime) * _maxChargeTime;
-            float fMultiplier = (_maxThrowForce - _minThrowForce) / _maxChargeTime;
-            float force = fMultiplier * chargeValue + _minThrowForce;
-
+            float force = chargeFoce;
+            float chargeValue = 0;
+            if (force == -1)
+            {
+                //Counts the charging time of the ball and converts it to the fore applied
+                float chargeTime = Mathf.Clamp(Time.time - _startChargeTime, 0, _maxChargeTime);
+                chargeValue = _chargeCurve.Evaluate(chargeTime / _maxChargeTime) * _maxChargeTime;
+                float fMultiplier = (_maxThrowForce - _minThrowForce) / _maxChargeTime;
+                force = fMultiplier * chargeValue + _minThrowForce;
+            }
+            else
+            {
+                float chargeTime = Utils.Map(1, 0, _maxChargeTime, 0, force);
+                chargeValue = _chargeCurve.Evaluate(chargeTime / _maxChargeTime) * _maxChargeTime;
+                float fMultiplier = (_maxThrowForce - _minThrowForce) / _maxChargeTime;
+                force = fMultiplier * chargeValue + _minThrowForce;
+            }
+            
             this.ball = null;
             IsCharging = false;
             
@@ -94,7 +109,12 @@ public class Throw : NetworkBehaviour
             tempFriendly = null;
             if ((pass && friendly != null) || (!pass && _player.HasTarget)) // If player has a target
             {
-                GameObject target = pass ? friendly : _player.Target;
+                GameObject target = targetObj;
+                if (target == null)
+                {
+                    target = pass ? friendly : _player.Target;
+                }
+
 
                 Transform targetPointTransform = target.transform;
                 Player targetPlayer = target.GetComponent<Player>();
@@ -126,6 +146,9 @@ public class Throw : NetworkBehaviour
 
                 Ball.BallStateRefab state = pass ? Ball.BallStateRefab.Pass : Ball.BallStateRefab.Curve;
                 CmdThrowBall(ball, _player, stepPosition, targetPointTransform, force, accuracy, _speedCurve, state); // Throw the object
+                
+                if (pass) OnPass.Invoke();
+                else OnThrow.Invoke();
             }
             else
             {
@@ -145,6 +168,8 @@ public class Throw : NetworkBehaviour
                 CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
                 ball.rb.velocity = velocity;
                 CmdSimpleThrowBall(ball, velocity); // Throw the object in front of the camera
+                
+                OnThrow.Invoke();
             }
         }
     }

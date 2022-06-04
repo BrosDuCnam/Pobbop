@@ -20,6 +20,6 @@ public class BallTrailHandler : MonoBehaviour
         float magnitude = vel.magnitude;
         magnitude = Mathf.Clamp(magnitude - 5f,0, Mathf.Infinity);
         vel = vel.normalized * magnitude;
-        trailEffect.SetVector3("Velocity", vel);
+        // trailEffect.SetVector3("Velocity", vel);
     }
 }

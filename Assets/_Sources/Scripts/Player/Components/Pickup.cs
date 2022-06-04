@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using Mirror;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
 
@@ -19,6 +20,8 @@ public class Pickup : NetworkBehaviour
     public Ball ball;
     private Player _player;
     [HideInInspector] public bool cooldown;
+    
+    public UnityEvent OnCatch;
     
     private void Start()
     {
@@ -142,6 +145,7 @@ public class Pickup : NetworkBehaviour
                 _player._throw.CmdWarnPlayer(_player, ball, false);
                 
                 print ("Ball catched :: " + name);
+                OnCatch.Invoke();
             }
         }
     }
