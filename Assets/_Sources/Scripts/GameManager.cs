@@ -79,8 +79,10 @@ public class GameManager : MonoBehaviour
     public static string GetPlayerId(Player player)
     {
         string playerId = null;
+        print("getPlayerId " + player);
         foreach (string id in players.Keys)
         {
+            print("key " + id);
             if (players[id] == player)
             {
                 playerId = playerIdPrefix + id;
@@ -119,6 +121,8 @@ public class GameManager : MonoBehaviour
 
         string killedPlayerId = GetPlayerId(killedPlayer);
         string sourceId = GetPlayerId(source);
+        print("killed " + killedPlayerId);
+        print("source " + sourceId);
         instance.onPlayerKilledCallback.Invoke(killedPlayerId, sourceId);
         CheckScore(teamId);
     }
