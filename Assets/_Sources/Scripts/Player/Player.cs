@@ -21,7 +21,7 @@ public class Player : NetworkBehaviour
     [SyncVar]
     private bool _isDead = false;
     public bool isDead { get { return _isDead;  } protected set { _isDead = value; } }
-    private int _kills = 0;
+    [SerializeField] private int _kills = 0;
     public int kills { get { return _kills; } set { _kills = value; } }
 
     private int _deaths = 0;
