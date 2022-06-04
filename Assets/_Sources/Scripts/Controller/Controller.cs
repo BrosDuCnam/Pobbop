@@ -545,7 +545,7 @@ public class Controller : NetworkBehaviour
             _PovAnimator.SetBool("sliding", sliding);
             _PovAnimator.SetLayerWeight(1, player.IsHoldingObject ? 1 : 0);
             _PovAnimator.SetFloat("speed", sliding ? 0 : rb.velocity.magnitude);
-            _PovAnimator.SetFloat("normalizedSpeed",  sliding ? 0 : rb.velocity.magnitude / runSpeed);
+            _PovAnimator.SetFloat("normalizedSpeed",  sliding || !isGrounded ? 0 : rb.velocity.magnitude / runSpeed);
             _PovAnimator.SetLayerWeight(2, player.IsCharging ? 1 : 0);
             _PovAnimator.SetBool("charging", player.IsCharging);
             _PovAnimator.SetBool("cancelThrow", cancelThrow);
