@@ -12,6 +12,7 @@ public class NetworkManagerRefab : NetworkManager
     [Scene] [SerializeField] private string menuScene = string.Empty;
     [Scene] [SerializeField] private string menuSceneAlt = "default";
     [Scene] [SerializeField] private string gameScene = string.Empty;
+    [Scene] [SerializeField] private string winScene = string.Empty;
 
     [Header("Room")]
     [SerializeField] private GameObject roomPlayerPrefab;    
@@ -23,6 +24,9 @@ public class NetworkManagerRefab : NetworkManager
     public static NetworkManagerRefab instance;
     public static event Action OnClientConnected;
     public static event Action OnClientDisconnected;
+    
+    public static event Action OnStartGame;
+    public static event Action OnEndGame;
 
 
     private void Awake()
@@ -48,6 +52,13 @@ public class NetworkManagerRefab : NetworkManager
     public override void OnClientDisconnect() {
         base.OnClientDisconnect();
         OnClientDisconnected?.Invoke();
+    }
+
+    public override void OnStopHost()
+    {
+        base.OnStopHost();
+        
+        NetworkServer.DisconnectAll();
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn)
@@ -107,6 +118,10 @@ public class NetworkManagerRefab : NetworkManager
                 indexCount++;
             }
         }
+        else if (newSceneName == winScene)
+        {
+            
+        }
         base.ServerChangeScene(newSceneName);
     }
 
@@ -125,7 +140,13 @@ public class NetworkManagerRefab : NetworkManager
         if (SceneManager.GetActiveScene().path == menuScene)
         {
             ServerChangeScene(gameScene);
+            OnStartGame?.Invoke();
         }
+    }
+
+    public void EndGame()
+    {
+        OnEndGame?.Invoke();
     }
 
 }

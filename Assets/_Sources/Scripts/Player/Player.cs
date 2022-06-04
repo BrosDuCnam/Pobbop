@@ -88,6 +88,7 @@ public class Player : NetworkBehaviour
             if (GetBall() == ball.transform)
                 return;
         deaths++;
+        ball.owner.kills++;
         print("dead" + name);
         isDead = true;
         _dirIndicatorHandler.incomingBall = null;

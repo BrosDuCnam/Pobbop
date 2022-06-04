@@ -53,6 +53,14 @@ public class PlayerSetup : NetworkBehaviour
         Player player = GetComponent<Player>();
         GameManager.RegisterPlayer(netID, player);
     }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        
+        string playerID = "Player" + GetComponent<NetworkIdentity>().netId;
+        GameManager.UnRegisterPlayer(playerID);
+    }
     
 
     private void OnDisable()
