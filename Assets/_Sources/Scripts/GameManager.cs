@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
         {
             if (players[id] == player)
             {
-                playerId = id;
+                playerId = playerIdPrefix + id;
                 break;
             }
         }
