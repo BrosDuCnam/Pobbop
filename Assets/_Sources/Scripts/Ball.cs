@@ -1,48 +1,103 @@
-﻿using System;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
-public class Ball : MonoBehaviour
+public class Ball : NetworkBehaviour
 {
-    [SerializeField] private PickableObject _pickableObject;
-    [SerializeField] private ThrowableObject _throwableObject;
-    [SerializeField] private BallState _ballState;
+    public Player owner;
+    public Rigidbody rb;
+    public Collider collider; 
 
-    public BallState BallState
+    private void Start()
     {
-        get => _ballState;
+        rb = GetComponent<Rigidbody>();
+        collider = GetComponent<Collider>();
     }
-    
-    private void StateChanged()
+
+    public enum BallStateRefab
     {
-        if (_pickableObject.IsPicked)
+        Free,
+        Picked,
+        Curve,
+        FreeThrow,
+        Pass
+    }
+
+    public BallStateRefab _ballState = BallStateRefab.Free;
+
+    public void ChangeBallState(BallStateRefab ballState, Player _owner = null)
+    {
+        _ballState = ballState;
+        owner = _owner;
+        if (ballState == BallStateRefab.Picked)
         {
-            _ballState = BallState.Picked;
+            rb.isKinematic = true;
         }
-        else if (_throwableObject.ThrowState != ThrowState.Idle)
+        else if (ballState == BallStateRefab.Free)
         {
-            _ballState = BallState.Thrown;
+            owner = null;
+        }
+    }
+
+    private void OnCollisionStay(Collision col)
+    {
+        if (col.gameObject.TryGetComponent(out Player player))
+        {
+            LetPlayerDie(player);
         }
         else
         {
-            _ballState = BallState.Idle;
+            if (_ballState == BallStateRefab.Picked || owner == null) return;
+            
+            owner._pickup.CmdChangeBallState(this, BallStateRefab.Free);
         }
     }
-    
-    private void Start()
+
+    [ServerCallback]
+    private void LetPlayerDie(Player player)
     {
-        _pickableObject = GetComponent<PickableObject>();
-        _throwableObject = GetComponent<ThrowableObject>();
-        
-        _pickableObject.OnStateChanged.AddListener(StateChanged);
-        _throwableObject.OnStateChanged.AddListener(StateChanged);
+        if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player.teamId == owner.teamId) return;
+        RpcDie(player, this);
+            
+        RpcChangeBallState(BallStateRefab.Free);
+        RpcChangeOwner(null);
+    }
+
+
+    [ClientRpc]
+    private void RpcDie(Player player, Ball ball)
+    {
+        player.Die(ball);
+    }
+
+    
+    [ClientRpc]
+    private void RpcChangeBallState(BallStateRefab ballState)
+    {
+        _ballState = ballState;
     }
     
+    [Command]
+    private void CmdChangeOwner(Player _owner)
+    {
+        RpcChangeOwner(_owner);
+    }
     
-}
+    [ClientRpc]
+    private void RpcChangeOwner(Player _owner)
+    {
+        owner = _owner;
+    }
 
-public enum BallState
-{
-    Picked,
-    Thrown,
-    Idle
+    private void OnGUI()
+    {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 40;
+        GUILayout.Label("Ball State: " + _ballState, style);
+        GUILayout.Label("Owner: " + owner, style);
+        GUILayout.Label("Ve: " + rb.velocity.magnitude, style);
+    }
 }

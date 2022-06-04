@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Permissions;
+using JetBrains.Annotations;
 using Mirror;
 using Steamworks;
+using UI;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
@@ -12,14 +14,17 @@ public class UiSceneSteamLobby : MonoBehaviour
 {
     [SerializeField] private bool filterLobbies;
     [SerializeField] private GameObject content;
+    [SerializeField] private GameObject camera;
 
-    
+    public string steamUsername = "DefaultName";
+
     public static UiSceneSteamLobby instance;
 
-    protected NetworkManagerLobby networkManager;
+    protected NetworkManagerRefab networkManager;
     protected const string HostAdressKey = "HostAdress";
     protected string lobbyName = "Default name";
     
+    protected CSteamID currentLobby = new CSteamID();
     protected List<CSteamID> lobbyIDS = new List<CSteamID>();
 
     protected Callback<LobbyCreated_t> lobbyCreated;
@@ -27,14 +32,11 @@ public class UiSceneSteamLobby : MonoBehaviour
     protected Callback<LobbyEnter_t> lobbyEntered;
     protected Callback<LobbyMatchList_t> lobbyListRetrieved;
     protected Callback<LobbyDataUpdate_t> lobbyDataUpdated;
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(transform.gameObject);
-    }
-
+    
     protected  virtual void Start()
     {
+        camera.SetActive(true);
+
         if (!SteamManager.Initialized)
         {
             Debug.Log("Can't access to steam networks, steam may be offline");
@@ -46,13 +48,16 @@ public class UiSceneSteamLobby : MonoBehaviour
         }
         MakeInstance();
         
-        networkManager = GetComponent<NetworkManagerLobby>();
+        networkManager = GetComponent<NetworkManagerRefab>();
 
         lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
         gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
         lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
         lobbyListRetrieved = Callback<LobbyMatchList_t>.Create(OnLobbyListRetrieved);
         lobbyDataUpdated = Callback<LobbyDataUpdate_t>.Create(OnGetLobbyInfo);
+        
+        steamUsername = SteamFriends.GetPersonaName();
+
     }
 
     protected void HostLobby(ELobbyType lobbyType, int maxPlayers)
@@ -62,7 +67,6 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     public void SwitchSceneHost()
     {
-        SceneManager.LoadScene("BuildScene-0.0.1");
         HostLobby(ELobbyType.k_ELobbyTypePublic, 10);
     }
     
@@ -96,16 +100,16 @@ public class UiSceneSteamLobby : MonoBehaviour
     protected virtual void OnLobbyCreated(LobbyCreated_t callback)
     {
         networkManager.StartHost();
+        currentLobby = new CSteamID(callback.m_ulSteamIDLobby);
 
         if (lobbyName == "Default name")
-            lobbyName = SteamFriends.GetPersonaName() + "'s Lobby";
+            lobbyName = steamUsername + "'s Lobby";
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", lobbyName);
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "game", "pobbop");
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey,
             SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyJoinable(new CSteamID(callback.m_ulSteamIDLobby), true);
         
-        networkManager.playerName = SteamFriends.GetPersonaName();
     }
 
     protected void SetLobbyName(string _lobbyName)
@@ -115,25 +119,35 @@ public class UiSceneSteamLobby : MonoBehaviour
 
     private void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
     {
-        SceneManager.LoadScene("BuildScene-0.0.1");
         SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
     }
 
     protected virtual void OnLobbyEntered(LobbyEnter_t callback)
     {
         if (NetworkServer.active) {return;}
-
-        networkManager.playerName = SteamFriends.GetPersonaName();
-
         string hostAdress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAdressKey);
+        currentLobby = new CSteamID(callback.m_ulSteamIDLobby);
+
         networkManager.networkAddress = hostAdress;
         networkManager.StartClient();
     }
 
     public void JoinLobby(CSteamID lobbyId)
     {
-        SceneManager.LoadScene("BuildScene-0.0.1");
         SteamMatchmaking.JoinLobby(lobbyId);
+    }
+
+    public void LeaveLobby()
+    {
+        if (currentLobby == null) return;
+
+        SteamMatchmaking.LeaveLobby(currentLobby);
+
+        if (HostMenu.instance.isServer)
+            SteamMatchmaking.DeleteLobbyData(currentLobby, "game");
+        
+        networkManager.LeaveServer();
+        HostMenu.instance.ClearPlayers();
     }
 
     void MakeInstance()

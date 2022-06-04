@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = System.Object;
 
 public class PlayerSpawnSystem : NetworkBehaviour
 {
@@ -12,7 +14,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
     public static event Action<Transform, int> OnAddPlayerTransform;
     public static event Action<Transform, int> OnRemovePlayerTransform;
 
-    [SerializeField] [SyncVar] private List<Transform> spawnPointsList;
+    [SerializeField] /*[SyncVar]*/ private List<Transform> spawnPointsList;
     [SyncVar] private List<List<Transform>> teamTransformLists;
 
     [SyncVar] public int teamNumber = 0;
@@ -67,6 +69,7 @@ public class PlayerSpawnSystem : NetworkBehaviour
         Transform spawnPoint = spawnPointsList[random.Next(0, spawnPointsList.Count - 1)];
         transform.position = spawnPoint.position;
         transform.rotation = spawnPoint.rotation;
+        CmdTpPlayer(gameObject, spawnPoint.position, spawnPoint.rotation);
     }
     
     private void Respawn()
@@ -77,8 +80,13 @@ public class PlayerSpawnSystem : NetworkBehaviour
         transform.rotation = spawnPoint.rotation;
         OnAddPlayerTransform?.Invoke(transform, teamNumber);
     }
-    
-    
+
+    [Command]
+    private void CmdTpPlayer(GameObject player, Vector3 position, Quaternion rotation)  
+    {
+        player.transform.position = position;
+        player.transform.rotation = rotation;
+    }
 
     private Transform PickSpawnPoint()
     {

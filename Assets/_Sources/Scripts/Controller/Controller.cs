@@ -14,7 +14,7 @@ using UnityEngine.PlayerLoop;
 public class Controller : NetworkBehaviour
 {
 
-    protected Rigidbody rb;
+    public Rigidbody rb;
 
     private Vector2 axis;
     private Vector3 dir = Vector3.zero;
@@ -43,6 +43,8 @@ public class Controller : NetworkBehaviour
     [SerializeField] private float jumpNerfResetTime = 0.5f;
     [SerializeField] [Range(0, 180)] private float lurchMaxAngle = 20;
     [SerializeField] [Range(0, 1)] private float crouchColliderHeightMultiplier = 0.3f;
+    [SerializeField] private float rayLength = 0.5f;
+    [SerializeField] private float groundStickForce = 2f;
     
     
     [Header("Camera Settings")]
@@ -87,7 +89,7 @@ public class Controller : NetworkBehaviour
     protected bool lurch;
     private float slideNerf;
 
-    private BasePlayer player;
+    private Player player;
 
     //Cam
     private Vector2 camAxis;
@@ -116,7 +118,7 @@ public class Controller : NetworkBehaviour
         onDirectionAxis.AddListener(OnDirection);
         onLurch.AddListener(OnLurch);
 
-        player = GetComponent<BasePlayer>();
+        player = GetComponent<Player>();
         rb = GetComponent<Rigidbody>();
         walkSpeed = _walkSpeed;
         crouchSpeed = _crouchSpeed;
@@ -124,6 +126,8 @@ public class Controller : NetworkBehaviour
         collider = gameObject.GetComponent<CapsuleCollider>();
         initialColHeight = collider.height;
         initialColCenter = collider.center;
+
+        isGrounded = true;
     }
     
     protected void Update()
@@ -132,8 +136,6 @@ public class Controller : NetworkBehaviour
         UpdateTPSAnimator();
         UpdatePOVAnimator();
         CamCrouch();
-       // Debug.Log("slide nerf : " + slideNerf);
-       // Debug.Log("enter sliding : " + enterSliding);
         if (Time.time > slideNerf && slideNerf != 0) enterSliding = true;
     }
 
@@ -371,6 +373,31 @@ public class Controller : NetworkBehaviour
         }
     }
 
+    private bool IsGroundNear()
+    {
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(transform.position, Vector3.down * rayLength);
+        foreach (RaycastHit hit in hits)
+        {
+            if (!hit.collider.transform.CompareTag("Player") && !hit.collider.transform.CompareTag("Ball"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private IEnumerator StickToGround()
+    {
+        while (!isGrounded && !jump && !animJump)
+        {
+            if (IsGroundNear())
+            {
+                rb.AddForce(Vector3.down * groundStickForce, ForceMode.Acceleration);
+            }
+            yield return null;
+        }
+    }
 
     #endregion
 
@@ -460,6 +487,7 @@ public class Controller : NetworkBehaviour
     private void OnCollisionExit(Collision col)
     {
         isGrounded = false;
+        StartCoroutine(StickToGround());
     }
 
     #endregion
@@ -486,8 +514,9 @@ public class Controller : NetworkBehaviour
     }
 
     #endregion
-
-    #region Private Methods
+    
+    
+    #region Animator
 
     private void UpdateTPSAnimator()
     {
@@ -495,6 +524,7 @@ public class Controller : NetworkBehaviour
         {
             velX = Vector3.Dot(transform.right, rb.velocity) / _walkSpeed;
             velY = Vector3.Dot(transform.forward, rb.velocity) / _walkSpeed;
+            //set the velocity to 0 if it's 0.0001...
             velX = Mathf.Round(velX * 1000) / 1000;
             velY = Mathf.Round(velY * 1000) / 1000;
             
@@ -524,6 +554,7 @@ public class Controller : NetworkBehaviour
     }
 
     #endregion
+
     
     #region Inputs
     public void Axis(Vector2 axis)
@@ -542,7 +573,7 @@ public class Controller : NetworkBehaviour
         run = true;
         if (run)
         {
-            player.CancelCharge();
+            player._throw.CancelThrow();
             cancelThrow = true;
             walkSpeed = _walkSpeed;
         }

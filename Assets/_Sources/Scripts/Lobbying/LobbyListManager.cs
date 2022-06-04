@@ -7,8 +7,7 @@ using UnityEngine.UI;
 public class LobbyListManager : MonoBehaviour
 {
     [SerializeField] private GameObject lobbyElementGO;
-
-
+    
     public void DisplayLobbies(List<CSteamID> lobbyIDS, LobbyDataUpdate_t callback)
     {
         for (int i = 0; i < lobbyIDS.Count; i++)
@@ -35,5 +34,5 @@ public class LobbyListManager : MonoBehaviour
             Destroy(transform.GetChild(i).gameObject);
         }
     }
-    
+
 }

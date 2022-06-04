@@ -118,10 +118,10 @@ MonoBehaviour:
   m_Name: UniversalRenderPipelineAsset_Renderer
   m_EditorClassIdentifier: 
   m_RendererFeatures:
-  - {fileID: -1679198313556152018}
   - {fileID: -9016486243466925821}
   - {fileID: -6849433693201116463}
-  m_RendererFeatureMap: 2ef10cd5074ab2e80329f56f8801df82d1d2278c58ecf1a0
+  - {fileID: -1679198313556152018}
+  m_RendererFeatureMap: 0329f56f8801df82d1d2278c58ecf1a02ef10cd5074ab2e8
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:

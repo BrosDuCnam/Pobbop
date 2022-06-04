@@ -26,8 +26,6 @@ public class ArenaShieldImpact : MonoBehaviour
     
     [SerializeField] private float decayRate;
     [SerializeField] private float diffuseRate;
-
-    [SerializeField] private bool testAgents;
     
     private ComputeBuffer agentBuffer;
 
@@ -94,6 +92,11 @@ public class ArenaShieldImpact : MonoBehaviour
         compute.SetTexture(1, "DiffusedMap", diffusedMap); 
 
         impactMat.SetTexture("ImpactParticles", map);
+        
+        newImpact();
+        agentBuffer.SetData(CreateAgentsAtPos(new Vector2(0f,0f)), 0,
+            impactHistoryIndex * numAgent, numAgent);
+        compute.SetBuffer(0, "agents", agentBuffer);
     }
 
     private void Update()
@@ -109,19 +112,6 @@ public class ArenaShieldImpact : MonoBehaviour
     void OnDestroy()
     {
         ComputeHelper.Release(agentBuffer);
-    }
-
-    private void OnCollisionEnter(Collision col)
-    {
-        Vector3 impactPos = col.contacts[0].point;
-        impactPos -= shieldPos; 
-        Vector2 uvPos = new Vector2(-impactPos.x, -impactPos.z) / shieldSize * 2;
-        
-        Debug.Log(uvPos);
-        newImpact();
-        agentBuffer.SetData(CreateAgentsAtPos(uvPos), 0,
-            impactHistoryIndex * numAgent, numAgent);
-        compute.SetBuffer(0, "agents", agentBuffer);
     }
 
     private Agent[] CreateAgentsAtPos(Vector2 pos)
@@ -147,4 +137,17 @@ public class ArenaShieldImpact : MonoBehaviour
         }
         impactHistoryIndex += 1;
     }
+    
+    private void OnCollisionEnter(Collision col)
+    {
+        Vector3 impactPos = col.contacts[0].point;
+        impactPos -= shieldPos; 
+        Vector2 uvPos = new Vector2(-impactPos.x, -impactPos.z) / shieldSize * 2;
+        
+        Debug.Log(uvPos);
+        newImpact();
+        agentBuffer.SetData(CreateAgentsAtPos(uvPos), 0,
+            impactHistoryIndex * numAgent, numAgent);
+        compute.SetBuffer(0, "agents", agentBuffer);
+    }    
 }

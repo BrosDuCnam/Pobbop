@@ -26,7 +26,7 @@ public class SteamLobby : MonoBehaviour
     protected Callback<LobbyDataUpdate_t> lobbyDataUpdated;
     
 
-    protected  virtual void Start()
+    protected virtual void Start()
     {
         if (!SteamManager.Initialized)
         {
