@@ -11,13 +11,22 @@ public class RoomProperties : NetworkBehaviour
     [HideInInspector] public int scoreLimit;
     [HideInInspector] public float timerLimit;
 
+    public enum GameLimitModes
+    {
+        Score,
+        Timer,
+        ScoreTimer
+    };
+
+    [HideInInspector] public GameLimitModes gameLimitMode;
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
-        
+
         DontDestroyOnLoad(this);
     }
 
@@ -43,5 +52,28 @@ public class RoomProperties : NetworkBehaviour
     private void RpcChangeTimerLimit(float timer)
     {
         timerLimit = timer;
+    }
+
+    [Command]
+    public void CmdChangGameLimitMode(int value)
+    {
+        RpcChangeScoreLimit(value);
+    }
+
+    [ClientRpc]
+    public void RpcChangeGameLimitMode(int value)
+    {
+        if (value == 0)
+        {
+            gameLimitMode = GameLimitModes.Score;
+        }
+        else if (value == 1)
+        {
+            gameLimitMode = GameLimitModes.Timer;
+        }
+        else if (value == 2)
+        {
+            gameLimitMode = GameLimitModes.ScoreTimer;
+        }
     }
 }

@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private static bool gameStarted;
     private static int scoreLimit;
     private float timerLimit;
+    private static RoomProperties.GameLimitModes gameLimitMode;
 
     private void Awake()
     {
@@ -125,7 +126,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (gameStarted)
+        if (gameStarted && (gameLimitMode == RoomProperties.GameLimitModes.Timer || gameLimitMode == RoomProperties.GameLimitModes.ScoreTimer))
         {
             if (timerLimit > 0)
             {
@@ -140,14 +141,20 @@ public class GameManager : MonoBehaviour
 
     private static void CheckScore(string teamId)
     {
-        if (teams[teamId] >= scoreLimit)
+        print("TryCheckScore");
+        if (gameStarted && (gameLimitMode == RoomProperties.GameLimitModes.Score || gameLimitMode == RoomProperties.GameLimitModes.ScoreTimer))
         {
-            OnGameEnded();    
+            print("checkScore " + scoreLimit);
+            if (teams[teamId] >= scoreLimit)
+            {
+                OnGameEnded();
+            }
         }
     }
 
     private void OnGameStarted()
     {
+        SetGameLimitMode();
         SetScore();
         SetTimer();
         gameStarted = true;
@@ -167,5 +174,10 @@ public class GameManager : MonoBehaviour
     private void SetTimer()
     {
         timerLimit = RoomProperties.instance.timerLimit;
+    }
+
+    private void SetGameLimitMode()
+    {
+        gameLimitMode = RoomProperties.instance.gameLimitMode;
     }
 }
