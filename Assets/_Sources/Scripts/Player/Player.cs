@@ -80,6 +80,32 @@ public class Player : NetworkBehaviour
     {
         return _targeter.GetDesiredFriend();
     }
+
+    public void ChangeKills(bool increase)
+    {
+        if (increase)
+        {
+            kills++;
+        }
+        else
+        {
+            kills--;
+        }
+        GameManager.ChangeTeamKills(teamId, increase);
+    }
+
+    public void ChangeKills(bool increase, Player killedPlayer)
+    {
+        if (increase)
+        {
+            kills++;
+        }
+        else
+        {
+            kills--;
+        }
+        GameManager.ChangeTeamKills(teamId, increase, killedPlayer, this);
+    }
     
     public void Die(Ball ball = null, float respawnTime = 0.4f)
     {

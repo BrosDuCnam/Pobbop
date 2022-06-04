@@ -103,6 +103,7 @@ namespace UI
             if (hostMenuData.TeamAmount < 4)
             {
                 hostMenuData.TeamAmount++;
+                GameManager.RegisterTeam(hostMenuData.TeamAmount);
                 UpdateUI();
             }
         }
@@ -111,6 +112,7 @@ namespace UI
         {
             if (hostMenuData.TeamAmount > 2)
             {
+                GameManager.UnregisterTeam(hostMenuData.TeamAmount);
                 hostMenuData.TeamAmount--;
                 UpdateUI();
             }

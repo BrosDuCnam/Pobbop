@@ -146,6 +146,7 @@ public class NetworkManagerRefab : NetworkManager
 
     public void EndGame()
     {
+        print("GameEnded");
         OnEndGame?.Invoke();
     }
 

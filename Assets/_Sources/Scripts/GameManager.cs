@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
     private const string playerIdPrefix = "Player";
+    private const string teamIdPrefix = "Team";
     private static Dictionary<string, Player> players = new Dictionary<string, Player>();
+    private static Dictionary<string, int> teams = new Dictionary<string, int>();
     public static GameManager instance;
 
     public delegate void OnPlayerKilledCallback(string player, string source);
@@ -23,8 +26,8 @@ public class GameManager : MonoBehaviour
 
     public OnPlayerLeftCallback onPlayerLeftCallback;
 
-    private bool gameStarted;
-    private int scoreLimit;
+    private static bool gameStarted;
+    private static int scoreLimit;
     private float timerLimit;
 
     private void Awake()
@@ -50,6 +53,18 @@ public class GameManager : MonoBehaviour
         instance.onPlayerLeftCallback.Invoke(playerId);
     }
 
+    public static void RegisterTeam(int id)
+    {
+        string teamId = teamIdPrefix + id;
+        teams.Add(teamId, 0);
+    }
+
+    public static void UnregisterTeam(int id)
+    {
+        string teamId = teamIdPrefix + id;
+        teams.Remove(teamId);
+    }
+
     public static Player GetPlayer(string playerId)
     {
         return players[playerId];
@@ -58,6 +73,53 @@ public class GameManager : MonoBehaviour
     public static Player[] GetAllPlayers()
     {
         return players.Values.ToArray();
+    }
+
+    public static string GetPlayerId(Player player)
+    {
+        string playerId = null;
+        foreach (string id in players.Keys)
+        {
+            if (players[id] == player)
+            {
+                playerId = id;
+                break;
+            }
+        }
+
+        return playerId;
+    }
+
+    public static void ChangeTeamKills(int id, bool increase)
+    {
+        string teamId = teamIdPrefix + id;
+        if (increase)
+        {
+            teams[teamId]++;
+        }
+        else
+        {
+            teams[teamId]--;
+        }
+        CheckScore(teamId);
+    }
+
+    public static void ChangeTeamKills(int id, bool increase, Player killedPlayer, Player source)
+    {
+        string teamId = teamIdPrefix + id;
+        if (increase)
+        {
+            teams[teamId]++;
+        }
+        else
+        {
+            teams[teamId]--;
+        }
+
+        string killedPlayerId = GetPlayerId(killedPlayer);
+        string sourceId = GetPlayerId(source);
+        instance.onPlayerKilledCallback.Invoke(killedPlayerId, sourceId);
+        CheckScore(teamId);
     }
 
 
@@ -76,8 +138,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CheckScore()
+    private static void CheckScore(string teamId)
     {
+        if (teams[teamId] >= scoreLimit)
+        {
+            OnGameEnded();    
+        }
     }
 
     private void OnGameStarted()
@@ -87,7 +153,7 @@ public class GameManager : MonoBehaviour
         gameStarted = true;
     }
 
-    private void OnGameEnded()
+    private static void OnGameEnded()
     {
         NetworkManagerRefab.instance.EndGame();
         gameStarted = false;
