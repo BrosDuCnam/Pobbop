@@ -35,7 +35,7 @@ public class Player : NetworkBehaviour
     public Controller _controller;
     public DirIndicatorHandler _dirIndicatorHandler;
     
-    [CanBeNull] private CanvasGroup _canvasGroup;
+    [SerializeField] private CanvasGroup _canvasGroup;
     private Transform _murderTarget;
     
     public Camera Camera { get { return _controller.camera; } }
@@ -78,6 +78,7 @@ public class Player : NetworkBehaviour
     {
         if (isLocalPlayer && isDead)
         {
+            print("Player is dead");
             Camera.transform.LookAt(_murderTarget);
         }
     }

@@ -138,7 +138,7 @@ namespace UI
 
             foreach (GameObject teamObject in _teamsObjects)
             {
-                Transform layout = teamObject.transform.GetChild(1).transform;
+                Transform layout = teamObject.transform.GetChild(1).GetChild(0).transform;
                 for (int i = 0; i < layout.childCount; i++)
                 {
                     Destroy(layout.GetChild(i).gameObject);
@@ -150,7 +150,7 @@ namespace UI
                 GameObject player = GetPlayerObject(playerData.PlayerId);
 
                 player = Instantiate(_playerPrefab,
-                    _teamsObjects[playerData.TeamIndex].transform.GetChild(1)); //Instantiate the player
+                    _teamsObjects[playerData.TeamIndex].transform.GetChild(1).GetChild(0)); //Instantiate the player
                 player.name = "Player_" + playerData.PlayerId; //Set the name of the player
                 player.GetComponentsInChildren<TextMeshProUGUI>()[0].text = playerData.Name; //Set the player name
                 player.GetComponentsInChildren<TextMeshProUGUI>()[1].text =

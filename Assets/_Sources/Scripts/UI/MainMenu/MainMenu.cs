@@ -15,6 +15,11 @@ namespace UI
         }
         private Direction _curentDirection;
 
+        public void Quit()
+        {
+            Application.Quit();
+        }
+        
         public void CloseAllSubMenus()
         {
             CloseAllSubMenus(false);
