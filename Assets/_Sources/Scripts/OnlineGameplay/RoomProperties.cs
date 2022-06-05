@@ -30,34 +30,16 @@ public class RoomProperties : NetworkBehaviour
         DontDestroyOnLoad(this);
     }
 
-    [Command]
-    public void CmdChangeScoreLimit(int score)
-    {
-        RpcChangeScoreLimit(score);
-    }
-
     [ClientRpc]
-    private void RpcChangeScoreLimit(int score)
+    public void RpcChangeScoreLimit(int score)
     {
         scoreLimit = score;
     }
 
-    [Command]
-    public void CmdChangeTimerLimit(float timer)
-    {
-        RpcChangeTimerLimit(timer);
-    }
-
     [ClientRpc]
-    private void RpcChangeTimerLimit(float timer)
+    public void RpcChangeTimerLimit(float timer)
     {
         timerLimit = timer;
-    }
-
-    [Command]
-    public void CmdChangGameLimitMode(int value)
-    {
-        RpcChangeScoreLimit(value);
     }
 
     [ClientRpc]

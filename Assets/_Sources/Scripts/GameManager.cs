@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     private const string playerIdPrefix = "Player";
     private const string teamIdPrefix = "Team";
-    private static Dictionary<string, Player> players = new Dictionary<string, Player>();
+    private static Dictionary<string, Player> players = new Dictionary<string, Player>(); 
     private static Dictionary<string, int> teams = new Dictionary<string, int>();
     public static GameManager instance;
 
@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         NetworkManagerRefab.OnStartGame += OnGameStarted;
+        
+        teams.Add("Team0", 0);
+        teams.Add("Team1", 0);
     }
 
     public static void RegisterPlayer(string netID, Player player)
@@ -79,13 +82,11 @@ public class GameManager : MonoBehaviour
     public static string GetPlayerId(Player player)
     {
         string playerId = null;
-        print("getPlayerId " + player);
         foreach (string id in players.Keys)
         {
-            print("key " + id);
             if (players[id] == player)
             {
-                playerId = playerIdPrefix + id;
+                playerId = id;
                 break;
             }
         }
@@ -121,9 +122,7 @@ public class GameManager : MonoBehaviour
 
         string killedPlayerId = GetPlayerId(killedPlayer);
         string sourceId = GetPlayerId(source);
-        print("killed " + killedPlayerId);
-        print("source " + sourceId);
-        instance.onPlayerKilledCallback.Invoke(killedPlayerId, sourceId);
+        // instance.onPlayerKilledCallback.Invoke(killedPlayerId, sourceId);
         CheckScore(teamId);
     }
 
@@ -135,6 +134,7 @@ public class GameManager : MonoBehaviour
             if (timerLimit > 0)
             {
                 timerLimit -= Time.deltaTime / 60;
+                print(timerLimit);
             }
             else
             {
@@ -145,10 +145,8 @@ public class GameManager : MonoBehaviour
 
     private static void CheckScore(string teamId)
     {
-        print("TryCheckScore");
         if (gameStarted && (gameLimitMode == RoomProperties.GameLimitModes.Score || gameLimitMode == RoomProperties.GameLimitModes.ScoreTimer))
         {
-            print("checkScore " + scoreLimit);
             if (teams[teamId] >= scoreLimit)
             {
                 OnGameEnded();
@@ -183,5 +181,6 @@ public class GameManager : MonoBehaviour
     private void SetGameLimitMode()
     {
         gameLimitMode = RoomProperties.instance.gameLimitMode;
+        print(gameLimitMode);
     }
 }
