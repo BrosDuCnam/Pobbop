@@ -1122,6 +1122,7 @@ MonoBehaviour:
   cooldownTime: 0.4
   catchDistance: 4
   ballTransform: {fileID: 0}
+  catchCooldown: 0.5
   ball: {fileID: 0}
   cooldown: 0
   OnCatch:

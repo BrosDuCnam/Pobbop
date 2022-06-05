@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using JetBrains.Annotations;
 using Mirror;
 using Unity.Mathematics;
@@ -17,9 +18,17 @@ public class Pickup : NetworkBehaviour
     [SerializeField] private float cooldownTime = 0.4f;
     [SerializeField] private float catchDistance = 4f;
     [CanBeNull] public Transform ballTransform;
+    [SerializeField] private float catchCooldown = 0.5f;
+    private float catchCooldownTimer;
     public Ball ball;
     private Player _player;
     [HideInInspector] public bool cooldown;
+    
+    public bool CanCatch
+    {
+        get => catchCooldownTimer >= catchCooldown;
+        set => catchCooldownTimer = value ? catchCooldown : 0;
+    }
     
     public UnityEvent OnCatch;
     
@@ -27,6 +36,8 @@ public class Pickup : NetworkBehaviour
     {
         _player = GetComponent<Player>();
         ballTransform = null;
+        
+        catchCooldownTimer = catchCooldown;
     }
 
     private void Update()
@@ -39,6 +50,11 @@ public class Pickup : NetworkBehaviour
                 ballTransform.position = pickupPoint.position;
                 CmdMoveBall(ballTransform, pickupPoint.position);
             }
+        }
+        
+        if (catchCooldownTimer < catchCooldown)
+        {
+            catchCooldownTimer += Time.deltaTime;
         }
     }
 
@@ -113,6 +129,15 @@ public class Pickup : NetworkBehaviour
 
     public void TryToCatch()
     {
+        if (!CanCatch)
+        {
+            _player.Camera.transform.DOShakePosition(0.2f, .5f, 20, 90, false, true);
+            
+            return;
+        }
+        
+        CanCatch = false;
+        
         RaycastHit[] hits = Physics.SphereCastAll(_player.Camera.transform.position, catchDistance, 
             _player.Camera.transform.forward, catchDistance); // Get all objects in range
         if (hits.Length > 0) // If the list of object is not empty
@@ -143,8 +168,8 @@ public class Pickup : NetworkBehaviour
                 CmdChangeBallState(closestBall, Ball.BallStateRefab.Picked);
                 _player.ChangeBallLayer(closestBall.gameObject, true);
                 _player._throw.CmdWarnPlayer(_player, ball, false);
-                
-                print ("Ball catched :: " + name);
+
+                print("Ball catched :: " + name);
                 OnCatch.Invoke();
             }
         }
