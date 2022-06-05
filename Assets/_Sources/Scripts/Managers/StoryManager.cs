@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using TMPro;
 using UnityEngine;
@@ -59,7 +60,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
     [SerializeField] private GameObject _ballPrefab;
     [SerializeField] public List<TutorialTarget> targets = new List<TutorialTarget>();
     
-    private TextMeshProUGUI _text;
+    [SerializeField] private TextMeshProUGUI _text;
 
     private void Start()
     {
@@ -123,7 +124,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         else if (state == StoryState.Shoot)
         {
             // If the player shoot all the targets, go to the next state
-            if (targets.Count == 0)
+            if (!targets.Any(t => t.gameObject.activeSelf))
             {
                 NextState();
             }

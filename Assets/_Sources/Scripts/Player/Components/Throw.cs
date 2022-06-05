@@ -19,6 +19,8 @@ public class Throw : NetworkBehaviour
 
     [SerializeField] private bool DEBUG;
     
+    private bool _canDoThrowPath = true;
+    
     GameObject tempFriendly;
 
     public UnityEvent OnThrow;
@@ -196,6 +198,12 @@ public class Throw : NetworkBehaviour
     }
 
     public float dbgTime = 0;
+    
+    public void StopThrow()
+    {
+        _canDoThrowPath = false;
+    }
+    
     /// <summary>
     /// Enumerator to throw the object during time.
     /// </summary>
@@ -229,8 +237,9 @@ public class Throw : NetworkBehaviour
 
         Vector3 direction = (target.position - step);
         Vector3 lastPos = origin;
+        _canDoThrowPath = true;
 
-        while (time < 1 && (ball._ballState == Ball.BallStateRefab.Curve || ball._ballState == Ball.BallStateRefab.Pass))
+        while (time < 1 && (ball._ballState == Ball.BallStateRefab.Curve || ball._ballState == Ball.BallStateRefab.Pass) && _canDoThrowPath)
         {
             Vector3 targetPos = Vector3.Lerp(originTargetPosition, target.position, accuracy);
             Vector3 nextPos = Utils.BezierCurve(origin, step, targetPos, time);
@@ -258,6 +267,7 @@ public class Throw : NetworkBehaviour
             CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);*/
         }
 
+        _canDoThrowPath = true;
         ball.rb.velocity = direction;
     }
     
