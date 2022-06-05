@@ -634,6 +634,9 @@ MonoBehaviour:
   ballTransform: {fileID: 0}
   ball: {fileID: 0}
   cooldown: 0
+  OnCatch:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4539989864678404381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -707,6 +710,7 @@ MonoBehaviour:
   playerCam: {fileID: 1008197578226024919}
   targetPoint: {fileID: 5270562764824853360}
   ballVelToDie: 8
+  _kills: 0
   _pickup: {fileID: 0}
   _throw: {fileID: 0}
   _targeter: {fileID: 0}
@@ -814,7 +818,14 @@ MonoBehaviour:
   maxStepMultiplier: 30
   _drawCurve: 1
   DEBUG: 1
+  OnThrow:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPass:
+    m_PersistentCalls:
+      m_Calls: []
   _startChargeTime: 0
+  ball: {fileID: 0}
   dbgTime: 0.87
 --- !u!114 &1265063199708227517
 MonoBehaviour:
