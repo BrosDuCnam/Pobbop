@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using Mirror;
 using UnityEngine;
@@ -48,6 +49,8 @@ public class RealPlayer : Player
     
     private void Update()
     {
+        base.Update();
+        
         UpdateTargetUI();
         DrawChargingCurve();
     } 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
@@ -33,6 +34,9 @@ public class Player : NetworkBehaviour
     public Targeter _targeter;
     public Controller _controller;
     public DirIndicatorHandler _dirIndicatorHandler;
+    
+    [CanBeNull] private CanvasGroup _canvasGroup;
+    private Transform _murderTarget;
     
     public Camera Camera { get { return _controller.camera; } }
 
@@ -69,7 +73,14 @@ public class Player : NetworkBehaviour
         //teamId = UnityEngine.Random.Range(0, 2220);
         Die(null, 1f); //Temp fix for client player TODO: Find a better fix
     }
-    
+
+    protected void Update()
+    {
+        if (isLocalPlayer && isDead)
+        {
+            Camera.transform.LookAt(_murderTarget);
+        }
+    }
 
     public Transform GetBall()
     {
@@ -115,6 +126,7 @@ public class Player : NetworkBehaviour
                 return;
         deaths++;
         ball.owner.ChangeKills(true, this);
+        _murderTarget = ball.owner.transform;
         print("dead" + name);
         isDead = true;
         _dirIndicatorHandler.incomingBall = null;
@@ -127,6 +139,8 @@ public class Player : NetworkBehaviour
             _pickup.ballTransform = null;
             _pickup.ball = null;
             _throw.IsCharging = false;
+            
+            DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 1, .1f);
         }
         _pickup.enabled = false;
         _controller.enabled = false;
@@ -136,7 +150,7 @@ public class Player : NetworkBehaviour
         StartCoroutine(Respawn(respawnTime));
     }
     
-    private IEnumerator Respawn(float respawnTime)
+    protected IEnumerator Respawn(float respawnTime)
     {
         yield return new WaitForSeconds(respawnTime);
         
@@ -152,6 +166,8 @@ public class Player : NetworkBehaviour
             _controller.enabled = true;
             _targeter.enabled = true;
             _throw.enabled = true;
+            
+            _canvasGroup.alpha = 0;
         }
     }
     
