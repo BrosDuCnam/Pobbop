@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class RoomProperties : MonoBehaviour
+public class RoomProperties : NetworkBehaviour
 {
     public static RoomProperties instance;
 
-     public int scoreLimit;
-     public float timerLimit;
+    public int scoreLimit;
+    public float timerLimit;
 
     public enum GameLimitModes
     {
@@ -29,20 +29,41 @@ public class RoomProperties : MonoBehaviour
 
         DontDestroyOnLoad(this);
     }
-    
-    public void RpcChangeScoreLimit(int score)
+
+    [Command(requiresAuthority = false)]
+    public void CmdChangeScoreLimit(int score)
+    {
+        RpcChangeScoreLimit(score);
+    }
+
+    [ClientRpc]
+    private void RpcChangeScoreLimit(int score)
     {
         print("scoreLimit " + score);
         scoreLimit = score;
     }
-    
-    public void RpcChangeTimerLimit(float timer)
+
+    [Command(requiresAuthority = false)]
+    public void CmdChangeTimerLimit(float timer)
+    {
+        RpcChangeTimerLimit(timer);
+    }
+
+    [ClientRpc]
+    private void RpcChangeTimerLimit(float timer)
     {
         print("timerLimit " + timer);
         timerLimit = timer;
     }
-    
-    public void RpcChangeGameLimitMode(int value)
+
+    [Command(requiresAuthority = false)]
+    public void CmdChangeGameLimitMode(int value)
+    {
+        RpcChangeGameLimitMode(value);    
+    }
+
+    [ClientRpc]
+    private void RpcChangeGameLimitMode(int value)
     {
         if (value == 0)
         {
@@ -55,6 +76,6 @@ public class RoomProperties : MonoBehaviour
         else if (value == 2)
         {
             gameLimitMode = GameLimitModes.ScoreTimer;
-        }
+        }    
     }
 }
