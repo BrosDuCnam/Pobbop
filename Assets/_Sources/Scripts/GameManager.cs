@@ -37,11 +37,6 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-        else
-        {
-            Destroy(this);
-        }
-
         DontDestroyOnLoad(gameObject);
 
         NetworkManagerRefab.OnStartGame += OnGameStarted;
