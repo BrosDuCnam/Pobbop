@@ -263,7 +263,7 @@ namespace UI
                 textArea.text = "0";
             }
             print("roomproperties");
-            _roomProperties.RpcChangeGameLimitMode(dropdown.value);
+            _roomProperties.CmdChangeGameLimitMode(dropdown.value);
 
             for (int i = 0; i < gameLimitModes.transform.childCount; i++)
             {
@@ -282,7 +282,7 @@ namespace UI
         {
             _scoreLimit += 5;
             textArea.text = _scoreLimit.ToString();
-            _roomProperties.RpcChangeScoreLimit(_scoreLimit);
+            _roomProperties.CmdChangeScoreLimit(_scoreLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -294,7 +294,7 @@ namespace UI
                 _scoreLimit -= 5;
             }
             textArea.text = _scoreLimit.ToString();
-            _roomProperties.RpcChangeScoreLimit(_scoreLimit);
+            _roomProperties.CmdChangeScoreLimit(_scoreLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -303,7 +303,7 @@ namespace UI
         {
             _timerLimit += 5;
             textArea.text = _timerLimit.ToString();
-            _roomProperties.RpcChangeTimerLimit(_timerLimit);
+            _roomProperties.CmdChangeTimerLimit(_timerLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -315,7 +315,7 @@ namespace UI
                 _timerLimit -= 5;
             }
             textArea.text = _timerLimit.ToString();
-            _roomProperties.RpcChangeTimerLimit(_timerLimit);
+            _roomProperties.CmdChangeTimerLimit(_timerLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
