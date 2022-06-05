@@ -858,30 +858,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _warningColor: {r: 1, g: 0, b: 0, a: 1}
-  _warningCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 10
-      value: 1
-      inSlope: 0.2402293
-      outSlope: 0.2402293
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.057272434
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  _startWarningTime: 30
   _fillImage: {fileID: 2408033555382826536}
   teams:
   - {fileID: 2064672231594165839}

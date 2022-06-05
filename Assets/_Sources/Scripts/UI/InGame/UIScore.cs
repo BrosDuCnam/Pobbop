@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,11 +8,12 @@ public class UIScore : MonoBehaviour
 {
     [SerializeField] private Color _warningColor;
     private Color _defaultColor;
-    private bool _isWarning;
-    
-    [SerializeField] private AnimationCurve _warningCurve;
+
+    [SerializeField] private float _startWarningTime;
     private float _warningTimer;
     private float _warningTimerLimit;
+    private bool _isWarning;
+    
     [SerializeField] private Image _fillImage;
     
     [SerializeField] private List<UIScoreTeam> teams = new List<UIScoreTeam>();
@@ -52,14 +54,13 @@ public class UIScore : MonoBehaviour
             _fillImage.fillAmount = 1 - gameManager.timer / roomProperties.timerLimit;
             
             _warningTimer += Time.deltaTime;
-            if (_warningTimer > _warningTimerLimit)
+            if (_warningTimer > _warningTimerLimit && gameManager.SecondsUntilGameEnds < _startWarningTime)
             {
                 _warningTimer = 0;
-                _warningTimerLimit = _warningCurve.Evaluate(gameManager.timer)/2;
+                _warningTimerLimit = Utils.Map(_startWarningTime, 0, 1, .1f, gameManager.SecondsUntilGameEnds);
                 _isWarning = !_isWarning;
-                _fillImage.color = Color.Lerp(Color.red, Color.white, _warningCurve.Evaluate(_warningTimer / _warningTimerLimit));
             }
-
+            
             if (_isWarning)
             {
                 _fillImage.color = _warningColor;
@@ -74,5 +75,5 @@ public class UIScore : MonoBehaviour
             _fillImage.fillAmount = 1;
         }
     }
-    
+
 }

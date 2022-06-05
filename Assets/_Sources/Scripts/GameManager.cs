@@ -29,6 +29,11 @@ public class GameManager : MonoBehaviour
     private bool gameStarted;
     private int scoreLimit;
     [HideInInspector] public float timer;
+
+    public float SecondsUntilGameEnds
+    {
+        get => timer * 60;
+    }
     private RoomProperties.GameLimitModes gameLimitMode;
 
     private void Awake()
