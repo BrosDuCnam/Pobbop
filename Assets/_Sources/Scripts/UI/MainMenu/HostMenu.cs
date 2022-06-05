@@ -58,7 +58,14 @@ namespace UI
 
         private void Awake()
         {
-            if (instance == null) instance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
             _mainMenu = GetComponent<MainMenu>();
             _roomProperties = networkManager.GetComponent<RoomProperties>();
         }
@@ -103,7 +110,7 @@ namespace UI
             if (hostMenuData.TeamAmount < 4)
             {
                 hostMenuData.TeamAmount++;
-                GameManager.RegisterTeam(hostMenuData.TeamAmount);
+                GameManager.instance.RegisterTeam(hostMenuData.TeamAmount);
                 UpdateUI();
             }
         }
@@ -112,7 +119,7 @@ namespace UI
         {
             if (hostMenuData.TeamAmount > 2)
             {
-                GameManager.UnregisterTeam(hostMenuData.TeamAmount);
+                GameManager.instance.UnregisterTeam(hostMenuData.TeamAmount);
                 hostMenuData.TeamAmount--;
                 UpdateUI();
             }

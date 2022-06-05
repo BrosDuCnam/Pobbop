@@ -26,6 +26,10 @@ public class RoomProperties : NetworkBehaviour
         {
             instance = this;
         }
+        else
+        {
+            Destroy(this);
+        }
 
         DontDestroyOnLoad(this);
     }

@@ -91,7 +91,7 @@ public class Player : NetworkBehaviour
         {
             kills--;
         }
-        GameManager.ChangeTeamKills(teamId, increase);
+        GameManager.instance.ChangeTeamKills(teamId, increase);
     }
 
     public void ChangeKills(bool increase, Player killedPlayer)
@@ -104,7 +104,7 @@ public class Player : NetworkBehaviour
         {
             kills--;
         }
-        GameManager.ChangeTeamKills(teamId, increase, killedPlayer, this);
+        GameManager.instance.ChangeTeamKills(teamId, increase, killedPlayer, this);
     }
     
     public void Die(Ball ball = null, float respawnTime = 0.4f)
