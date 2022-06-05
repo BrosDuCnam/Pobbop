@@ -26,21 +26,19 @@ public class RoomProperties : MonoBehaviour
         {
             instance = this;
         }
-        else
-        {
-            Destroy(this);
-        }
 
         DontDestroyOnLoad(this);
     }
     
     public void RpcChangeScoreLimit(int score)
     {
+        print("scoreLimit " + score);
         scoreLimit = score;
     }
     
     public void RpcChangeTimerLimit(float timer)
     {
+        print("timerLimit " + timer);
         timerLimit = timer;
     }
     

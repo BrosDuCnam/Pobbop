@@ -62,10 +62,6 @@ namespace UI
             {
                 instance = this;
             }
-            else
-            {
-                Destroy(this);
-            }
             _mainMenu = GetComponent<MainMenu>();
             _roomProperties = networkManager.GetComponent<RoomProperties>();
         }
