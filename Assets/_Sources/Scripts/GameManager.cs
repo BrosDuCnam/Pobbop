@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     private const string playerIdPrefix = "Player";
     private const string teamIdPrefix = "Team";
     private static Dictionary<string, Player> players = new Dictionary<string, Player>(); 
-    private static Dictionary<string, int> teams = new Dictionary<string, int>();
+    public static Dictionary<string, int> teams = new Dictionary<string, int>();
     public static GameManager instance;
 
     public delegate void OnPlayerKilledCallback(string player, string source);
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     private static bool gameStarted;
     private static int scoreLimit;
-    private float timerLimit;
+    [HideInInspector] public float timerLimit;
     private static RoomProperties.GameLimitModes gameLimitMode;
 
     private void Awake()
