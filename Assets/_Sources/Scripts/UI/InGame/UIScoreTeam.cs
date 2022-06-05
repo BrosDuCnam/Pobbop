@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class UIScoreTeam : MonoBehaviour
 {
+     private RoomProperties roomProperties;
      [SerializeField] private int _score;
      public int Score
      {
@@ -21,9 +22,26 @@ public class UIScoreTeam : MonoBehaviour
      [SerializeField] private Image _fillImage;
      public int maxScore;
 
+     private void Start()
+     {
+          roomProperties = RoomProperties.instance;
+
+          if (roomProperties.gameLimitMode == RoomProperties.GameLimitModes.Timer)
+          {
+               _fillImage.fillAmount = 1;
+          }
+          
+          Score = 0;
+     }
+     
      public void UpdateUI()
      {
-          _fillImage.fillAmount = (float) Score / maxScore;
+          if (roomProperties == null) roomProperties = RoomProperties.instance;
+          
+          if (roomProperties.gameLimitMode != RoomProperties.GameLimitModes.Timer)
+          {
+               _fillImage.fillAmount = (float) Score / maxScore;
+          }
           _scoreText.text = Score.ToString();
      }
 }

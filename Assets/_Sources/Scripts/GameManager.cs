@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     private bool gameStarted;
     private int scoreLimit;
-    [HideInInspector] public float timerLimit;
+    [HideInInspector] public float timer;
     private RoomProperties.GameLimitModes gameLimitMode;
 
     private void Awake()
@@ -141,10 +141,10 @@ public class GameManager : MonoBehaviour
         if (gameStarted && (gameLimitMode == RoomProperties.GameLimitModes.Timer ||
                             gameLimitMode == RoomProperties.GameLimitModes.ScoreTimer))
         {
-            if (timerLimit > 0)
+            if (timer > 0)
             {
-                timerLimit -= Time.deltaTime / 60;
-                print(timerLimit);
+                timer -= Time.deltaTime / 60;
+                // print(timer);
             }
             else
             {
@@ -186,7 +186,7 @@ public class GameManager : MonoBehaviour
 
     private void SetTimer()
     {
-        timerLimit = RoomProperties.instance.timerLimit;
+        timer = RoomProperties.instance.timerLimit;
     }
 
     private void SetGameLimitMode()
