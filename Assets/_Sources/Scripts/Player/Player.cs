@@ -34,7 +34,8 @@ public class Player : NetworkBehaviour
     public Targeter _targeter;
     public Controller _controller;
     public DirIndicatorHandler _dirIndicatorHandler;
-    
+
+    public RectTransform mainContainer;
     [SerializeField] private CanvasGroup _canvasGroup;
     private Transform _murderTarget;
     
