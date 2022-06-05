@@ -8,7 +8,7 @@ public class TutorialTarget : Target
         if (col.gameObject.CompareTag("Ball"))
         {
             StoryManager.Instance.targets.Remove(this);
-            Destroy(this);
+            gameObject.SetActive(false);
         }
     }
 }
