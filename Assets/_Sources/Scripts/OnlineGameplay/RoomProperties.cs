@@ -8,8 +8,8 @@ public class RoomProperties : NetworkBehaviour
 {
     public static RoomProperties instance;
 
-    [HideInInspector] public int scoreLimit;
-    [HideInInspector] public float timerLimit;
+    [SyncVar] public int scoreLimit;
+     public float timerLimit;
 
     public enum GameLimitModes
     {
@@ -25,6 +25,10 @@ public class RoomProperties : NetworkBehaviour
         if (instance == null)
         {
             instance = this;
+        }
+        else
+        {
+            Destroy(this);
         }
 
         DontDestroyOnLoad(this);

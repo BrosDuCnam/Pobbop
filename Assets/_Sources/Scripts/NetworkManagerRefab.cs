@@ -35,6 +35,10 @@ public class NetworkManagerRefab : NetworkManager
         {
             instance = this;
         }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     public override void OnStartClient()
