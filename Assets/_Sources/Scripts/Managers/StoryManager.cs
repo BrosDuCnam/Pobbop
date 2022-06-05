@@ -91,7 +91,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
             ball.transform.position = _throw.transform.position;
             _throw.ball = ball.transform;
 
-            _throw.ReleaseThrow(false, 1, player.gameObject);
+            _throw.ReleaseThrow(false, 1, 1, player.gameObject);
         });
     }
 

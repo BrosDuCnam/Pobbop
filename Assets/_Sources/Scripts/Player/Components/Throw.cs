@@ -74,7 +74,7 @@ public class Throw : NetworkBehaviour
         return (force - _minThrowForce) / (_maxThrowForce - _minThrowForce);
     }
 
-    public void ReleaseThrow(bool pass = false, float chargeFoce = -1, GameObject targetObj = null)
+    public void ReleaseThrow(bool pass = false, float chargeFoce = -1, float accuracyValue = -1, GameObject targetObj = null)
     {
         if (ball != null && IsCharging)
         {
@@ -142,9 +142,9 @@ public class Throw : NetworkBehaviour
                     multiplier = -a * Mathf.Pow((90 - camAngelToA) / 90, 2);
 
                 Vector3 stepPosition = playerCam.position + a + o + multiplier;
-
-                //float accuracy = ChargeValue; // TODO - Maybe need to calculate the accuracy in other way
-                float accuracy = 1; // TODO - Maybe need to calculate the accuracy in other way
+                
+                float accuracy = accuracyValue;
+                if (accuracy == -1) accuracy = ChargeValue;
 
                 Ball.BallStateRefab state = pass ? Ball.BallStateRefab.Pass : Ball.BallStateRefab.Curve;
                 CmdThrowBall(ball, _player, stepPosition, targetPointTransform, force, accuracy, _speedCurve, state); // Throw the object
