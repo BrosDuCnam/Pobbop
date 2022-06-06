@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerSetup : NetworkBehaviour
 {
@@ -21,6 +22,14 @@ public class PlayerSetup : NetworkBehaviour
             DisableOnLocal();
         }
     }
+    
+    public void Disconnect()
+    {
+        // TODO: Disconnect player and change scene
+        // GetComponent<NetworkIdentity>().connectionToServer.Disconnect();
+        // SceneManager.LoadScene(0);
+    }
+    
     private void DisableOnLocal()
     {
         foreach (GameObject gameObject in gameObjectsToDeactivateOnLocal)

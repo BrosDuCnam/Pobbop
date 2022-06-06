@@ -131,7 +131,7 @@ public class Pickup : NetworkBehaviour
     {
         if (!CanCatch)
         {
-            _player.Camera.transform.DOShakePosition(0.2f, .5f, 20, 90, false, true);
+            _player.mainContainer.transform.DOShakePosition(0.2f, 50f, 20, 90, false, true);
             
             return;
         }
