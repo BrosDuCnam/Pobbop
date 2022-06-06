@@ -6,6 +6,7 @@ namespace UI
     public class MainMenu : MonoBehaviour
     {
         public GameObject[] subMenus;
+        public Transform creditTransform;
 
         public enum Direction
         {
@@ -15,6 +16,11 @@ namespace UI
         }
         private Direction _curentDirection;
 
+        public void Quit()
+        {
+            Application.Quit();
+        }
+        
         public void CloseAllSubMenus()
         {
             CloseAllSubMenus(false);
@@ -81,6 +87,12 @@ namespace UI
                     return 0;
             }
         }
+        
+        public void StartCreditsAnimation()
+        {
+            creditTransform.localPosition = new Vector3(0, 0, 0);
+            creditTransform.DOLocalMoveY(-1000, 10).onComplete = () => RotateToFront();
+        }
 
         #region RotateTo
         
@@ -102,6 +114,11 @@ namespace UI
         public void RotateTo(Direction direction)
         {
             transform.DOLocalRotate(new Vector3(0, DirectionToAngle(direction), 0), 0.5f).SetEase(Ease.InOutQuint);
+        }
+        
+        public void RotateToTop()
+        {
+            transform.DOLocalRotate(new Vector3(-90f, 0, 0), 0.5f).SetEase(Ease.InOutQuint);
         }
         
         #endregion

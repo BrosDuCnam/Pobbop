@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerSetup : NetworkBehaviour
 {
@@ -21,6 +22,14 @@ public class PlayerSetup : NetworkBehaviour
             DisableOnLocal();
         }
     }
+    
+    public void Disconnect()
+    {
+        // TODO: Disconnect player and change scene
+        // GetComponent<NetworkIdentity>().connectionToServer.Disconnect();
+        // SceneManager.LoadScene(0);
+    }
+    
     private void DisableOnLocal()
     {
         foreach (GameObject gameObject in gameObjectsToDeactivateOnLocal)
@@ -51,7 +60,7 @@ public class PlayerSetup : NetworkBehaviour
 
         string netID = GetComponent<NetworkIdentity>().netId.ToString();
         Player player = GetComponent<Player>();
-        GameManager.RegisterPlayer(netID, player);
+        GameManager.instance.RegisterPlayer(netID, player);
     }
 
     public override void OnStopClient()
@@ -59,12 +68,12 @@ public class PlayerSetup : NetworkBehaviour
         base.OnStopClient();
         
         string playerID = "Player" + GetComponent<NetworkIdentity>().netId;
-        GameManager.UnRegisterPlayer(playerID);
+        GameManager.instance.UnRegisterPlayer(playerID);
     }
     
 
     private void OnDisable()
     {
-        GameManager.UnRegisterPlayer(transform.name);
+        GameManager.instance.UnRegisterPlayer(transform.name);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
+using DG.Tweening;
 using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,6 +26,8 @@ public class RealPlayer : Player
 
     private bool lockTargetUiPos = false;
 
+    [SerializeField] private CanvasGroup _escapeCanvasGroup;
+    public bool IsEscapeCanvasActive => _escapeCanvasGroup.alpha > 0;
 
     #region Inputs
 
@@ -48,10 +52,34 @@ public class RealPlayer : Player
     
     private void Update()
     {
+        base.Update();
+        
         UpdateTargetUI();
         DrawChargingCurve();
-    } 
+    }
+
+    public void Escape(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.started) return;
+
+        ToggleEscapeCanvas();
+    }
     
+    public void ToggleEscapeCanvas()
+    {
+        _controller.enabled = IsEscapeCanvasActive;
+        
+        _pickup.enabled = IsEscapeCanvasActive;
+        _controller.enabled = IsEscapeCanvasActive;
+        _targeter.enabled = IsEscapeCanvasActive;
+        _throw.enabled = IsEscapeCanvasActive;
+
+        Cursor.visible = !IsEscapeCanvasActive;
+        Cursor.lockState = !IsEscapeCanvasActive ? CursorLockMode.None : CursorLockMode.Locked;
+        
+        float alphaTarget = IsEscapeCanvasActive ? 0 : 1;
+        DOTween.To(() => _escapeCanvasGroup.alpha, x => _escapeCanvasGroup.alpha = x, alphaTarget, 0.2f).SetEase(Ease.InOutQuad);
+    }    
     private void UpdateTargetUI()
     {
         if (HasTarget && IsHoldingObject)

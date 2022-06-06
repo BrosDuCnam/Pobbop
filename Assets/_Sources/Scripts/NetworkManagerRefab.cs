@@ -31,7 +31,10 @@ public class NetworkManagerRefab : NetworkManager
 
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
     }
 
     public override void OnStartClient()
@@ -75,7 +78,7 @@ public class NetworkManagerRefab : NetworkManager
     {
         float distance = float.MinValue;
         Transform spawnPoint = new GameObject().transform;
-        List<Transform> allPlayers = GameManager.GetAllPlayers().Select(x => x.transform).ToList();
+        List<Transform> allPlayers = GameManager.instance.GetAllPlayers().Select(x => x.transform).ToList();
         //Fix for host not registering spawnpoints
         if (startPositions.Count == 0)
         {
@@ -122,6 +125,7 @@ public class NetworkManagerRefab : NetworkManager
         {
             
         }
+        DontDestroyOnLoad(RoomProperties.instance);
         base.ServerChangeScene(newSceneName);
     }
 

@@ -10,8 +10,8 @@ public class GameManager : MonoBehaviour
 {
     private const string playerIdPrefix = "Player";
     private const string teamIdPrefix = "Team";
-    private static Dictionary<string, Player> players = new Dictionary<string, Player>(); 
-    private static Dictionary<string, int> teams = new Dictionary<string, int>();
+    private Dictionary<string, Player> players = new Dictionary<string, Player>();
+    public Dictionary<string, int> teams = new Dictionary<string, int>();
     public static GameManager instance;
 
     public delegate void OnPlayerKilledCallback(string player, string source);
@@ -26,23 +26,32 @@ public class GameManager : MonoBehaviour
 
     public OnPlayerLeftCallback onPlayerLeftCallback;
 
-    private static bool gameStarted;
-    private static int scoreLimit;
-    private float timerLimit;
-    private static RoomProperties.GameLimitModes gameLimitMode;
+    private bool gameStarted;
+    private int scoreLimit;
+    [HideInInspector] public float timer;
+
+    public float SecondsUntilGameEnds
+    {
+        get => timer * 60;
+    }
+    private RoomProperties.GameLimitModes gameLimitMode;
 
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+
         DontDestroyOnLoad(gameObject);
 
         NetworkManagerRefab.OnStartGame += OnGameStarted;
-        
+
         teams.Add("Team0", 0);
         teams.Add("Team1", 0);
     }
 
-    public static void RegisterPlayer(string netID, Player player)
+    public void RegisterPlayer(string netID, Player player)
     {
         string playerId = playerIdPrefix + netID;
         players.Add(playerId, player);
@@ -51,35 +60,35 @@ public class GameManager : MonoBehaviour
             instance.onPlayerJoinedCallback.Invoke(playerId);
     }
 
-    public static void UnRegisterPlayer(string playerId)
+    public void UnRegisterPlayer(string playerId)
     {
         players.Remove(playerId);
         instance.onPlayerLeftCallback.Invoke(playerId);
     }
 
-    public static void RegisterTeam(int id)
+    public void RegisterTeam(int id)
     {
         string teamId = teamIdPrefix + id;
         teams.Add(teamId, 0);
     }
 
-    public static void UnregisterTeam(int id)
+    public void UnregisterTeam(int id)
     {
         string teamId = teamIdPrefix + id;
         teams.Remove(teamId);
     }
 
-    public static Player GetPlayer(string playerId)
+    public Player GetPlayer(string playerId)
     {
         return players[playerId];
     }
 
-    public static Player[] GetAllPlayers()
+    public Player[] GetAllPlayers()
     {
         return players.Values.ToArray();
     }
 
-    public static string GetPlayerId(Player player)
+    public string GetPlayerId(Player player)
     {
         string playerId = null;
         foreach (string id in players.Keys)
@@ -94,7 +103,7 @@ public class GameManager : MonoBehaviour
         return playerId;
     }
 
-    public static void ChangeTeamKills(int id, bool increase)
+    public void ChangeTeamKills(int id, bool increase)
     {
         string teamId = teamIdPrefix + id;
         if (increase)
@@ -105,10 +114,11 @@ public class GameManager : MonoBehaviour
         {
             teams[teamId]--;
         }
+
         CheckScore(teamId);
     }
 
-    public static void ChangeTeamKills(int id, bool increase, Player killedPlayer, Player source)
+    public void ChangeTeamKills(int id, bool increase, Player killedPlayer, Player source)
     {
         string teamId = teamIdPrefix + id;
         if (increase)
@@ -129,12 +139,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (gameStarted && (gameLimitMode == RoomProperties.GameLimitModes.Timer || gameLimitMode == RoomProperties.GameLimitModes.ScoreTimer))
+        if (gameStarted && (gameLimitMode == RoomProperties.GameLimitModes.Timer ||
+                            gameLimitMode == RoomProperties.GameLimitModes.ScoreTimer))
         {
-            if (timerLimit > 0)
+            if (timer > 0)
             {
-                timerLimit -= Time.deltaTime / 60;
-                print(timerLimit);
+                timer -= Time.deltaTime / 60;
+                // print(timer);
             }
             else
             {
@@ -143,9 +154,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private static void CheckScore(string teamId)
+    private void CheckScore(string teamId)
     {
-        if (gameStarted && (gameLimitMode == RoomProperties.GameLimitModes.Score || gameLimitMode == RoomProperties.GameLimitModes.ScoreTimer))
+        if (gameStarted && (gameLimitMode == RoomProperties.GameLimitModes.Score ||
+                            gameLimitMode == RoomProperties.GameLimitModes.ScoreTimer))
         {
             if (teams[teamId] >= scoreLimit)
             {
@@ -162,7 +174,7 @@ public class GameManager : MonoBehaviour
         gameStarted = true;
     }
 
-    private static void OnGameEnded()
+    private void OnGameEnded()
     {
         NetworkManagerRefab.instance.EndGame();
         gameStarted = false;
@@ -175,7 +187,7 @@ public class GameManager : MonoBehaviour
 
     private void SetTimer()
     {
-        timerLimit = RoomProperties.instance.timerLimit;
+        timer = RoomProperties.instance.timerLimit;
     }
 
     private void SetGameLimitMode()

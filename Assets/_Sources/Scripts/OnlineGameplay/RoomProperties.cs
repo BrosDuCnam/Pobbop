@@ -8,8 +8,8 @@ public class RoomProperties : NetworkBehaviour
 {
     public static RoomProperties instance;
 
-    [HideInInspector] public int scoreLimit;
-    [HideInInspector] public float timerLimit;
+    public int scoreLimit;
+    public float timerLimit;
 
     public enum GameLimitModes
     {
@@ -27,35 +27,55 @@ public class RoomProperties : NetworkBehaviour
             instance = this;
         }
 
-        DontDestroyOnLoad(this);
+       // DontDestroyOnLoad(this);
     }
 
-    [ClientRpc]
-    public void RpcChangeScoreLimit(int score)
+    [Command(requiresAuthority = false)]
+    public void CmdChangeScoreLimit(int score)
     {
-        scoreLimit = score;
+        RpcChangeScoreLimit(score);
     }
 
     [ClientRpc]
-    public void RpcChangeTimerLimit(float timer)
+    private void RpcChangeScoreLimit(int score)
     {
-        timerLimit = timer;
+        print("scoreLimit " + score);
+        instance.scoreLimit = score;
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdChangeTimerLimit(float timer)
+    {
+        RpcChangeTimerLimit(timer);
     }
 
     [ClientRpc]
-    public void RpcChangeGameLimitMode(int value)
+    private void RpcChangeTimerLimit(float timer)
+    {
+        print("timerLimit " + timer);
+        instance.timerLimit = timer;
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdChangeGameLimitMode(int value)
+    {
+        RpcChangeGameLimitMode(value);    
+    }
+
+    [ClientRpc]
+    private void RpcChangeGameLimitMode(int value)
     {
         if (value == 0)
         {
-            gameLimitMode = GameLimitModes.Score;
+            instance.gameLimitMode = GameLimitModes.Score;
         }
         else if (value == 1)
         {
-            gameLimitMode = GameLimitModes.Timer;
+            instance.gameLimitMode = GameLimitModes.Timer;
         }
         else if (value == 2)
         {
-            gameLimitMode = GameLimitModes.ScoreTimer;
+            instance.gameLimitMode = GameLimitModes.ScoreTimer;
         }
     }
 }

@@ -7,6 +7,7 @@ using TMPro;
 using UI.Host;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Serialization;
 
 namespace UI
 {
@@ -52,15 +53,17 @@ namespace UI
         private int _scoreLimit;
         private float _timerLimit;
         private List<TextMeshProUGUI> lastTextUpdated = new List<TextMeshProUGUI>();
-        private RoomProperties _roomProperties;
 
         [SerializeField] private GameObject networkManager;
+        [SerializeField] private RoomProperties roomProperties;
 
         private void Awake()
         {
-            if (instance == null) instance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
             _mainMenu = GetComponent<MainMenu>();
-            _roomProperties = networkManager.GetComponent<RoomProperties>();
         }
         
         private void Start()
@@ -103,7 +106,7 @@ namespace UI
             if (hostMenuData.TeamAmount < 4)
             {
                 hostMenuData.TeamAmount++;
-                GameManager.RegisterTeam(hostMenuData.TeamAmount);
+                GameManager.instance.RegisterTeam(hostMenuData.TeamAmount);
                 UpdateUI();
             }
         }
@@ -112,7 +115,7 @@ namespace UI
         {
             if (hostMenuData.TeamAmount > 2)
             {
-                GameManager.UnregisterTeam(hostMenuData.TeamAmount);
+                GameManager.instance.UnregisterTeam(hostMenuData.TeamAmount);
                 hostMenuData.TeamAmount--;
                 UpdateUI();
             }
@@ -135,7 +138,7 @@ namespace UI
 
             foreach (GameObject teamObject in _teamsObjects)
             {
-                Transform layout = teamObject.transform.GetChild(1).transform;
+                Transform layout = teamObject.transform.GetChild(1).GetChild(0).transform;
                 for (int i = 0; i < layout.childCount; i++)
                 {
                     Destroy(layout.GetChild(i).gameObject);
@@ -147,7 +150,7 @@ namespace UI
                 GameObject player = GetPlayerObject(playerData.PlayerId);
 
                 player = Instantiate(_playerPrefab,
-                    _teamsObjects[playerData.TeamIndex].transform.GetChild(1)); //Instantiate the player
+                    _teamsObjects[playerData.TeamIndex].transform.GetChild(1).GetChild(0)); //Instantiate the player
                 player.name = "Player_" + playerData.PlayerId; //Set the name of the player
                 player.GetComponentsInChildren<TextMeshProUGUI>()[0].text = playerData.Name; //Set the player name
                 player.GetComponentsInChildren<TextMeshProUGUI>()[1].text =
@@ -260,7 +263,7 @@ namespace UI
                 textArea.text = "0";
             }
             print("roomproperties");
-            _roomProperties.RpcChangeGameLimitMode(dropdown.value);
+            roomProperties.CmdChangeGameLimitMode(dropdown.value);
 
             for (int i = 0; i < gameLimitModes.transform.childCount; i++)
             {
@@ -279,7 +282,7 @@ namespace UI
         {
             _scoreLimit += 5;
             textArea.text = _scoreLimit.ToString();
-            _roomProperties.RpcChangeScoreLimit(_scoreLimit);
+            roomProperties.CmdChangeScoreLimit(_scoreLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -291,7 +294,7 @@ namespace UI
                 _scoreLimit -= 5;
             }
             textArea.text = _scoreLimit.ToString();
-            _roomProperties.RpcChangeScoreLimit(_scoreLimit);
+            roomProperties.CmdChangeScoreLimit(_scoreLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -300,7 +303,7 @@ namespace UI
         {
             _timerLimit += 5;
             textArea.text = _timerLimit.ToString();
-            _roomProperties.RpcChangeTimerLimit(_timerLimit);
+            roomProperties.CmdChangeTimerLimit(_timerLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -312,7 +315,7 @@ namespace UI
                 _timerLimit -= 5;
             }
             textArea.text = _timerLimit.ToString();
-            _roomProperties.RpcChangeTimerLimit(_timerLimit);
+            roomProperties.CmdChangeTimerLimit(_timerLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
