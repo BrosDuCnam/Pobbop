@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using Mirror;
 using UnityEngine;
 
 namespace UI

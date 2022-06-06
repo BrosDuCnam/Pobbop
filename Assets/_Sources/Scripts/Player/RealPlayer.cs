@@ -67,12 +67,7 @@ public class RealPlayer : Player
     
     public void ToggleEscapeCanvas()
     {
-        _controller.enabled = IsEscapeCanvasActive;
-        
-        _pickup.enabled = IsEscapeCanvasActive;
-        _controller.enabled = IsEscapeCanvasActive;
-        _targeter.enabled = IsEscapeCanvasActive;
-        _throw.enabled = IsEscapeCanvasActive;
+        GetComponent<PlayerInput>().enabled = IsEscapeCanvasActive;
 
         Cursor.visible = !IsEscapeCanvasActive;
         Cursor.lockState = !IsEscapeCanvasActive ? CursorLockMode.None : CursorLockMode.Locked;

@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Sources/Scenes/YmDevScene_/RefabMulti.unity
     guid: e984f0d27e57e25489bc8aa5c399eada
+  - enabled: 1
+    path: Assets/_Sources/Scenes/YmDevScene_/Tutorial.unity
+    guid: 2297b4682b161d747bbb8ad97adf5d59
   m_configObjects: {}

@@ -12,6 +12,7 @@ public class NetworkManagerRefab : NetworkManager
     [Scene] [SerializeField] private string menuScene = string.Empty;
     [Scene] [SerializeField] private string menuSceneAlt = "default";
     [Scene] [SerializeField] private string gameScene = string.Empty;
+    [Scene] [SerializeField] private string tutoScene = string.Empty;
     [Scene] [SerializeField] private string winScene = string.Empty;
 
     [Header("Room")]
@@ -66,7 +67,7 @@ public class NetworkManagerRefab : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        if (SceneManager.GetActiveScene().path == menuScene || SceneManager.GetActiveScene().path == menuSceneAlt)
+        if (SceneManager.GetActiveScene().path == menuScene || SceneManager.GetActiveScene().path == menuSceneAlt || SceneManager.GetActiveScene().path == tutoScene)
         {
             GameObject roomPlayerInstance = Instantiate(roomPlayerPrefab);
 
@@ -103,7 +104,7 @@ public class NetworkManagerRefab : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
-        if (newSceneName == gameScene)
+        if (newSceneName == gameScene || newSceneName == tutoScene)
         {
             List<RoomPlayer> roomPlayers = HostMenu.instance.hostMenuPlayerData.Select(x => x.RoomPlayer).ToList();
             int indexCount = 0;
@@ -158,6 +159,15 @@ public class NetworkManagerRefab : NetworkManager
         if (SceneManager.GetActiveScene().path == menuScene)
         {
             ServerChangeScene(gameScene);
+            OnStartGame?.Invoke();
+        }
+    }
+
+    public void StartTuto()
+    {
+        if (SceneManager.GetActiveScene().path == menuScene)
+        {
+            ServerChangeScene(tutoScene);
             OnStartGame?.Invoke();
         }
     }

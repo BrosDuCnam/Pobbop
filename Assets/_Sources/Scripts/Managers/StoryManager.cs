@@ -64,6 +64,12 @@ public class StoryManager : SingletonBehaviour<StoryManager>
 
     private void Start()
     {
+        if (player == null)
+        {
+            player = GameObject.FindObjectsOfType<Player>().FirstOrDefault();
+            if (player == null) return;
+        }
+        
         NextState();
         
         NetworkClient.RegisterPrefab(_ballPrefab);
@@ -97,6 +103,13 @@ public class StoryManager : SingletonBehaviour<StoryManager>
 
     private void Update()
     {
+        if (player == null)
+        {
+            player = GameObject.FindObjectsOfType<Player>().FirstOrDefault();
+            if (player == null) return;
+            Start();
+        }
+        
         randomTimer += Time.deltaTime;
         if (randomTimer > randomTimeToSpeech)
         {
