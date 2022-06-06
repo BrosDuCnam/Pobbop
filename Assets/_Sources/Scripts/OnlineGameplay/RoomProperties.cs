@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class RoomProperties : NetworkBehaviour
+public class RoomProperties : MonoBehaviour
 {
     public static RoomProperties instance;
 
@@ -27,42 +27,36 @@ public class RoomProperties : NetworkBehaviour
             instance = this;
         }
 
-       // DontDestroyOnLoad(this);
+        DontDestroyOnLoad(this);
     }
-
-    [Command(requiresAuthority = false)]
+    
     public void CmdChangeScoreLimit(int score)
     {
         RpcChangeScoreLimit(score);
     }
-
-    [ClientRpc]
+    
     private void RpcChangeScoreLimit(int score)
     {
         print("scoreLimit " + score);
         instance.scoreLimit = score;
     }
-
-    [Command(requiresAuthority = false)]
+    
     public void CmdChangeTimerLimit(float timer)
     {
         RpcChangeTimerLimit(timer);
     }
-
-    [ClientRpc]
+    
     private void RpcChangeTimerLimit(float timer)
     {
         print("timerLimit " + timer);
         instance.timerLimit = timer;
     }
-
-    [Command(requiresAuthority = false)]
+    
     public void CmdChangeGameLimitMode(int value)
     {
         RpcChangeGameLimitMode(value);    
     }
-
-    [ClientRpc]
+    
     private void RpcChangeGameLimitMode(int value)
     {
         if (value == 0)
