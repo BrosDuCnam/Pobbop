@@ -7,6 +7,7 @@ using TMPro;
 using UI.Host;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Serialization;
 
 namespace UI
 {
@@ -52,9 +53,9 @@ namespace UI
         private int _scoreLimit;
         private float _timerLimit;
         private List<TextMeshProUGUI> lastTextUpdated = new List<TextMeshProUGUI>();
-        private RoomProperties _roomProperties;
 
         [SerializeField] private GameObject networkManager;
+        [SerializeField] private RoomProperties roomProperties;
 
         private void Awake()
         {
@@ -63,7 +64,6 @@ namespace UI
                 instance = this;
             }
             _mainMenu = GetComponent<MainMenu>();
-            _roomProperties = networkManager.GetComponent<RoomProperties>();
         }
         
         private void Start()
@@ -263,7 +263,7 @@ namespace UI
                 textArea.text = "0";
             }
             print("roomproperties");
-            _roomProperties.CmdChangeGameLimitMode(dropdown.value);
+            roomProperties.CmdChangeGameLimitMode(dropdown.value);
 
             for (int i = 0; i < gameLimitModes.transform.childCount; i++)
             {
@@ -282,7 +282,7 @@ namespace UI
         {
             _scoreLimit += 5;
             textArea.text = _scoreLimit.ToString();
-            _roomProperties.CmdChangeScoreLimit(_scoreLimit);
+            roomProperties.CmdChangeScoreLimit(_scoreLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -294,7 +294,7 @@ namespace UI
                 _scoreLimit -= 5;
             }
             textArea.text = _scoreLimit.ToString();
-            _roomProperties.CmdChangeScoreLimit(_scoreLimit);
+            roomProperties.CmdChangeScoreLimit(_scoreLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -303,7 +303,7 @@ namespace UI
         {
             _timerLimit += 5;
             textArea.text = _timerLimit.ToString();
-            _roomProperties.CmdChangeTimerLimit(_timerLimit);
+            roomProperties.CmdChangeTimerLimit(_timerLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }
@@ -315,7 +315,7 @@ namespace UI
                 _timerLimit -= 5;
             }
             textArea.text = _timerLimit.ToString();
-            _roomProperties.CmdChangeTimerLimit(_timerLimit);
+            roomProperties.CmdChangeTimerLimit(_timerLimit);
             lastTextUpdated.Remove(textArea);
             lastTextUpdated.Add(textArea);
         }

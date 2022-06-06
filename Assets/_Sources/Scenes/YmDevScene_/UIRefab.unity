@@ -364,6 +364,72 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 892826084684448894, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
   m_PrefabInstance: {fileID: 1869116236}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &700160401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 700160404}
+  - component: {fileID: 700160403}
+  - component: {fileID: 700160402}
+  m_Layer: 0
+  m_Name: RoomProperties
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &700160402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 700160401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97990d6297b02314d8c11006c54e62e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  scoreLimit: 0
+  timerLimit: 0
+  gameLimitMode: 0
+--- !u!114 &700160403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 700160401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 2819586879
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!4 &700160404
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 700160401}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -92.146736, y: -5305.5933, z: -179.87927}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &731194126
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,8 +443,6 @@ GameObject:
   - component: {fileID: 731194129}
   - component: {fileID: 731194127}
   - component: {fileID: 731194130}
-  - component: {fileID: 731194132}
-  - component: {fileID: 731194133}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -481,40 +545,6 @@ MonoBehaviour:
   winScene: 
   roomPlayerPrefab: {fileID: 2146637403515613536, guid: 367816d3c70d3754b856af91f24852e7, type: 3}
   gamePlayerPrefab: {fileID: 5484164245318665630, guid: 93d9915ac5c7ba247afe3450732e0f90, type: 3}
---- !u!114 &731194132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 731194126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97990d6297b02314d8c11006c54e62e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  scoreLimit: 0
-  timerLimit: 0
-  gameLimitMode: 0
---- !u!114 &731194133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 731194126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 2563174816
-  serverOnly: 0
-  visible: 0
-  m_AssetId: 
-  hasSpawned: 0
 --- !u!1 &774513063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1851,6 +1881,10 @@ PrefabInstance:
       propertyPath: networkManager
       value: 
       objectReference: {fileID: 731194126}
+    - target: {fileID: 892826084684448868, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+      propertyPath: roomProperties
+      value: 
+      objectReference: {fileID: 700160402}
     - target: {fileID: 1029628346006383645, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
