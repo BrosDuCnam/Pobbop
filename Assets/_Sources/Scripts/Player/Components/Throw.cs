@@ -147,6 +147,7 @@ public class Throw : NetworkBehaviour
                 
                 float accuracy = accuracyValue;
                 if (accuracy == -1) accuracy = ChargeValue;
+                if (pass) accuracy = 1;
 
                 Ball.BallStateRefab state = pass ? Ball.BallStateRefab.Pass : Ball.BallStateRefab.Curve;
                 CmdThrowBall(ball, _player, stepPosition, targetPointTransform, force, accuracy, _speedCurve, state); // Throw the object
