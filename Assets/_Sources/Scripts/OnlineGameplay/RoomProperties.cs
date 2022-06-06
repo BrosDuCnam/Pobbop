@@ -27,7 +27,7 @@ public class RoomProperties : NetworkBehaviour
             instance = this;
         }
 
-        DontDestroyOnLoad(this);
+       // DontDestroyOnLoad(this);
     }
 
     [Command(requiresAuthority = false)]
