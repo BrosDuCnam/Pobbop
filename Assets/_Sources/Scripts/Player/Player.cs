@@ -202,7 +202,7 @@ public class Player : NetworkBehaviour
     
     private void OnCollisionEnter(Collision col)
     {
-        if (!enabled) return;
+        if (!enabled || !hasAuthority) return;
         if (col.gameObject.CompareTag("Ball"))
         {
             Ball ball = col.gameObject.GetComponent<Ball>();
@@ -213,7 +213,7 @@ public class Player : NetworkBehaviour
             if (ball.rb.velocity.magnitude > ballVelToDie && !isDead
                 && (ball._ballState == Ball.BallStateRefab.Curve || ball._ballState == Ball.BallStateRefab.FreeThrow))
             {
-                Die(ball); // TODO : send msg die to others
+                Die(ball);
             }
         }
     }
