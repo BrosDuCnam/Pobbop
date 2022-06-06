@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class RoomProperties : MonoBehaviour
+public class RoomProperties : NetworkBehaviour
 {
     public static RoomProperties instance;
 
