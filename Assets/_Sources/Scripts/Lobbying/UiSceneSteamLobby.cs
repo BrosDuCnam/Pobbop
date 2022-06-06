@@ -135,6 +135,7 @@ public class UiSceneSteamLobby : MonoBehaviour
     public void JoinLobby(CSteamID lobbyId)
     {
         SteamMatchmaking.JoinLobby(lobbyId);
+        HostMenu.instance.HostMenuShowOnServer();
     }
 
     public void LeaveLobby()

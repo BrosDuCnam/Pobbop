@@ -127,10 +127,24 @@ public class NetworkManagerRefab : NetworkManager
 
     public void LeaveServer()
     {
-        if (HostMenu.instance.isServer)
-            StopHost();
-        else
-            StopClient();
+        if (NetworkClient.localPlayer != null)
+        {
+
+            if (NetworkClient.localPlayer.isServer)
+            {
+                NetworkClient.Shutdown();
+                NetworkServer.Shutdown();
+                StopHost();
+                StopServer();
+                print("stop server");
+            }
+            else
+            {
+                NetworkClient.Shutdown();
+                StopClient();
+            }
+            
+        }
 
         HostMenu.instance.gameObject.SetActive(true);
     }

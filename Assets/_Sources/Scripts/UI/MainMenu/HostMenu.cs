@@ -76,7 +76,7 @@ namespace UI
             UpdateUI();
         }
 
-        private void HostMenuShowOnServer()
+        public void HostMenuShowOnServer()
         {
             _startGame.SetActive(isServer);
             _teamAmount.SetActive(isServer);
