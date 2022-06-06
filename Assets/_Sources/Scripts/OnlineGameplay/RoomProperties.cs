@@ -40,7 +40,7 @@ public class RoomProperties : NetworkBehaviour
     private void RpcChangeScoreLimit(int score)
     {
         print("scoreLimit " + score);
-        scoreLimit = score;
+        instance.scoreLimit = score;
     }
 
     [Command(requiresAuthority = false)]
@@ -53,7 +53,7 @@ public class RoomProperties : NetworkBehaviour
     private void RpcChangeTimerLimit(float timer)
     {
         print("timerLimit " + timer);
-        timerLimit = timer;
+        instance.timerLimit = timer;
     }
 
     [Command(requiresAuthority = false)]
@@ -67,15 +67,15 @@ public class RoomProperties : NetworkBehaviour
     {
         if (value == 0)
         {
-            gameLimitMode = GameLimitModes.Score;
+            instance.gameLimitMode = GameLimitModes.Score;
         }
         else if (value == 1)
         {
-            gameLimitMode = GameLimitModes.Timer;
+            instance.gameLimitMode = GameLimitModes.Timer;
         }
         else if (value == 2)
         {
-            gameLimitMode = GameLimitModes.ScoreTimer;
+            instance.gameLimitMode = GameLimitModes.ScoreTimer;
         }    
     }
 }
