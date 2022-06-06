@@ -67,11 +67,17 @@ public class NetworkManagerRefab : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn)
     {
-        if (SceneManager.GetActiveScene().path == menuScene || SceneManager.GetActiveScene().path == menuSceneAlt || SceneManager.GetActiveScene().path == tutoScene)
+        print("addPlayer");
+        if (SceneManager.GetActiveScene().path == menuScene || SceneManager.GetActiveScene().path == menuSceneAlt)
         {
             GameObject roomPlayerInstance = Instantiate(roomPlayerPrefab);
-
             NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
+        }
+        else if (SceneManager.GetActiveScene().path == tutoScene)
+        {
+            print("spawn");
+            GameObject gamePlayerInstance = Instantiate(gamePlayerPrefab);
+            NetworkServer.AddPlayerForConnection(conn, gamePlayerInstance.gameObject);
         }
     }
     
@@ -165,11 +171,10 @@ public class NetworkManagerRefab : NetworkManager
 
     public void StartTuto()
     {
-        if (SceneManager.GetActiveScene().path == menuScene)
-        {
-            ServerChangeScene(tutoScene);
-            OnStartGame?.Invoke();
-        }
+        StartHost();
+
+        ServerChangeScene(tutoScene);
+        OnStartGame?.Invoke();
     }
 
     public void EndGame()

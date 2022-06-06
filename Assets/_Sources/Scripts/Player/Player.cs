@@ -213,7 +213,7 @@ public class Player : NetworkBehaviour
             if (ball.rb.velocity.magnitude > ballVelToDie && !isDead
                 && (ball._ballState == Ball.BallStateRefab.Curve || ball._ballState == Ball.BallStateRefab.FreeThrow))
             {
-                Die(ball);
+                Die(ball); // TODO : send msg die to others
             }
         }
     }
