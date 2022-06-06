@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -50,8 +51,8 @@ namespace UI
 
         public static HostMenu instance;
 
-        private int _scoreLimit;
-        private float _timerLimit;
+        [HideInInspector] public int _scoreLimit;
+        [HideInInspector] public float _timerLimit;
         private List<TextMeshProUGUI> lastTextUpdated = new List<TextMeshProUGUI>();
 
         [SerializeField] private GameObject networkManager;
@@ -71,6 +72,8 @@ namespace UI
             hostMenuData.TeamAmount = 2;
 
             UpdateUI();
+            RequestAllData(); // remove later
+            print("Start");
         }
 
         public void HostGame()
@@ -221,7 +224,7 @@ namespace UI
         {
             HostMenuPlayerData playerData = hostMenuPlayerData.Find(x => x.PlayerId == playerId);
             playerData.TeamIndex = teamId;
-            print(playerData.TeamIndex);
+            print(playerData.TeamIndex + "Team Index");
             UpdateUI();
         }
 
@@ -323,6 +326,27 @@ namespace UI
         public bool IsServer()
         {
             return isServer;
+        }
+        
+        public void RequestAllData()
+        {
+            print("requesting all data");
+            RoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<RoomPlayer>();
+            localPlayer.CmdRequestData();
+        }
+
+        public void RefreshData(int teamAmount, int[] playerIds, int[] teamIds)
+        {
+            hostMenuData.TeamAmount = teamAmount;
+            print("aaaaa");
+            ChangePlayerTeamEnum(playerIds[0], teamIds[0]);
+            UpdateUI();
+        }
+        
+        private IEnumerator ChangePlayerTeamEnum(int playerId, int teamId)
+        {
+            yield return new WaitForSeconds(1);
+            ChangePlayerTeam(playerId, teamId);
         }
     }
 }

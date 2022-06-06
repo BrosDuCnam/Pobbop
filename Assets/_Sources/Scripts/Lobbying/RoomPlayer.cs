@@ -67,4 +67,23 @@ public class RoomPlayer : NetworkBehaviour
             HostMenu.instance.DecreaseTeamSize();
         
     }
+
+    [Command]
+    public void CmdRequestData()
+    {
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        int teamAmount = HostMenu.instance.hostMenuData.TeamAmount;
+        
+        RpcRefreshData(teamAmount, new []{0}, new []{1});
+    }
+    
+    [ClientRpc] [ServerCallback]
+    private void RpcRefreshData(int teamAmount, int[] playerIds, int[] teamIds)
+    {
+        HostMenu.instance.RefreshData(teamAmount, playerIds, teamIds);
+    }
 }
