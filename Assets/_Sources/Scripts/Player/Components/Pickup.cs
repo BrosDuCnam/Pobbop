@@ -129,6 +129,8 @@ public class Pickup : NetworkBehaviour
 
     public void TryToCatch()
     {
+        if (!enabled) return;
+        
         if (!CanCatch)
         {
             _player.mainContainer.transform.DOShakePosition(0.2f, 50f, 20, 90, false, true);

@@ -76,6 +76,8 @@ public class Throw : NetworkBehaviour
 
     public void ReleaseThrow(bool pass = false, float chargeFoce = -1, float accuracyValue = -1, GameObject targetObj = null)
     {
+        if (!enabled) return;
+        
         if (ball != null && IsCharging)
         {
             _player._controller.IsThrowing = false;
