@@ -125,6 +125,7 @@ public class NetworkManagerRefab : NetworkManager
         {
             
         }
+        DontDestroyOnLoad(RoomProperties.instance);
         base.ServerChangeScene(newSceneName);
     }
 
