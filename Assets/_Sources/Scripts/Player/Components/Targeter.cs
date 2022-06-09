@@ -34,6 +34,8 @@ public class Targeter : MonoBehaviour
     /// </summary>
     private void UpdateTargets(string name = "")
     {
+        _friendlyPlayers = new List<Player>();
+        _targetPlayers = new List<Player>();
         foreach (Player player in GameManager.instance.GetAllPlayers())
         {
             if (player.teamId == _player.teamId && player != _player) _friendlyPlayers.Add(player);

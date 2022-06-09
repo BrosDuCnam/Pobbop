@@ -12,7 +12,7 @@ public class RoomPlayer : NetworkBehaviour
 {
     [SyncVar] public string username;
     public int myId;
-    public int teamId;
+    [SyncVar] public int teamId;
 
     private HostMenuPlayerData me;
 
@@ -78,12 +78,24 @@ public class RoomPlayer : NetworkBehaviour
     {
         int teamAmount = HostMenu.instance.hostMenuData.TeamAmount;
         
-        RpcRefreshData(teamAmount, new []{0}, new []{1});
+        RpcRefreshData(teamAmount);
+        CmdChangeTeam(teamId);
     }
     
     [ClientRpc] [ServerCallback]
-    private void RpcRefreshData(int teamAmount, int[] playerIds, int[] teamIds)
+    private void RpcRefreshData(int teamAmount)
     {
-        HostMenu.instance.RefreshData(teamAmount, playerIds, teamIds);
+        HostMenu.instance.RefreshData(teamAmount);
+    }
+
+    [Command] 
+    public void CmdRemovePlayer()
+    {
+        RpcRemovePlayer();
+    }
+    [ClientRpc] 
+    private void RpcRemovePlayer()
+    {
+        HostMenu.instance.RemovePlayer(myId);
     }
 }

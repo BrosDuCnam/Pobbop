@@ -1843,7 +1843,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.10789795
+        value: 0.022174075
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -2503,8 +2503,8 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_Camera: {fileID: 1008197578226024919}
+  m_PlaneDistance: 0.6
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -4514,7 +4514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 801049288609698926, guid: a63cef42454737c40907849e85b0342d, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 865185750933070481, guid: a63cef42454737c40907849e85b0342d, type: 3}
       propertyPath: m_Layer
@@ -4630,7 +4630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4085908669495331858, guid: a63cef42454737c40907849e85b0342d, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4089645296865860592, guid: a63cef42454737c40907849e85b0342d, type: 3}
       propertyPath: m_Layer
@@ -4718,7 +4718,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6580733228301068953, guid: a63cef42454737c40907849e85b0342d, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6702123639833218916, guid: a63cef42454737c40907849e85b0342d, type: 3}
       propertyPath: m_Layer

@@ -57,6 +57,8 @@ namespace UI
 
         [SerializeField] private GameObject networkManager;
         [SerializeField] private RoomProperties roomProperties;
+        
+        [SerializeField] private UiSceneSteamLobby lobby;
 
         private void Awake()
         {
@@ -228,6 +230,13 @@ namespace UI
             UpdateUI();
         }
 
+        public void RemovePlayer(int playerId)
+        {
+            HostMenuPlayerData playerData = hostMenuPlayerData.Find(x => x.PlayerId == playerId);
+            hostMenuPlayerData.Remove(playerData);
+            UpdateUI();
+        }
+
         public void ChangeTeamNum(bool increase)
         {
             RoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<RoomPlayer>();
@@ -327,26 +336,32 @@ namespace UI
         {
             return isServer;
         }
+
+        public void QuitLobby() // TODO: Test in multiplayer
+        {
+            RoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<RoomPlayer>();
+            localPlayer.CmdRemovePlayer();
+            lobby.LeaveLobby();
+        }
         
         public void RequestAllData()
         {
             print("requesting all data");
-            RoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<RoomPlayer>();
-            localPlayer.CmdRequestData();
+            if (!isServer && hostMenuPlayerData.Count > 0)
+            {
+                RoomPlayer localPlayer = NetworkClient.localPlayer.GetComponent<RoomPlayer>();
+                localPlayer.CmdRequestData();
+            }
+
         }
 
-        public void RefreshData(int teamAmount, int[] playerIds, int[] teamIds)
+        public void RefreshData(int teamAmount)
         {
             hostMenuData.TeamAmount = teamAmount;
-            print("aaaaa");
-            ChangePlayerTeamEnum(playerIds[0], teamIds[0]);
+
             UpdateUI();
         }
         
-        private IEnumerator ChangePlayerTeamEnum(int playerId, int teamId)
-        {
-            yield return new WaitForSeconds(1);
-            ChangePlayerTeam(playerId, teamId);
-        }
+        
     }
 }

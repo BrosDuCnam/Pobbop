@@ -42,7 +42,6 @@ public class NetworkManagerRefab : NetworkManager
     {
         DontDestroyOnLoad(gameObject);
         HostMenu.instance.RedirectOnHostPage();
-        print("OnStartClient");
         base.OnStartClient();
     }
     
@@ -74,6 +73,12 @@ public class NetworkManagerRefab : NetworkManager
             NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
         }
         else if (SceneManager.GetActiveScene().path == tutoScene)
+        {
+            print("spawn");
+            GameObject gamePlayerInstance = Instantiate(gamePlayerPrefab);
+            NetworkServer.AddPlayerForConnection(conn, gamePlayerInstance.gameObject);
+        }
+        else if (SceneManager.GetActiveScene().path == gameScene)
         {
             print("spawn");
             GameObject gamePlayerInstance = Instantiate(gamePlayerPrefab);
@@ -182,5 +187,6 @@ public class NetworkManagerRefab : NetworkManager
         print("GameEnded");
         OnEndGame?.Invoke();
     }
+    
 
 }
