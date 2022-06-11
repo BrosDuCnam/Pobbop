@@ -11,6 +11,8 @@ public class Targeter : MonoBehaviour
     [SerializeField] private List<GameObject> _targets = new List<GameObject>();
     [SerializeField] private List<Player> _targetPlayers = new List<Player>();
     [SerializeField] private List<Player> _friendlyPlayers = new List<Player>();
+    [SerializeField] public List<Target> targetNonPlayers = new List<Target>();
+    
     [NotNull] public GameObject CurrentTarget { get; private set; }
     [SerializeField] private float _targetRange = 100f;
     [SerializeField] private bool DEBUG;
@@ -48,7 +50,7 @@ public class Targeter : MonoBehaviour
     {
         if (_player.IsCharging == false && _targets.Count > 0) // If player is not charging we can search for targets
         {
-            List<GameObject> visibleTargets = GetVisibleTargets(_targets, _targetPlayers); // Get all visible targets
+            List<GameObject> visibleTargets = GetVisiblePlayers(_targets, _targetPlayers).Concat(GetVisibleTargets(targetNonPlayers)).ToList(); // Get all visible targets
             visibleTargets =
                 OrderByDistanceToCenterOfScreen(
                     visibleTargets); // Order visible targets by distance to center of screen
@@ -99,7 +101,7 @@ public class Targeter : MonoBehaviour
     /// </summary>
     /// <param name="targets">List of targets</param>
     /// <returns>List of visible target</returns>
-    public List<GameObject> GetVisibleTargets(List<GameObject> targets, List<Player> players)
+    public List<GameObject> GetVisiblePlayers(List<GameObject> targets, List<Player> players)
     {
         List<GameObject> visibleTargets = new List<GameObject>();
         //foreach (GameObject target in targets)
@@ -126,6 +128,41 @@ public class Targeter : MonoBehaviour
         }
         return visibleTargets;
     }
+    
+    
+    
+    /// <summary>
+    /// Function to get all visible targets
+    /// </summary>
+    /// <param name="targets">List of targets</param>
+    /// <returns>List of visible target</returns>
+    public List<GameObject> GetVisibleTargets(List<Target> targets)
+    {
+        List<GameObject> visibleTargets = new List<GameObject>();
+        //foreach (GameObject target in targets)
+        for (int i = 0; i < targets.Count; i++)
+        {
+            if (targets[i] == null) continue;
+            // Check if target is in field of view of player camera
+            if (Utils.IsVisibleByCamera(targets[i].transform.position, _player.playerCam))
+            {
+                // If object obstructs the view of the player, it is not visible
+                RaycastHit[] hits = Physics.RaycastAll(_player.targetPoint.position, targets[i].transform.position - _player.targetPoint.position,
+                    _targetRange);
+
+                hits = hits.Where(x => !x.transform.gameObject.CompareTag("Ball")).ToArray();
+                hits = hits.OrderBy(x => x.distance).ToArray();
+
+                if (hits.Length > 0 && (hits[0].collider.gameObject == targets[i] 
+                                        || hits[0].transform.root.gameObject == targets[i] 
+                                        || hits[0].transform.root.GetComponentsInChildren<Transform>().Contains(targets[i].transform)))
+                {
+                    visibleTargets.Add(targets[i].gameObject);
+                }
+            }
+        }
+        return visibleTargets;
+    }
 
     /// <summary>
     /// Gets the friendly player who is the closest to the center of the screen
@@ -134,7 +171,7 @@ public class Targeter : MonoBehaviour
     public GameObject GetDesiredFriend()
     {
         if (_friendlyPlayers.Count == 0) return null;
-        List<GameObject> visibleFriendlies = GetVisibleTargets(_friendlyPlayers.Select(x => x.gameObject).ToList(), _friendlyPlayers);
+        List<GameObject> visibleFriendlies = GetVisiblePlayers(_friendlyPlayers.Select(x => x.gameObject).ToList(), _friendlyPlayers);
         if (visibleFriendlies.Count == 0) return null;
         return OrderByDistanceToCenterOfScreen(visibleFriendlies)[0];
     }

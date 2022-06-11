@@ -126,10 +126,10 @@ public class Throw : NetworkBehaviour
 
 
                 Transform targetPointTransform = target.transform;
-                Player targetPlayer = target.GetComponent<Player>();
-                targetPointTransform = targetPlayer.targetPoint;
+                if (target.TryGetComponent(out Player targetPlayer))
+                    targetPointTransform = targetPlayer.targetPoint;
                 
-                if (!pass)
+                if (!pass && targetPlayer != null)
                     CmdWarnPlayer(targetPlayer, ball, true);
 
                 Transform playerCam = null;

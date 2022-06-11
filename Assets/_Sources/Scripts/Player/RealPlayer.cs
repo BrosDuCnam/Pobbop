@@ -188,7 +188,9 @@ public class RealPlayer : Player
             _chargingCurveLineRenderer.enabled = true;
             
             Transform targetPointTransform = Target.transform;
-            targetPointTransform = Target.GetComponent<Player>().targetPoint;
+            if (Target.TryGetComponent(out Player otherPlayer))
+                targetPointTransform = otherPlayer.targetPoint;
+            
             
             float chargeTime = Mathf.Clamp(Time.time - _throw._startChargeTime, 0, _throw._maxChargeTime);
             float chargeValue = _throw._chargeCurve.Evaluate(chargeTime / _throw._maxChargeTime);

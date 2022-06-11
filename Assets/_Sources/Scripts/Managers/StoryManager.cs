@@ -85,6 +85,8 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         _text = player.GetComponentsInChildren<TextMeshProUGUI>().Last();
         NextState();
         NetworkClient.RegisterPrefab(_ballPrefab);
+
+        player._targeter.targetNonPlayers = targets.Select(t => (Target)t).ToList();
         
         player._pickup.OnCatch.AddListener(() =>
         {
