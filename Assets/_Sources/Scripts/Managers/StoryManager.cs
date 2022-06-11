@@ -12,6 +12,12 @@ public class StoryManager : SingletonBehaviour<StoryManager>
 {
     public Player player;
 
+    [SerializeField] private Transform _shootBallPosition;
+    private GameObject _shootBall;
+    [SerializeField] private ColliderTriggerHandler _shootBallColliderTrigger;
+    [SerializeField] private float _shootBallCooldown = 1f;
+    private float _shootBallCooldownTimer;
+
     [SerializeField] private float _thowerRotationSpeed;
     [SerializeField] private float _thowerCooldown;
     [SerializeField] private float _minRandomTimeToSpeech = 10f;
@@ -52,7 +58,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
             }
             else
             {
-                int index = Random.Range(0, randomTexts.Count);
+                int index = Random.Range(0, randomTexts.Count-1);
                 saidTexts.Add(randomTexts[index]);
                 randomTexts.RemoveAt(index);
                 return randomTexts[index];
@@ -116,6 +122,29 @@ public class StoryManager : SingletonBehaviour<StoryManager>
                 NextState();
             }
         });
+        
+        // Spawn ball first time
+        Ball ball = Instantiate(_ballPrefab).GetComponent<Ball>();
+        NetworkServer.Spawn(ball.gameObject);
+        ball.transform.position = _shootBallPosition.position;
+        _shootBall = ball.gameObject;
+        
+        // Spawn ball when ball quit spawn area
+        _shootBallColliderTrigger.OnTriggerExitEvent.AddListener((collision) =>
+        {
+            // If the collider is th eshoot or the player and the shoot ball is not in
+            if (collision.gameObject == _shootBall || (collision.gameObject == player.gameObject && !_shootBallColliderTrigger.collider.bounds.Contains(_shootBall.transform.position)))
+            {
+                if (_shootBallCooldownTimer > 0) return;
+                
+                _shootBallCooldownTimer = _shootBallCooldown;
+                
+                Ball ball = Instantiate(_ballPrefab).GetComponent<Ball>();
+                NetworkServer.Spawn(ball.gameObject);
+                ball.transform.position = _shootBallPosition.position;
+                _shootBall = ball.gameObject;
+            }
+        });
     }
 
     private void Update()
@@ -136,13 +165,18 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         {
             _thowerCooldownTimer -= Time.deltaTime;
         }
-
-        // randomTimer += Time.deltaTime;
-        // if (randomTimer > randomTimeToSpeech)
+        if (_shootBallCooldownTimer > 0)
+        {
+            _shootBallCooldownTimer -= Time.deltaTime;
+        }
+        
+        // _randomTimer += Time.deltaTime;
+        // if (_randomTimer > _randomTimeToSpeech)
         // {
-        //     randomTimer = 0;
-        //     randomTimeToSpeech = Random.Range(minRandomTimeToSpeech, maxRandomTimeToSpeech);
-        //     Dialogue(dialogs[(int) state].GetRandomText());
+        //     _randomTimer = 0;
+        //     _randomTimeToSpeech = 20/*Random.Range(_minRandomTimeToSpeech, _maxRandomTimeToSpeech)*/;
+        //     string text = dialogs[(int) state].GetRandomText();
+        //     if (!string.IsNullOrEmpty(text)) Dialogue(text);
         // }
         
         else if (state == StoryState.Sprint)
