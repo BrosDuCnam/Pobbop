@@ -74,18 +74,22 @@ public class Throw : NetworkBehaviour
         return (force - _minThrowForce) / (_maxThrowForce - _minThrowForce);
     }
 
-    public void ReleaseThrow(bool pass = false, float chargeFoce = -1, float accuracyValue = -1, GameObject targetObj = null)
+    public void ReleaseThrow(bool pass = false, float chargeFoce = -1, float accuracyValue = -1, GameObject targetObj = null, bool isPlayer = false)
     {
         if (!enabled) return;
-        
+
         if (ball != null && IsCharging)
         {
-            _player._controller.IsThrowing = false;
-            _player._pickup.Throw();
+            if (_player != null)
+            {
+                _player._controller.IsThrowing = false;
+                _player._pickup.Throw();
+            }
             Ball ball = this.ball.GetComponent<Ball>();
+            print(ball.collider == null);
             ball.collider.enabled = true;
             CmdSetKinematic(ball, false);
-            _player.ChangeBallLayer(ball.gameObject, false);
+            if (_player != null) _player.ChangeBallLayer(ball.gameObject, false);
 
             float force = chargeFoce;
             float chargeValue = 0;
@@ -108,10 +112,11 @@ public class Throw : NetworkBehaviour
             this.ball = null;
             IsCharging = false;
             
-            _player.IsHoldingObject = false;
-            GameObject friendly = tempFriendly == null ? _player.GetDesiredFriendly() : tempFriendly;
+            if (_player != null) _player.IsHoldingObject = false;
+            GameObject friendly = tempFriendly; 
+            if (_player != null) friendly = tempFriendly == null ? _player.GetDesiredFriendly() : tempFriendly;
             tempFriendly = null;
-            if ((pass && friendly != null) || (!pass && _player.HasTarget)) // If player has a target
+            if (targetObj != null || (pass && friendly != null) || (!pass && _player.HasTarget)) // If player has a target
             {
                 GameObject target = targetObj;
                 if (target == null)
@@ -127,7 +132,10 @@ public class Throw : NetworkBehaviour
                 if (!pass)
                     CmdWarnPlayer(targetPlayer, ball, true);
 
-                Transform playerCam = _player.playerCam.transform;
+                Transform playerCam = null;
+                if (_player == null) playerCam = transform;
+                else playerCam = _player.playerCam.transform;
+                
                 Vector3 a = (targetPointTransform.position - playerCam.position) / 2; // Adjacent : half distance between the player and the target
                 float camAngelToA = Vector3.Angle(playerCam.forward, a); // Angle between a and hypotenuse (where the player is looking)
 
@@ -151,7 +159,6 @@ public class Throw : NetworkBehaviour
 
                 Ball.BallStateRefab state = pass ? Ball.BallStateRefab.Pass : Ball.BallStateRefab.Curve;
                 CmdThrowBall(ball, _player, stepPosition, targetPointTransform, force, accuracy, _speedCurve, state); // Throw the object
-                
                 if (pass) OnPass.Invoke();
                 else OnThrow.Invoke();
             }
@@ -224,8 +231,8 @@ public class Throw : NetworkBehaviour
         ball._ballState = state;
         CmdChangeBallState(ball, state, _player);
 
-        //Vector3 origin = transform.position;
-        Vector3 origin = _player._pickup.pickupPoint.position;
+        Vector3 origin = transform.position;
+        if (_player != null) origin = _player._pickup.pickupPoint.position;
         Vector3 originTargetPosition = target.position;
         Vector3 torqueDirection = -Vector3.Cross(origin - step, Vector3.up).normalized;
 

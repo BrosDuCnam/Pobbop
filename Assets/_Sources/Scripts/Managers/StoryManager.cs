@@ -12,10 +12,16 @@ public class StoryManager : SingletonBehaviour<StoryManager>
 {
     public Player player;
 
-    [SerializeField] private float minRandomTimeToSpeech = 10f;
-    [SerializeField] private float maxRandomTimeToSpeech = 30f;
-    private float randomTimeToSpeech;
-    private float randomTimer;
+    [SerializeField] private float _thowerRotationSpeed;
+    [SerializeField] private float _thowerCooldown;
+    [SerializeField] private float _minRandomTimeToSpeech = 10f;
+    [SerializeField] private float _maxRandomTimeToSpeech = 30f;
+    private float _thowerCooldownTimer; 
+    private float _randomTimeToSpeech;
+    private float _randomTimer;
+
+    private float _startDelay = 5f;
+    private float _startDelayTimer;
     
     public enum StoryState
     {
@@ -54,7 +60,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         }
     }
     public DialogData[] dialogs;
-    [SerializeField] private Collider _spawnCollider;
+    [SerializeField] private ColliderTriggerHandler _spawnCollider;
     [SerializeField] private ColliderTriggerHandler _catchCollider;
     [SerializeField] private Throw _throw;
     [SerializeField] private GameObject _ballPrefab;
@@ -71,7 +77,6 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         }
         
         NextState();
-        
         NetworkClient.RegisterPrefab(_ballPrefab);
         
         player._pickup.OnCatch.AddListener(() =>
@@ -92,19 +97,34 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         
         _catchCollider.OnTriggerEnterEvent.AddListener((collision) =>
         {
-            print("catch");
+            if (_thowerCooldownTimer > 0) return;
+            
+            _thowerCooldownTimer = _thowerCooldown;
             
             Ball ball = Instantiate(_ballPrefab).GetComponent<Ball>();
             NetworkServer.Spawn(ball.gameObject);
             ball.transform.position = _throw.transform.position;
             _throw.ball = ball.transform;
 
-            _throw.ReleaseThrow(false, 1, 1, player.gameObject);
+            _throw.ReleaseThrow(false, .1f, 1, player.gameObject);
+        });
+        
+        _spawnCollider.OnTriggerExitEvent.AddListener((collision) =>
+        {
+            if (state == StoryState.Spawn)
+            {
+                NextState();
+            }
         });
     }
 
     private void Update()
     {
+        _throw.IsCharging = true;
+        
+        //Rotate the thrower
+        _throw.transform.Rotate(0, _thowerRotationSpeed * Time.deltaTime, 0);
+        
         if (player == null)
         {
             player = GameObject.FindObjectsOfType<Player>().FirstOrDefault();
@@ -112,6 +132,11 @@ public class StoryManager : SingletonBehaviour<StoryManager>
             Start();
         }
         
+        if (_thowerCooldownTimer > 0)
+        {
+            _thowerCooldownTimer -= Time.deltaTime;
+        }
+
         // randomTimer += Time.deltaTime;
         // if (randomTimer > randomTimeToSpeech)
         // {
@@ -119,15 +144,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         //     randomTimeToSpeech = Random.Range(minRandomTimeToSpeech, maxRandomTimeToSpeech);
         //     Dialogue(dialogs[(int) state].GetRandomText());
         // }
-
-        if (state == StoryState.Spawn)
-        {
-            // If the player is not in the spawn collider, go to the next state
-            if (!_spawnCollider.bounds.Contains(player.transform.position))
-            {
-                NextState();
-            }
-        }
+        
         else if (state == StoryState.Sprint)
         {
             // If the player is sprinting, go to the next state
@@ -187,5 +204,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         state += 1;
 
         Dialogue(dialogs[(int) state -1].defaultTexts);
+        
+        print("Next state: " + state);
     }
 }

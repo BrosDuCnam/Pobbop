@@ -11,7 +11,7 @@ public class Ball : NetworkBehaviour
     public Rigidbody rb;
     public Collider collider; 
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
@@ -59,7 +59,10 @@ public class Ball : NetworkBehaviour
     [ServerCallback]
     private void LetPlayerDie(Player player)
     {
-        if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player.teamId == owner.teamId) return;
+        if (owner != null)
+        {
+            if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player.teamId == owner.teamId) return;
+        }
         RpcDie(player, this);
             
         RpcChangeBallState(BallStateRefab.Free);

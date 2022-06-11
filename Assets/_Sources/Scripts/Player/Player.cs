@@ -72,14 +72,13 @@ public class Player : NetworkBehaviour
         _controller = GetComponent<Controller>();
         _dirIndicatorHandler = GetComponent<DirIndicatorHandler>();
         //teamId = UnityEngine.Random.Range(0, 2220);
-        Die(null, 1f); //Temp fix for client player TODO: Find a better fix
+        Die(null, 0.01f); //Temp fix for client player TODO: Find a better fix
     }
 
     protected void Update()
     {
         if (isLocalPlayer && isDead)
         {
-            print("Player is dead");
             Camera.transform.LookAt(_murderTarget);
         }
     }
