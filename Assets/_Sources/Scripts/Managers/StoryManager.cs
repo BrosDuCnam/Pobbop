@@ -90,8 +90,10 @@ public class StoryManager : SingletonBehaviour<StoryManager>
             }
         });
         
-        _catchCollider.OnCollisionEnterEvent.AddListener((collision) =>
+        _catchCollider.OnTriggerEnterEvent.AddListener((collision) =>
         {
+            print("catch");
+            
             Ball ball = Instantiate(_ballPrefab).GetComponent<Ball>();
             NetworkServer.Spawn(ball.gameObject);
             ball.transform.position = _throw.transform.position;
@@ -110,13 +112,13 @@ public class StoryManager : SingletonBehaviour<StoryManager>
             Start();
         }
         
-        randomTimer += Time.deltaTime;
-        if (randomTimer > randomTimeToSpeech)
-        {
-            randomTimer = 0;
-            randomTimeToSpeech = Random.Range(minRandomTimeToSpeech, maxRandomTimeToSpeech);
-            Dialogue(dialogs[(int) state].GetRandomText());
-        }
+        // randomTimer += Time.deltaTime;
+        // if (randomTimer > randomTimeToSpeech)
+        // {
+        //     randomTimer = 0;
+        //     randomTimeToSpeech = Random.Range(minRandomTimeToSpeech, maxRandomTimeToSpeech);
+        //     Dialogue(dialogs[(int) state].GetRandomText());
+        // }
 
         if (state == StoryState.Spawn)
         {
@@ -157,32 +159,33 @@ public class StoryManager : SingletonBehaviour<StoryManager>
 
     private void Dialogue(string text)
     {
+        StopAllCoroutines();
         StartCoroutine(DialogueCoroutine(new List<string>() {text}));
     }
     private void Dialogue(List<string> texts)
     {
+        StopAllCoroutines();
         StartCoroutine(DialogueCoroutine(texts));
     }
     
     
     public IEnumerator DialogueCoroutine(List<string> text)
     {
-        // TODO: better animation
         while (text.Count > 0)
         {
             if (string.IsNullOrEmpty(text[0])) continue;
-            _text.text = text[0];
+            StartCoroutine(TextRevealer.RevealText(_text, text[0], .2f, true));
             text.RemoveAt(0);
             yield return new WaitForSeconds(10f);
         }
 
-        _text.text = dialogs[(int) state].defaultText;
+        StartCoroutine(TextRevealer.RevealText(_text, dialogs[(int) state - 1].defaultText, .2f, true));
     }
     
     private void NextState()
     {
         state += 1;
 
-        Dialogue(dialogs[(int) state].defaultTexts);
+        Dialogue(dialogs[(int) state -1].defaultTexts);
     }
 }
