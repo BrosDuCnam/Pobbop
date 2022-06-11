@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 public class StoryManager : SingletonBehaviour<StoryManager>
 {
     public Player player;
-
+    
     [SerializeField] private Transform _shootBallPosition;
     private GameObject _shootBall;
     [SerializeField] private ColliderTriggerHandler _shootBallColliderTrigger;
@@ -81,7 +81,8 @@ public class StoryManager : SingletonBehaviour<StoryManager>
             player = GameObject.FindObjectsOfType<Player>().FirstOrDefault();
             if (player == null) return;
         }
-        
+
+        _text = player.GetComponentsInChildren<TextMeshProUGUI>().Last();
         NextState();
         NetworkClient.RegisterPrefab(_ballPrefab);
         

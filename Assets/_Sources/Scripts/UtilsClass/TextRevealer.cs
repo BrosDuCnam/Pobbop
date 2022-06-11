@@ -22,6 +22,13 @@ public static class TextRevealer
         
         while (currentChar < message.Length+1)
         {
+            if (message.Length <= currentChar || message[currentChar] == ' ')
+            {
+                currentAlphaStep = 0;
+                currentChar += 1;
+                continue;
+            }
+            
             float alpha = ((float)currentAlphaStep / alphaStep);
             string hex = ColorUtility.ToHtmlStringRGBA(new Color(1, 1, 1, alpha));
 

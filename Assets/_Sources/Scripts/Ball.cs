@@ -59,10 +59,10 @@ public class Ball : NetworkBehaviour
     [ServerCallback]
     private void LetPlayerDie(Player player)
     {
-        if (owner != null)
-        {
+        /*if (owner != null)
+        {*/
             if (_ballState == BallStateRefab.Picked || _ballState == BallStateRefab.Free || player.teamId == owner.teamId) return;
-        }
+        //}
         RpcDie(player, this);
             
         RpcChangeBallState(BallStateRefab.Free);
