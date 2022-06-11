@@ -10,7 +10,7 @@ public class Targeter : MonoBehaviour
     private Player _player;
     [SerializeField] private List<GameObject> _targets = new List<GameObject>();
     [SerializeField] private List<Player> _targetPlayers = new List<Player>();
-    [SerializeField] private List<Player> _friendlyPlayers = new List<Player>();
+    [SerializeField] public List<Player> friendlyPlayers = new List<Player>();
     [SerializeField] public List<Target> targetNonPlayers = new List<Target>();
     
     [NotNull] public GameObject CurrentTarget { get; private set; }
@@ -36,19 +36,20 @@ public class Targeter : MonoBehaviour
     /// </summary>
     private void UpdateTargets(string name = "")
     {
-        _friendlyPlayers = new List<Player>();
-        _targetPlayers = new List<Player>();
-        foreach (Player player in GameManager.instance.GetAllPlayers())
+        friendlyPlayers = new List<Player>();
+        foreach (Player player in FindObjectsOfType<Player>())
         {
-            if (player.teamId == _player.teamId && player != _player) _friendlyPlayers.Add(player);
+            if (player.teamId == _player.teamId && player != _player) friendlyPlayers.Add(player);
             else _targetPlayers.Add(player);
         }
+
+        _targetPlayers = new List<Player>();
         _targets = _targetPlayers.Select(x => x.gameObject).ToList();
     }
     
     private void Update()
     {
-        if (_player.IsCharging == false && _targets.Count > 0) // If player is not charging we can search for targets
+        if (_player.IsCharging == false && _targets.Count + targetNonPlayers.Count > 0) // If player is not charging we can search for targets
         {
             List<GameObject> visibleTargets = GetVisiblePlayers(_targets, _targetPlayers).Concat(GetVisibleTargets(targetNonPlayers)).ToList(); // Get all visible targets
             visibleTargets =
@@ -170,8 +171,8 @@ public class Targeter : MonoBehaviour
     /// <returns></returns>
     public GameObject GetDesiredFriend()
     {
-        if (_friendlyPlayers.Count == 0) return null;
-        List<GameObject> visibleFriendlies = GetVisiblePlayers(_friendlyPlayers.Select(x => x.gameObject).ToList(), _friendlyPlayers);
+        if (friendlyPlayers.Count == 0) return null;
+        List<GameObject> visibleFriendlies = GetVisiblePlayers(friendlyPlayers.Select(x => x.gameObject).ToList(), friendlyPlayers);
         if (visibleFriendlies.Count == 0) return null;
         return OrderByDistanceToCenterOfScreen(visibleFriendlies)[0];
     }

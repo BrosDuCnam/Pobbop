@@ -11,6 +11,8 @@ using Random = UnityEngine.Random;
 public class StoryManager : SingletonBehaviour<StoryManager>
 {
     public Player player;
+
+    [SerializeField] private Player _matePlayer;
     
     [SerializeField] private Transform _shootBallPosition;
     private GameObject _shootBall;
@@ -82,6 +84,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
             if (player == null) return;
         }
 
+        player._targeter.friendlyPlayers = new List<Player>() {_matePlayer};
         _text = player.GetComponentsInChildren<TextMeshProUGUI>().Last();
         NextState();
         NetworkClient.RegisterPrefab(_ballPrefab);

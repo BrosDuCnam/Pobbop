@@ -72,7 +72,8 @@ public class Player : NetworkBehaviour
         _controller = GetComponent<Controller>();
         _dirIndicatorHandler = GetComponent<DirIndicatorHandler>();
         //teamId = UnityEngine.Random.Range(0, 2220);
-        Die(null, 0.01f); //Temp fix for client player TODO: Find a better fix
+
+        if (name != "Cube") Die(null, 0.01f); //Temp fix for client player TODO: Find a better fix
     }
 
     protected void Update()
