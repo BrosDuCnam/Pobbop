@@ -42,8 +42,6 @@ public class Targeter : MonoBehaviour
             if (player.teamId == _player.teamId && player != _player) friendlyPlayers.Add(player);
             else _targetPlayers.Add(player);
         }
-
-        _targetPlayers = new List<Player>();
         _targets = _targetPlayers.Select(x => x.gameObject).ToList();
     }
     
