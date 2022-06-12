@@ -28,6 +28,8 @@ public class PlayerSetup : NetworkBehaviour
         // TODO: Disconnect player and change scene
         // GetComponent<NetworkIdentity>().connectionToServer.Disconnect();
         // SceneManager.LoadScene(0);
+        
+        NetworkManagerRefab.instance.LeaveServer();
     }
     
     private void DisableOnLocal()
@@ -69,6 +71,7 @@ public class PlayerSetup : NetworkBehaviour
         
         string playerID = "Player" + GetComponent<NetworkIdentity>().netId;
         GameManager.instance.UnRegisterPlayer(playerID);
+        SceneManager.LoadScene(0);
     }
     
 
