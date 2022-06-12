@@ -85,7 +85,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
         }
 
         player._targeter.friendlyPlayers = new List<Player>() {_matePlayer};
-        _text = player.GetComponentsInChildren<TextMeshProUGUI>().Last();
+        _text = player.GetComponentsInChildren<TextMeshProUGUI>()[2];
         NextState();
         NetworkClient.RegisterPrefab(_ballPrefab);
 
