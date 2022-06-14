@@ -176,9 +176,6 @@ public class RealPlayer : Player
             Color newColor = Color.Lerp(currentColor, restColor, Time.deltaTime * colorSpeed);
             _targetImage.color = newColor;
         }
-        //TODO : Fix it
-        _targetImage.rectTransform.position /= 100000;
-        _targetImage.rectTransform.position = new Vector3(_targetImage.rectTransform.position.x, _targetImage.rectTransform.position.y, 0);
     }
 
     private void DrawChargingCurve()
