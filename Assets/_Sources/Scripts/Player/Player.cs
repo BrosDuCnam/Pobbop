@@ -129,8 +129,11 @@ public class Player : NetworkBehaviour
         deaths++;
         if (ball != null)
         {
-            ball.owner.ChangeKills(true, this);
-            _murderTarget = ball.owner.transform;
+            if (ball.owner != null)
+            {
+                ball.owner.ChangeKills(true, this);
+                _murderTarget = ball.owner.transform;
+            }
         }
         print("dead" + name);
         isDead = true;

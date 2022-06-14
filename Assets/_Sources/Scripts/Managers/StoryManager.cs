@@ -119,6 +119,7 @@ public class StoryManager : SingletonBehaviour<StoryManager>
             _throw.ball = ball.transform;
 
             _throw.ReleaseThrow(false, .1f, 1, player.gameObject);
+            player._dirIndicatorHandler.incomingBall = _throw.ball;
         });
         
         _spawnCollider.OnTriggerExitEvent.AddListener((collision) =>
