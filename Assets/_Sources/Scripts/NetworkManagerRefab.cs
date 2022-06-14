@@ -120,20 +120,16 @@ public class NetworkManagerRefab : NetworkManager
 
     public override void ServerChangeScene(string newSceneName)
     {
-        print("test1");
         if (newSceneName == gameScene || newSceneName == tutoScene)
         {
-            print("test2");
             List<RoomPlayer> roomPlayers = HostMenu.instance.hostMenuPlayerData.Select(x => x.RoomPlayer).ToList();
             int indexCount = 0;
             foreach (RoomPlayer roomPlayer in roomPlayers)
             {
-                print("test3");
                 NetworkConnection conn = roomPlayer.connectionToClient;
                 
                 Vector3 spawnPos = newSceneName == gameScene ? startPositions[indexCount].position : new Vector3(-20, 0, 10);
                 Quaternion spawnRot = newSceneName == gameScene ? startPositions[indexCount].rotation : new Quaternion();
-                print(spawnPos + "  aaaaaaaaaaaaaa " + spawnRot);
                 GameObject gamePlayerInstance = Instantiate(gamePlayerPrefab, spawnPos, spawnRot);
                 RealPlayer player = gamePlayerInstance.GetComponent<RealPlayer>();
                 player.teamId = roomPlayer.teamId;
@@ -188,7 +184,6 @@ public class NetworkManagerRefab : NetworkManager
 
     public void StartTuto()
     {
-        print("initalize tuto");
         StartHost();
 
         ServerChangeScene(tutoScene);

@@ -64,7 +64,7 @@ public class Player : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    protected void Start()
+    protected virtual void Start()
     {
         _pickup = GetComponent<Pickup>();
         _throw = GetComponent<Throw>();

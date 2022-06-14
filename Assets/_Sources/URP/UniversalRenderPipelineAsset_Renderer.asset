@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d42443ec3cd6d444a8a682a875d5c01, type: 3}
   m_Name: Blit
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     Event: 600
     blitMaterial: {fileID: 2100000, guid: 124d0e7c25ca0c746af9122eae734f14, type: 2}

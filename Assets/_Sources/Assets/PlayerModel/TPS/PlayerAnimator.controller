@@ -270,9 +270,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.11103296
   m_TransitionOffset: 0
-  m_ExitTime: 0.9234694
+  m_ExitTime: 0.9660104
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -1237,7 +1237,7 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: 0
-    m_DefaultWeight: 1
+    m_DefaultWeight: 0
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 1
     m_Controller: {fileID: 9100000}
@@ -1553,7 +1553,7 @@ BlendTree:
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -2068412057412333134, guid: a63cef42454737c40907849e85b0342d, type: 3}
+    m_Motion: {fileID: -2068412057412333134, guid: b811b3b07ee8f2e499e9c02450d878fd, type: 3}
     m_Threshold: 0.33333334
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -1836,7 +1836,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: slide_0
+  m_Name: slide_fix
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -1852,7 +1852,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 5382802675215406716, guid: a63cef42454737c40907849e85b0342d, type: 3}
+  m_Motion: {fileID: -2591830946973368632, guid: b811b3b07ee8f2e499e9c02450d878fd, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

@@ -28,6 +28,7 @@ public class RealPlayer : Player
 
     [SerializeField] private CanvasGroup _escapeCanvasGroup;
     public bool IsEscapeCanvasActive => _escapeCanvasGroup.alpha > 0;
+    
 
     #region Inputs
 
