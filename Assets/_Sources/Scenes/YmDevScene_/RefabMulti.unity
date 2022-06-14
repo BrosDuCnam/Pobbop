@@ -3795,7 +3795,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 76123930adf2c884da4658853a76547b, type: 2}
+  sharedProfile: {fileID: 11400000, guid: b0b463c1479059c4ca0a41f0c27a9995, type: 2}
 --- !u!1001 &1680967116
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4172,7 +4172,7 @@ PrefabInstance:
     - target: {fileID: -8335683750835705212, guid: 9fb6c0f371054d04cae49c626fe491b1, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 8c426dc9513421246a03a9220c3690c8, type: 2}
+      objectReference: {fileID: 2100000, guid: 77e40232475777a4c9ac1a13576e0987, type: 2}
     - target: {fileID: -7791944975921311039, guid: 9fb6c0f371054d04cae49c626fe491b1, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295

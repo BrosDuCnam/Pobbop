@@ -153,7 +153,6 @@ public class RealPlayer : Player
             Color newColor = Color.Lerp(currentColor, restColor, Time.deltaTime * colorSpeed);
             _targetImage.color = newColor;
 
-
             lockTargetUiPos = false;
         } 
         else
@@ -169,7 +168,6 @@ public class RealPlayer : Player
                 if (Vector2.Distance(screenCenter, newPos) < 50) lockTargetUiPos = true;
             }
 
-            
             Vector2 currentScale = _targetImage.rectTransform.localScale;
             Vector2 newScale = Vector2.Lerp(currentScale, Vector2.one * restScale, Time.deltaTime * scaleSpeed);
             _targetImage.rectTransform.localScale = newScale;
@@ -177,8 +175,10 @@ public class RealPlayer : Player
             Color currentColor = _targetImage.color;
             Color newColor = Color.Lerp(currentColor, restColor, Time.deltaTime * colorSpeed);
             _targetImage.color = newColor;
-            
         }
+        //TODO : Fix it
+        _targetImage.rectTransform.position /= 100000;
+        _targetImage.rectTransform.position = new Vector3(_targetImage.rectTransform.position.x, _targetImage.rectTransform.position.y, 0);
     }
 
     private void DrawChargingCurve()
