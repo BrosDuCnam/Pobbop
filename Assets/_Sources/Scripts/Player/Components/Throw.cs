@@ -278,7 +278,7 @@ public class Throw : NetworkBehaviour
         }
 
         _canDoThrowPath = true;
-        ball.rb.velocity = direction;
+        //ball.rb.velocity = direction;
     }
     
 

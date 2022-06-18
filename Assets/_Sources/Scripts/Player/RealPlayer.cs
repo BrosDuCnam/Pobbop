@@ -166,7 +166,7 @@ public class RealPlayer : Player
                 Vector2 currentPos = _targetImage.rectTransform.position;
                 Vector2 newPos = Vector2.Lerp(currentPos, screenCenter, Time.deltaTime * moveSpeed);
                 _targetImage.rectTransform.position = newPos;
-                if (Vector2.Distance(screenCenter, newPos) < 50) lockTargetUiPos = true;
+                if (Vector2.Distance(screenCenter, newPos) < 10) lockTargetUiPos = true;
             }
 
             Vector2 currentScale = _targetImage.rectTransform.localScale;

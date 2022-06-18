@@ -123,12 +123,13 @@ Material:
     - Vector1_30aced42db1e424e8decd6d4ab408c82: 0
     - Vector1_e656ba5e79ea4183a3c24677f61c71e6: 0.726
     - Vector1_e656ba5e79ea4183a3c24677f61c71e6_1: 0.373
-    - Vector1_e656ba5e79ea4183a3c24677f61c71e6_2: 0
+    - Vector1_e656ba5e79ea4183a3c24677f61c71e6_2: 0.716
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _Color_Strength: 0
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -140,6 +141,7 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
+    - _Opacity_Strength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0

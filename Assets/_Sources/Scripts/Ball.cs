@@ -10,7 +10,7 @@ public class Ball : NetworkBehaviour
     public Player owner;
     public Rigidbody rb;
     public Collider collider; 
-    private Pickup localPickup;
+    private RealPlayer localPlayer;
 
     private void Awake()
     {
@@ -20,7 +20,7 @@ public class Ball : NetworkBehaviour
 
     private void Start()
     {
-        localPickup = NetworkClient.localPlayer.GetComponent<Pickup>();
+        localPlayer = NetworkClient.localPlayer.GetComponent<RealPlayer>();
     }
 
     public enum BallStateRefab
@@ -57,10 +57,8 @@ public class Ball : NetworkBehaviour
         else
         {
             if (_ballState == BallStateRefab.Picked) return;
-            
-            if (_ballState == BallStateRefab.Curve)
-                print("collision with " + col.gameObject.name);
-            localPickup.GetComponent<Pickup>().CmdChangeBallState(this, BallStateRefab.Free);
+            _ballState = BallStateRefab.Free;
+            localPlayer._pickup.GetComponent<Pickup>().CmdChangeBallState(this, BallStateRefab.Free);
         }
     }
 
@@ -101,12 +99,12 @@ public class Ball : NetworkBehaviour
         owner = _owner;
     }
 
-    private void OnGUI()
-    {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 40;
-        GUILayout.Label("Ball State: " + _ballState, style);
-        GUILayout.Label("Owner: " + owner, style);
-        GUILayout.Label("Ve: " + rb.velocity.magnitude, style);
-    }
+    // private void OnGUI()
+    // {
+    //     GUIStyle style = new GUIStyle();
+    //     style.fontSize = 40;
+    //     GUILayout.Label("Ball State: " + _ballState, style);
+    //     GUILayout.Label("Owner: " + owner, style);
+    //     GUILayout.Label("Ve: " + rb.velocity.magnitude, style);
+    // }
 }
