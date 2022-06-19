@@ -31,8 +31,13 @@ public class PlayerSetup : NetworkBehaviour
         Player localPlayer = NetworkClient.localPlayer.GetComponent<Player>();
         int localId = localPlayer.teamId;
         teamArrow.color = localId == player.teamId ? Color.blue : Color.red;
-        teamArrow.canvas.GetComponent<LookAtCamera>().camera = localPlayer.playerCam.transform;
-        if (player == localPlayer) teamArrow.gameObject.SetActive(false);
+        LookAtCamera lookAtCam = teamArrow.canvas.GetComponent<LookAtCamera>();
+        lookAtCam.camera = localPlayer.playerCam.transform;
+        lookAtCam.usernameText.text = localPlayer.username;
+        if (player == localPlayer)
+        {
+            teamArrow.canvas.gameObject.SetActive(false);
+        }
     }
     
     public void Disconnect()
@@ -40,8 +45,7 @@ public class PlayerSetup : NetworkBehaviour
         // TODO: Disconnect player and change scene
         // GetComponent<NetworkIdentity>().connectionToServer.Disconnect();
         // SceneManager.LoadScene(0);
-        
-        NetworkManagerRefab.instance.LeaveServer();
+        NetworkManagerRefab.instance.ReturnToMenu();
     }
     
     private void DisableOnLocal()

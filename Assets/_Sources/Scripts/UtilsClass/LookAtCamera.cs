@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LookAtCamera : MonoBehaviour
 {
     public Transform camera;
+    public TMP_Text usernameText;
     [SerializeField] private float size = 2;
     [SerializeField] private float distanceScale = 0.2f;
     [SerializeField] private float maxScale = 20f;
