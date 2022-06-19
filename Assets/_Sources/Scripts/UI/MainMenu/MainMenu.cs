@@ -1,6 +1,9 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using Mirror;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -8,6 +11,35 @@ namespace UI
     {
         public GameObject[] subMenus;
         public Transform creditTransform;
+        
+        public Slider sensibilitySlider;
+        public TMP_InputField sensibilityInputField;
+
+        private void Start()
+        {
+            sensibilitySlider.onValueChanged.AddListener(OnSensibilityChanged);
+            sensibilitySlider.value = PlayerPrefs.GetFloat("sensibility", 0.5f);
+            sensibilityInputField.onEndEdit.AddListener(OnSensibilityChanged);
+            sensibilityInputField.placeholder.GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("sensibility", 0.5f).ToString();;
+        }
+
+        private void OnSensibilityChanged(float value)
+        {
+            sensibilityInputField.text = value.ToString("0.00");
+            PlayerPrefs.SetFloat("sensibility", value);
+        }
+        
+        private void OnSensibilityChanged(string value)
+        {
+            // if value is not a number, ignore
+            if (!float.TryParse(value, out var sensibility))
+            {
+                sensibilityInputField.text = PlayerPrefs.GetFloat("sensibility").ToString();
+                return;
+            }
+            sensibilitySlider.value = sensibility;
+            PlayerPrefs.SetFloat("sensibility", sensibility);
+        }
 
         public enum Direction
         {

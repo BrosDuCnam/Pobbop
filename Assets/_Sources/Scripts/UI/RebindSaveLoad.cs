@@ -10,6 +10,10 @@ public class RebindSaveLoad : MonoBehaviour
         var rebinds = PlayerPrefs.GetString("rebinds");
         if (!string.IsNullOrEmpty(rebinds))
             actions.LoadBindingOverridesFromJson(rebinds);
+        
+        var sensibility = PlayerPrefs.GetFloat("sensibility", 0.1f);
+        GetComponent<Controller>().sensX = sensibility;
+        GetComponent<Controller>().sensY = sensibility;
     }
 
     public void OnDisable()

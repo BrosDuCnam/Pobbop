@@ -49,8 +49,8 @@ public class Controller : NetworkBehaviour
     
     [Header("Camera Settings")]
     [SerializeField] public Camera camera;
-    [SerializeField] private float sensX = 0.1f;
-    [SerializeField] private float sensY = 0.1f;
+    [SerializeField] public float sensX = 0.1f;
+    [SerializeField] public float sensY = 0.1f;
     public Animator _TpsAnimator;
     public Animator _PovAnimator;
     [SerializeField] private float camCrouchOffset = 0.8f;

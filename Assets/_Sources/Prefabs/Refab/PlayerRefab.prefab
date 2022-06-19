@@ -1062,6 +1062,7 @@ GameObject:
   - component: {fileID: 8455922505097929944}
   - component: {fileID: -6959653211031553873}
   - component: {fileID: 7901385578497279274}
+  - component: {fileID: 6966832199085494124}
   m_Layer: 0
   m_Name: PlayerRefab
   m_TagString: Player
@@ -1794,6 +1795,19 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 0
+--- !u!114 &6966832199085494124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5484164245318665630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2847438cb32896d40ad5089e04b490f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actions: {fileID: -944628639613478452, guid: 18c46e395e930d8499bc25aecdffa60d, type: 3}
 --- !u!1 &5501504316050702757
 GameObject:
   m_ObjectHideFlags: 0
