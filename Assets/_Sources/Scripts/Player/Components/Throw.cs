@@ -18,6 +18,7 @@ public class Throw : NetworkBehaviour
     [SerializeField] private bool _drawCurve = true;
 
     [SerializeField] private bool DEBUG;
+
     
     private bool _canDoThrowPath = true;
     

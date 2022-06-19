@@ -23,6 +23,7 @@ public class RealPlayer : Player
     [SerializeField] private float scaleSpeed = 5f;
     [SerializeField] private float colorSpeed = 5f;
 
+    private bool chargePass;
 
     private bool lockTargetUiPos = false;
 
@@ -34,14 +35,26 @@ public class RealPlayer : Player
 
     public void Throw(InputAction.CallbackContext ctx)
     {
-        if (ctx.started) _throw.ChargeThrow();
+        if (ctx.started)
+        {
+            _throw.ChargeThrow();
+            chargePass = false;
+        }
         if (ctx.canceled) _throw.ReleaseThrow();
     }
 
     public void Pass(InputAction.CallbackContext ctx)
     {
-        if (ctx.started) _throw.ChargeThrow();
-        if (ctx.canceled) _throw.ReleaseThrow(true);
+        if (ctx.started)
+        {
+            _throw.ChargeThrow();
+            chargePass = true;
+        }
+
+        if (ctx.canceled)
+        {
+            _throw.ReleaseThrow(true);
+        }
     }
     
     public void Catch(InputAction.CallbackContext ctx)
@@ -181,7 +194,7 @@ public class RealPlayer : Player
 
     private void DrawChargingCurve()
     {
-        if (HasTarget && IsCharging)
+        if (HasTarget && IsCharging && !chargePass)
         {
             _chargingCurveLineRenderer.enabled = true;
             

@@ -48,7 +48,8 @@ public class Pickup : NetworkBehaviour
             if (ball._ballState == Ball.BallStateRefab.Picked)
             {
                 ballTransform.position = pickupPoint.position;
-                CmdMoveBall(ballTransform, pickupPoint.position);
+                ballTransform.rotation = pickupPoint.rotation;
+                CmdMoveBall(ballTransform, pickupPoint.position, pickupPoint.rotation);
             }
         }
         
@@ -59,9 +60,10 @@ public class Pickup : NetworkBehaviour
     }
 
     [Command]
-    private void CmdMoveBall(Transform ball, Vector3 position)
+    private void CmdMoveBall(Transform ball, Vector3 position, Quaternion rotation)
     {
         ball.position = position;
+        ball.rotation = rotation;
     }
 
     [Command]

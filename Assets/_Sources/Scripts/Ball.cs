@@ -11,6 +11,12 @@ public class Ball : NetworkBehaviour
     public Rigidbody rb;
     public Collider collider; 
     private RealPlayer localPlayer;
+    [SerializeField] private Renderer coreRenderer;
+    [SyncVar] [SerializeField] private Color FreeColor;
+    [SyncVar] [SerializeField] private Color PickedColor;
+    [SyncVar] [SerializeField] private Color CurveColor;
+    [SyncVar] [SerializeField] private Color FreeThrowColor;
+    [SyncVar] [SerializeField] private Color PassColor;
 
     private void Awake()
     {
@@ -21,6 +27,7 @@ public class Ball : NetworkBehaviour
     private void Start()
     {
         localPlayer = NetworkClient.localPlayer.GetComponent<RealPlayer>();
+        GetComponent<Renderer>().material = GetComponent<Renderer>().material;
     }
 
     public enum BallStateRefab
@@ -46,6 +53,8 @@ public class Ball : NetworkBehaviour
         {
             owner = null;
         }
+
+        ChangeMaterialColor(ballState);
     }
 
     private void OnCollisionEnter(Collision col)
@@ -85,6 +94,7 @@ public class Ball : NetworkBehaviour
     private void RpcChangeBallState(BallStateRefab ballState)
     {
         _ballState = ballState;
+        ChangeMaterialColor(ballState);
     }
     
     [Command]
@@ -97,6 +107,29 @@ public class Ball : NetworkBehaviour
     private void RpcChangeOwner(Player _owner)
     {
         owner = _owner;
+    }
+
+    private void ChangeMaterialColor(BallStateRefab state)
+    {
+        print("change color");
+        switch (state)
+        {
+            case BallStateRefab.Free:
+                coreRenderer.material.color = FreeColor;
+                break;
+            case BallStateRefab.FreeThrow:
+                coreRenderer.material.color = FreeThrowColor;
+                break;
+            case BallStateRefab.Curve:
+                coreRenderer.material.color = CurveColor;
+                break;
+            case BallStateRefab.Picked:
+                coreRenderer.material.color = PickedColor;
+                break;
+            case BallStateRefab.Pass:
+                coreRenderer.material.color = PassColor;
+                break;
+        }
     }
 
     // private void OnGUI()
