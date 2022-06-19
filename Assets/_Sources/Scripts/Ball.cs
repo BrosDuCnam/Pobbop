@@ -10,7 +10,13 @@ public class Ball : NetworkBehaviour
     public Player owner;
     public Rigidbody rb;
     public Collider collider; 
-    private Pickup localPickup;
+    private RealPlayer localPlayer;
+    [SerializeField] private Renderer coreRenderer;
+    [SyncVar] [SerializeField] private Color FreeColor;
+    [SyncVar] [SerializeField] private Color PickedColor;
+    [SyncVar] [SerializeField] private Color CurveColor;
+    [SyncVar] [SerializeField] private Color FreeThrowColor;
+    [SyncVar] [SerializeField] private Color PassColor;
 
     private void Awake()
     {
@@ -20,7 +26,8 @@ public class Ball : NetworkBehaviour
 
     private void Start()
     {
-        localPickup = NetworkClient.localPlayer.GetComponent<Pickup>();
+        localPlayer = NetworkClient.localPlayer.GetComponent<RealPlayer>();
+        GetComponent<Renderer>().material = GetComponent<Renderer>().material;
     }
 
     public enum BallStateRefab
@@ -46,6 +53,8 @@ public class Ball : NetworkBehaviour
         {
             owner = null;
         }
+
+        ChangeMaterialColor(ballState);
     }
 
     private void OnCollisionEnter(Collision col)
@@ -57,10 +66,8 @@ public class Ball : NetworkBehaviour
         else
         {
             if (_ballState == BallStateRefab.Picked) return;
-            
-            if (_ballState == BallStateRefab.Curve)
-                print("collision with " + col.gameObject.name);
-            localPickup.GetComponent<Pickup>().CmdChangeBallState(this, BallStateRefab.Free);
+            _ballState = BallStateRefab.Free;
+            localPlayer._pickup.GetComponent<Pickup>().CmdChangeBallState(this, BallStateRefab.Free);
         }
     }
 
@@ -87,6 +94,7 @@ public class Ball : NetworkBehaviour
     private void RpcChangeBallState(BallStateRefab ballState)
     {
         _ballState = ballState;
+        ChangeMaterialColor(ballState);
     }
     
     [Command]
@@ -101,12 +109,35 @@ public class Ball : NetworkBehaviour
         owner = _owner;
     }
 
-    private void OnGUI()
+    private void ChangeMaterialColor(BallStateRefab state)
     {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 40;
-        GUILayout.Label("Ball State: " + _ballState, style);
-        GUILayout.Label("Owner: " + owner, style);
-        GUILayout.Label("Ve: " + rb.velocity.magnitude, style);
+        print("change color");
+        switch (state)
+        {
+            case BallStateRefab.Free:
+                coreRenderer.material.color = FreeColor;
+                break;
+            case BallStateRefab.FreeThrow:
+                coreRenderer.material.color = FreeThrowColor;
+                break;
+            case BallStateRefab.Curve:
+                coreRenderer.material.color = CurveColor;
+                break;
+            case BallStateRefab.Picked:
+                coreRenderer.material.color = PickedColor;
+                break;
+            case BallStateRefab.Pass:
+                coreRenderer.material.color = PassColor;
+                break;
+        }
     }
+
+    // private void OnGUI()
+    // {
+    //     GUIStyle style = new GUIStyle();
+    //     style.fontSize = 40;
+    //     GUILayout.Label("Ball State: " + _ballState, style);
+    //     GUILayout.Label("Owner: " + owner, style);
+    //     GUILayout.Label("Ve: " + rb.velocity.magnitude, style);
+    // }
 }

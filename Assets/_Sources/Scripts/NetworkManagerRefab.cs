@@ -160,17 +160,36 @@ public class NetworkManagerRefab : NetworkManager
                 NetworkServer.Shutdown();
                 StopHost();
                 StopServer();
-                print("stop server");
             }
             else
             {
                 NetworkClient.Shutdown();
                 StopClient();
             }
-            
         }
-
         HostMenu.instance.gameObject.SetActive(true);
+    }
+
+    public void ReturnToMenu()
+    {
+        ServerChangeScene(menuScene);
+
+        if (NetworkClient.localPlayer != null)
+        {
+            if (NetworkClient.localPlayer.isServer)
+            {
+                NetworkClient.Shutdown();
+                NetworkServer.Shutdown();
+                StopHost();
+                StopServer();
+            }
+            else
+            {
+                NetworkClient.Shutdown();
+                StopClient();
+            }
+        }
+        Destroy(gameObject);
     }
 
     public void StartGame()
@@ -195,6 +214,4 @@ public class NetworkManagerRefab : NetworkManager
         print("GameEnded");
         OnEndGame?.Invoke();
     }
-    
-
 }

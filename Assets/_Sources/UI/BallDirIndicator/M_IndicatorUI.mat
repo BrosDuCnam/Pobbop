@@ -95,8 +95,8 @@ Material:
     m_Ints: []
     m_Floats:
     - BorderSize: 0
-    - PosX: 4.4340587
-    - PosY: 5
+    - PosX: -5
+    - PosY: 2.5729618
     - Rotation: 0
     - SizeX: 0
     - SizeY: 0

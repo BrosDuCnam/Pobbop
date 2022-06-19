@@ -201,6 +201,9 @@ public class Player : NetworkBehaviour
         ball.gameObject.layer = layer ? 
             LayerMask.NameToLayer("Always On Top") : 
             LayerMask.NameToLayer("Default");
+        ball.transform.GetChild(0).gameObject.layer = layer ? 
+            LayerMask.NameToLayer("Always On Top") : 
+            LayerMask.NameToLayer("Default");
     }
     
     private void OnCollisionEnter(Collision col)

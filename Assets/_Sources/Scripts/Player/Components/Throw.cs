@@ -18,6 +18,7 @@ public class Throw : NetworkBehaviour
     [SerializeField] private bool _drawCurve = true;
 
     [SerializeField] private bool DEBUG;
+
     
     private bool _canDoThrowPath = true;
     
@@ -278,7 +279,7 @@ public class Throw : NetworkBehaviour
         }
 
         _canDoThrowPath = true;
-        ball.rb.velocity = direction;
+        //ball.rb.velocity = direction;
     }
     
 
