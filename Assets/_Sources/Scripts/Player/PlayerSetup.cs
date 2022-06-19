@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Random = System.Random;
 
 public class PlayerSetup : NetworkBehaviour
 {
@@ -10,6 +12,8 @@ public class PlayerSetup : NetworkBehaviour
     [SerializeField] Behaviour[] compToDisableOnLocal;
     [SerializeField] private GameObject[] gameObjectsToDeactivateOnClients;
     [SerializeField] private GameObject[] gameObjectsToDeactivateOnLocal;
+    [SerializeField] private RawImage teamArrow;
+    [SerializeField] private Transform playerCam;
     
     private void Start()
     {
@@ -21,6 +25,14 @@ public class PlayerSetup : NetworkBehaviour
         {
             DisableOnLocal();
         }
+        
+        //Set team arrow color based on team
+        Player player = GetComponent<Player>();
+        Player localPlayer = NetworkClient.localPlayer.GetComponent<Player>();
+        int localId = localPlayer.teamId;
+        teamArrow.color = localId == player.teamId ? Color.blue : Color.red;
+        teamArrow.canvas.GetComponent<LookAtCamera>().camera = localPlayer.playerCam.transform;
+        if (player == localPlayer) teamArrow.gameObject.SetActive(false);
     }
     
     public void Disconnect()
@@ -63,6 +75,7 @@ public class PlayerSetup : NetworkBehaviour
         string netID = GetComponent<NetworkIdentity>().netId.ToString();
         Player player = GetComponent<Player>();
         GameManager.instance.RegisterPlayer(netID, player);
+
     }
 
     public override void OnStopClient()
