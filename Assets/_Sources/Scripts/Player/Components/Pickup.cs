@@ -140,11 +140,6 @@ public class Pickup : NetworkBehaviour
             return;
         }
 
-        if (_player.IsHoldingObject)
-        {
-            _player._throw.CmdSimpleThrowBall(ball, Vector3.zero);
-        }
-        
         CanCatch = false;
         
         RaycastHit[] hits = Physics.SphereCastAll(_player.Camera.transform.position, catchDistance, 
