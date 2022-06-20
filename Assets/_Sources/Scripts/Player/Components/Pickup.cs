@@ -139,6 +139,13 @@ public class Pickup : NetworkBehaviour
             
             return;
         }
+
+        if (_player.IsHoldingObject)
+        {
+            ball._ballState = Ball.BallStateRefab.Free;
+            ball.ChangeBallState(Ball.BallStateRefab.Free);
+            _player.ChangeBallLayer(ball.gameObject, false);
+        }
         
         CanCatch = false;
         
