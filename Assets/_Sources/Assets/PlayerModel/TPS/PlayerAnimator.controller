@@ -1225,7 +1225,7 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
-    m_DefaultWeight: 1
+    m_DefaultWeight: 0
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -1274,7 +1274,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -632501676062462385, guid: a63cef42454737c40907849e85b0342d, type: 3}
+  m_Motion: {fileID: -3536216422171634052, guid: b811b3b07ee8f2e499e9c02450d878fd, type: 3}
   m_Tag: 
   m_SpeedParameter: velX
   m_MirrorParameter: crouch
