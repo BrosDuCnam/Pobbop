@@ -88,7 +88,7 @@ public class PlayerSetup : NetworkBehaviour
         
         string playerID = "Player" + GetComponent<NetworkIdentity>().netId;
         GameManager.instance.UnRegisterPlayer(playerID);
-        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(0);
     }
     
 
