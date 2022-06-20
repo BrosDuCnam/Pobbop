@@ -14,15 +14,24 @@ namespace UI
         
         public Slider sensibilitySlider;
         public TMP_InputField sensibilityInputField;
+        public Button sensibilityResetButton;
 
         private void Start()
         {
             sensibilitySlider.onValueChanged.AddListener(OnSensibilityChanged);
-            sensibilitySlider.value = PlayerPrefs.GetFloat("sensibility", 0.5f);
+            sensibilitySlider.value = PlayerPrefs.GetFloat("sensibility", 0.1f);
             sensibilityInputField.onEndEdit.AddListener(OnSensibilityChanged);
-            sensibilityInputField.placeholder.GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("sensibility", 0.5f).ToString();;
+            sensibilityInputField.placeholder.GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("sensibility", 0.1f).ToString();;
+            sensibilityResetButton.onClick.AddListener(OnSensibilityReset);
         }
 
+        private void OnSensibilityReset()
+        {
+            sensibilitySlider.value = 0.1f;
+            sensibilityInputField.text = "0.1";
+            PlayerPrefs.SetFloat("sensibility", 0.1f);
+        }
+        
         private void OnSensibilityChanged(float value)
         {
             sensibilityInputField.text = value.ToString("0.00");
