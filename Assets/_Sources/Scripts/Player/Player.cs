@@ -177,6 +177,8 @@ public class Player : NetworkBehaviour
             
             _canvasGroup.alpha = 0;
         }
+
+        _dirIndicatorHandler.incomingBall = null;
     }
     
         
