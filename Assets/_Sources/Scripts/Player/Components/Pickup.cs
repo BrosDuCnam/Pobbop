@@ -133,13 +133,13 @@ public class Pickup : NetworkBehaviour
     {
         if (!enabled) return;
         
-        if (!CanCatch)
+        if (!CanCatch || _player.GetBall() != null)
         {
             _player.mainContainer.transform.DOShakePosition(0.2f, 50f, 20, 90, false, true);
             
             return;
         }
-
+        
         CanCatch = false;
         
         RaycastHit[] hits = Physics.SphereCastAll(_player.Camera.transform.position, catchDistance, 
