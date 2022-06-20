@@ -1570,7 +1570,7 @@ MonoBehaviour:
   pickupPoint: {fileID: 2993412299723579490}
   maxVelToPickup: 5
   cooldownTime: 0.4
-  catchDistance: 4
+  catchDistance: 2
   ballTransform: {fileID: 0}
   catchCooldown: 0.5
   ball: {fileID: 0}
