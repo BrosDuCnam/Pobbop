@@ -155,7 +155,7 @@ public class Throw : NetworkBehaviour
                 Vector3 stepPosition = playerCam.position + a + o + multiplier;
                 
                 float accuracy = accuracyValue;
-                if (accuracy == -1) 1f;
+                if (accuracy == -1) accuracy = 1f;
                 if (pass) accuracy = 1;
 
                 Ball.BallStateRefab state = pass ? Ball.BallStateRefab.Pass : Ball.BallStateRefab.Curve;

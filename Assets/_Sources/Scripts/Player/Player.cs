@@ -120,7 +120,7 @@ public class Player : NetworkBehaviour
         GameManager.instance.ChangeTeamKills(teamId, increase, killedPlayer, this);
     }
     
-    public void Die(Ball ball = null, float respawnTime = 0.4f)
+    public void Die(Ball ball = null, float respawnTime = 3f)
     {
         if (isDead) return;
         if (ball != null)
