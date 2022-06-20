@@ -142,9 +142,7 @@ public class Pickup : NetworkBehaviour
 
         if (_player.IsHoldingObject)
         {
-            ball._ballState = Ball.BallStateRefab.Free;
-            ball.ChangeBallState(Ball.BallStateRefab.Free);
-            _player.ChangeBallLayer(ball.gameObject, false);
+            _player._throw.CmdSimpleThrowBall(ball, Vector3.zero);
         }
         
         CanCatch = false;

@@ -188,7 +188,7 @@ public class Throw : NetworkBehaviour
     }
 
     [Command]
-    private void CmdSimpleThrowBall(Ball ball, Vector3 velocity)
+    public void CmdSimpleThrowBall(Ball ball, Vector3 velocity)
     {
         ball.rb.velocity = velocity;
     }

@@ -52,7 +52,6 @@ public class Ball : NetworkBehaviour
         else if (ballState == BallStateRefab.Free)
         {
             owner = null;
-            rb.isKinematic = false;
         }
 
         ChangeMaterialColor(ballState);
