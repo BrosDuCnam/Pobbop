@@ -5526,9 +5526,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ae7d2b60d54d20a665b9d0dea2f971, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stepSounds:
-  - {fileID: 8300000, guid: ecb1e1d1bd08ab742ad3be54b2141d9c, type: 3}
-  audioSource: {fileID: 7137393534912867252}
+  _stepSounds:
+  - {fileID: 8300000, guid: 0064ac2b5255d864f83c21f270622951, type: 3}
+  - {fileID: 8300000, guid: 47222c0386e7c784dbb3ce3a652dd02a, type: 3}
+  - {fileID: 8300000, guid: de4fdc62991aefd4680282d071db08af, type: 3}
+  - {fileID: 8300000, guid: d6cc6b4dc0ff6794b92910a724a6bc87, type: 3}
+  _audioSource: {fileID: 7137393534912867252}
+  _stepInterval: 0.3
 --- !u!1001 &5600153665446019831
 PrefabInstance:
   m_ObjectHideFlags: 0
