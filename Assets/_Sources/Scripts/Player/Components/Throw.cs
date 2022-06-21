@@ -181,7 +181,8 @@ public class Throw : NetworkBehaviour
                 CmdChangeBallState(ball, Ball.BallStateRefab.FreeThrow, _player);
                 ball.rb.velocity = velocity;
                 CmdSimpleThrowBall(ball, velocity); // Throw the object in front of the camera
-                
+
+
                 OnThrow.Invoke();
             }
         }
@@ -189,6 +190,11 @@ public class Throw : NetworkBehaviour
 
     [Command]
     public void CmdSimpleThrowBall(Ball ball, Vector3 velocity)
+    {
+        RpcSimpleThrowBall(ball, velocity);
+    }
+    [ClientRpc]
+    public void RpcSimpleThrowBall(Ball ball, Vector3 velocity)
     {
         ball.rb.velocity = velocity;
     }
