@@ -4137,39 +4137,39 @@ MonoBehaviour:
   dialogs:
   - defaultText: Leave the house
     defaultTexts:
-    - You can move by press directionnal key or move the stick
+    - You can move by pressing the directionnal key
     - Try to leave the house
     randomTexts:
     - Exit through the door
-  - defaultText: Use MAJ to run
+  - defaultText: Use SHIFT to run
     defaultTexts:
-    - You can press MAJ to go faster
+    - You can press SHIFT to go faster
     randomTexts:
-    - Hey wake up and press MAJ to go faster
-  - defaultText: Elimite all target
+    - Hey wake up and press SHIFT to go faster
+  - defaultText: Eliminate all targets
     defaultTexts:
-    - You can pickup the red ball by moving closer
-    - Then try to shoot on the targets !
+    - You can pickup the ball by moving closer
+    - Then try to shoot at the targets !
     randomTexts:
-    - Try to hold the shoot button to make the ball faster
-    - You can make cool effects by hold the mouse and look away
-  - defaultText: Crouch by pressing CTRL
+    - Try to hold the shoot button to charge your throw
+    - You can make cool effects by holding the shoot button and looking away
+  - defaultText: Crouch by pressing CTRL or C
     defaultTexts:
-    - Good job ! Now try to crouch by pressing CTRL
+    - Good job ! Now try to crouch by pressing CTRL or C
     - And you can slide if you sprint before crouching !
     randomTexts: []
-  - defaultText: Successfully catch a ball
+  - defaultText: Try and catch a ball
     defaultTexts:
-    - When an ennemy target you you can catch his ball by pressing Right Click
+    - When an ennemy targets you you can catch the ball by pressing the Right Click
     - Caution you can't spam it, and the ball must be near
     randomTexts:
-    - It can save life to catch a ball
+    - It can save your life to catch a ball
   - defaultText: Pass a ball to a friend
     defaultTexts:
     - Your are in a team based game so try to pass a ball by pressing E
-    - It's usefull when a mate is in better situation than you.
+    - It's usefull when a mate is in better position than you.
     randomTexts:
-    - Successfully trace a bal
+    - Successfully pass a ball
   _spawnCollider: {fileID: 1445841531}
   _catchCollider: {fileID: 1661500496}
   _throw: {fileID: 733417845}
