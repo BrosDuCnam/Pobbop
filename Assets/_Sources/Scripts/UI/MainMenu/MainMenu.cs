@@ -15,6 +15,8 @@ namespace UI
         public Slider sensibilitySlider;
         public TMP_InputField sensibilityInputField;
         public Button sensibilityResetButton;
+        
+        private Vector3 _creditPosition;
 
         private void Start()
         {
@@ -23,6 +25,8 @@ namespace UI
             sensibilityInputField.onEndEdit.AddListener(OnSensibilityChanged);
             sensibilityInputField.placeholder.GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetFloat("sensibility", 0.1f).ToString();;
             sensibilityResetButton.onClick.AddListener(OnSensibilityReset);
+            
+            _creditPosition = creditTransform.position;
         }
 
         private void OnSensibilityReset()
@@ -132,8 +136,8 @@ namespace UI
         
         public void StartCreditsAnimation()
         {
-            creditTransform.localPosition = new Vector3(0, 0, 0);
-            creditTransform.DOLocalMoveY(-1000, 10).onComplete = () => RotateToFront();
+            creditTransform.position = _creditPosition;
+            creditTransform.DOLocalMoveY(-3400, 10).SetEase(Ease.Linear).onComplete = () => RotateToFront();
         }
 
         #region RotateTo
