@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Mirror;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Player : NetworkBehaviour
@@ -221,7 +222,8 @@ public class Player : NetworkBehaviour
             if (ball.rb.velocity.magnitude > ballVelToDie && !isDead
                 && (ball._ballState == Ball.BallStateRefab.Curve || ball._ballState == Ball.BallStateRefab.FreeThrow))
             {
-                Die(ball);
+                if (SceneManager.GetActiveScene().name == "Tutorial") Die(ball, 0.1f);
+                else Die(ball);
             }
         }
     }

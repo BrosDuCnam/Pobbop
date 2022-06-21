@@ -112,7 +112,6 @@ public class Ball : NetworkBehaviour
 
     private void ChangeMaterialColor(BallStateRefab state)
     {
-        print("change color");
         switch (state)
         {
             case BallStateRefab.Free:
