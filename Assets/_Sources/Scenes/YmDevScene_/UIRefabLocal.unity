@@ -2493,6 +2493,10 @@ PrefabInstance:
       propertyPath: roomProperties
       value: 
       objectReference: {fileID: 448943761}
+    - target: {fileID: 892826084684448888, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+      propertyPath: m_CameraType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 892826084713842482, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -2928,6 +2932,10 @@ PrefabInstance:
     - target: {fileID: 4189588212763271663, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4205676706304869180, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4244450569613221706, guid: 80d07350c7c23de438bd1291ba39d724, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument

@@ -133,12 +133,12 @@ public class Ball : NetworkBehaviour
         }
     }
 
-    private void OnGUI()
-    {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 40;
-        GUILayout.Label("Ball State: " + _ballState, style);
-        GUILayout.Label("Owner: " + owner, style);
-        GUILayout.Label("Ve: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude, style);
-    }
+    // private void OnGUI()
+    // {
+    //     GUIStyle style = new GUIStyle();
+    //     style.fontSize = 40;
+    //     GUILayout.Label("Ball State: " + _ballState, style);
+    //     GUILayout.Label("Owner: " + owner, style);
+    //     GUILayout.Label("Ve: " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude, style);
+    // }
 }
